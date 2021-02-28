@@ -12,6 +12,7 @@ const LeftContainer = styled.div`
   font-weight: 600;
   display: flex;
   align-items: center;
+  cursor: pointer;
   svg {
     margin-right: 6px;
   }

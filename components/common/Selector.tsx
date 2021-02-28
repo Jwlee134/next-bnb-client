@@ -2,7 +2,6 @@ import useValidation from "hooks/useValidation";
 import React from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
-import Warning from "../../public/static/svg/warning.svg";
 
 interface ContainerProps {
   isValid: boolean;
@@ -12,19 +11,20 @@ interface ContainerProps {
 
 const Container = styled.div<ContainerProps>`
   width: 100%;
-  input {
-    all: unset;
+  select {
     width: 100%;
+    border-radius: 8px;
     height: 48px;
     padding: 11px;
     border: 1px solid ${palette.gray_dd};
-    box-sizing: border-box;
-    border-radius: 8px;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("/static/svg/selector/down_arrow.svg");
+    background-repeat: no-repeat;
+    background-position: bottom 50% right 15px;
     &:focus {
       border-color: ${palette.dark_cyan};
-    }
-    &::placeholder {
-      font-weight: 300;
     }
     ${({ isValid, validation, useValidationMode }) =>
       !isValid &&
@@ -37,25 +37,18 @@ const Container = styled.div<ContainerProps>`
   }
 `;
 
-const ErrorMessage = styled.div`
-  margin-top: 8px;
-  color: ${palette.tawny};
-  font-weight: 300;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  svg {
-    margin-right: 5px;
-    margin-bottom: 1px;
-  }
-`;
-
-interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  options: string[];
+  initialValue?: string;
+  style?: Object;
   isValid?: boolean;
   useValidationMode?: boolean;
 }
 
-const Input = ({
+const Selector = ({
+  options,
+  initialValue,
+  style,
   isValid = true,
   useValidationMode = true,
   ...props
@@ -63,19 +56,21 @@ const Input = ({
   const { validation } = useValidation();
   return (
     <Container
+      style={style}
       isValid={isValid}
       validation={validation}
       useValidationMode={useValidationMode}
     >
-      <input {...props} />
-      {!isValid && useValidationMode && validation && (
-        <ErrorMessage>
-          <Warning />
-          필수 항목입니다.
-        </ErrorMessage>
-      )}
+      <select {...props}>
+        <option value="">{initialValue}</option>
+        {options.map((option, index) => (
+          <option key={index} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
     </Container>
   );
 };
 
-export default React.memo(Input);
+export default React.memo(Selector);

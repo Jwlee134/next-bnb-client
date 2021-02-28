@@ -2,6 +2,7 @@ import React from "react";
 import Head from "next/head";
 import { NextPage } from "next";
 import Home from "components/home";
+import dbConnect from "utils/dbConnect";
 
 const home: NextPage = () => {
   return (
@@ -12,6 +13,11 @@ const home: NextPage = () => {
       <Home />
     </>
   );
+};
+
+export const getServerSideProps = async () => {
+  await dbConnect();
+  return { props: {} };
 };
 
 export default home;

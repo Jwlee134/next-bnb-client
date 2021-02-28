@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface State {
   authMode: "signUp" | "login";
+  validation: boolean;
 }
 
 const initialState: State = {
   authMode: "signUp",
+  validation: false,
 };
 
 const common = createSlice({
@@ -14,6 +16,9 @@ const common = createSlice({
   reducers: {
     setAuthMode: (state, action: PayloadAction<"signUp" | "login">) => {
       state.authMode = action.payload;
+    },
+    setValidation: (state, action: PayloadAction<boolean>) => {
+      state.validation = action.payload;
     },
   },
 });
