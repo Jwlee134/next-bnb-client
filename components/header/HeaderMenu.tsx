@@ -7,6 +7,10 @@ import useModal from "hooks/useModal";
 import AuthModal from "components/modal/authModal";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
+import { useSelector } from "store";
+import { useRouter } from "next/router";
+import { logoutAPI } from "lib/api/auth";
+import { userActions } from "store/user";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -66,10 +70,26 @@ const ListItem = styled.li`
   }
 `;
 
+const Divider = styled.div`
+  width: 100%;
+  height: 0.5px;
+  background-color: ${palette.gray_dd};
+  margin: 6px 0px;
+`;
+
 const HeaderMenu = () => {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [popupOpened, setPopupOpened] = useState(false);
   const { openModal, closeModal, ModalPortal } = useModal();
   const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logoutAPI();
+    dispatch(userActions.initUser());
+    setPopupOpened(false);
+    router.push("/");
+  };
 
   return (
     <>
@@ -84,24 +104,36 @@ const HeaderMenu = () => {
         {popupOpened && (
           <PopupContainer>
             <List>
-              <ListItem
-                onClick={() => {
-                  openModal();
-                  setPopupOpened(false);
-                  dispatch(commonActions.setAuthMode("login"));
-                }}
-              >
-                로그인
-              </ListItem>
-              <ListItem
-                onClick={() => {
-                  openModal();
-                  setPopupOpened(false);
-                  dispatch(commonActions.setAuthMode("signUp"));
-                }}
-              >
-                회원가입
-              </ListItem>
+              {!isLoggedIn && (
+                <>
+                  <ListItem
+                    onClick={() => {
+                      openModal();
+                      setPopupOpened(false);
+                      dispatch(commonActions.setAuthMode("login"));
+                    }}
+                  >
+                    로그인
+                  </ListItem>
+                  <ListItem
+                    onClick={() => {
+                      openModal();
+                      setPopupOpened(false);
+                      dispatch(commonActions.setAuthMode("signUp"));
+                    }}
+                  >
+                    회원가입
+                  </ListItem>
+                </>
+              )}
+              {isLoggedIn && (
+                <>
+                  <ListItem>저장 목록</ListItem>
+                  <ListItem>숙소 등록하기</ListItem>
+                  <Divider />
+                  <ListItem onClick={handleLogout}>로그아웃</ListItem>
+                </>
+              )}
             </List>
           </PopupContainer>
         )}

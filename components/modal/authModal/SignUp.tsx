@@ -7,6 +7,8 @@ import Button from "components/common/Button";
 import { signUpAPI } from "lib/api/auth";
 import useValidation from "hooks/useValidation";
 import palette from "styles/palette";
+import { useDispatch } from "react-redux";
+import { userActions } from "store/user";
 import PasswordValidation from "./PasswordValidation";
 import RedXIcon from "../../../public/static/svg/auth/red_x_icon.svg";
 import GreenCheckIcon from "../../../public/static/svg/auth/green_check_icon.svg";
@@ -43,7 +45,8 @@ const ErrorMessage = styled.div`
   align-items: center;
 `;
 
-const SignUp = () => {
+const SignUp = ({ closeModal }: { closeModal: () => void }) => {
+  const dispatch = useDispatch();
   const { setValidation } = useValidation();
 
   const [validatePassword, setValidatePassword] = useState(false);
@@ -97,7 +100,8 @@ const SignUp = () => {
     };
     try {
       const { data } = await signUpAPI(body);
-      console.log(data._id);
+      dispatch(userActions.setUser(data));
+      closeModal();
     } catch (error) {
       setErrorMessage(error.response.data);
     }
@@ -218,7 +222,7 @@ const SignUp = () => {
       </SelectorContainer>
       <ButtonContainer>
         <Button type="submit">가입하기</Button>
-        {errorMessage && <ErrorMessage>이미 가입된 이메일입니다.</ErrorMessage>}
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </ButtonContainer>
     </Container>
   );

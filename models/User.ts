@@ -1,24 +1,14 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-export interface User extends Document {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  birthday: string;
-  avatarUrl: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import mongoose, { Schema } from "mongoose";
+import { IUser } from "types/user";
 
 const UserSchema: Schema = new mongoose.Schema({
   firstName: String,
   lastName: String,
   email: String,
   password: String,
-  birthday: String,
+  birthday: Date,
   avatarUrl: String,
-  createAt: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },
@@ -28,4 +18,5 @@ const UserSchema: Schema = new mongoose.Schema({
   },
 });
 
-export default mongoose.models.User || mongoose.model<User>("User", UserSchema);
+export default mongoose.models.User ||
+  mongoose.model<IUser>("User", UserSchema);

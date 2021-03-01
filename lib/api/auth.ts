@@ -1,5 +1,5 @@
-import { User } from "models/User";
-import { axios } from ".";
+import { IUser } from "types/user";
+import { api } from ".";
 
 interface SignUpBody {
   email: string;
@@ -10,4 +10,11 @@ interface SignUpBody {
 }
 
 export const signUpAPI = (body: SignUpBody) =>
-  axios.post<User>("/api/auth/signUp", body);
+  api.post<IUser>("/api/auth/signUp", body);
+
+export const loginAPI = (body: { email: string; password: string }) =>
+  api.post("/api/auth/login", body);
+
+export const meAPI = () => api.get("/api/auth/me");
+
+export const logoutAPI = () => api.post("/api/auth/logout");

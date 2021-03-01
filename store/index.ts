@@ -6,9 +6,11 @@ import {
 } from "react-redux";
 
 import common from "./common";
+import user from "./user";
 
 const rootReducer = combineReducers({
   common,
+  user,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -77,6 +77,14 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
 
   const isLogin = authMode === "login";
 
+  const handleGithubLogin = async () => {};
+
+  const handleKakaoLogin = async () => {
+    const link = document.createElement("a");
+    link.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=http://localhost:3000/kakao&response_type=code`;
+    link.click();
+  };
+
   return (
     <Container>
       <AuthHeader>
@@ -84,7 +92,11 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
         <IoCloseSharp size={24} onClick={closeModal} />
       </AuthHeader>
       <AuthContainer>
-        {isLogin ? <Login /> : <SignUp />}
+        {isLogin ? (
+          <Login closeModal={closeModal} />
+        ) : (
+          <SignUp closeModal={closeModal} />
+        )}
         <Divider>
           <span>또는</span>
         </Divider>
@@ -95,13 +107,13 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
           </Button>
         </ButtonContainer>
         <ButtonContainer>
-          <Button socialAuthButton={true}>
+          <Button socialAuthButton={true} onClick={handleGithubLogin}>
             <GrGithub size={24} />
             Github 계정으로 계속하기
           </Button>
         </ButtonContainer>
         <ButtonContainer>
-          <Button socialAuthButton={true}>
+          <Button socialAuthButton={true} onClick={handleKakaoLogin}>
             <RiKakaoTalkFill size={24} />
             Kakao 계정으로 계속하기
           </Button>
@@ -111,9 +123,9 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
             ? "에어비앤비 계정이 없으세요?"
             : "이미 계정을 보유하고 계시나요?"}
           <ChangeAuthMode
-            onClick={() =>
-              dispatch(commonActions.setAuthMode(isLogin ? "signUp" : "login"))
-            }
+            onClick={() => {
+              dispatch(commonActions.setAuthMode(isLogin ? "signUp" : "login"));
+            }}
           >
             {isLogin ? "회원가입" : "로그인"}
           </ChangeAuthMode>

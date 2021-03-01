@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 
 const dbConnect = async () => {
-  // check if we have a connection to the database or if it's currently
-  // connecting or disconnecting (readyState 1, 2 and 3)
+  // 데이터베이스에 연결되어 있다면 함수 종료
   if (mongoose.connection.readyState >= 1) {
     return;
   }
