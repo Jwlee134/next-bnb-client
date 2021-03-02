@@ -28,7 +28,7 @@ const Container = styled.div<ContainerProps>`
     cursor: pointer;
     background-image: url("/static/svg/selector/down_arrow.svg");
     background-repeat: no-repeat;
-    background-position: bottom 50% right 15px;
+    background-position: bottom 45% right 15px;
     &:focus {
       border-color: ${palette.dark_cyan};
     }
