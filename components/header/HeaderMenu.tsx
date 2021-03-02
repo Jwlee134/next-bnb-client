@@ -78,6 +78,7 @@ const Divider = styled.div`
 `;
 
 const HeaderMenu = () => {
+  const user = useSelector((state) => state.user.user);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [popupOpened, setPopupOpened] = useState(false);
   const { openModal, closeModal, ModalPortal } = useModal();
@@ -99,7 +100,12 @@ const HeaderMenu = () => {
           onClick={() => setPopupOpened(!popupOpened)}
         >
           <IoIosMenu size={20} />
-          <Image src="/static/image/user/default_user_profile_image.jpg" />
+          <Image
+            src={
+              user?.avatarUrl ||
+              "/static/image/user/default_user_profile_image.jpg"
+            }
+          />
         </Container>
         {popupOpened && (
           <PopupContainer>

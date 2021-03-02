@@ -1,10 +1,9 @@
-import { IUser } from "types/user";
+import { IUser, OauthLoginBody } from "types/user";
 import { api } from ".";
 
 interface SignUpBody {
   email: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   password: string;
   birthday: string;
 }
@@ -13,7 +12,10 @@ export const signUpAPI = (body: SignUpBody) =>
   api.post<IUser>("/api/auth/signUp", body);
 
 export const loginAPI = (body: { email: string; password: string }) =>
-  api.post("/api/auth/login", body);
+  api.post<IUser>("/api/auth/login", body);
+
+export const oauthLoginAPI = (body: OauthLoginBody) =>
+  api.post<IUser>("/api/oauth", body);
 
 export const meAPI = () => api.get("/api/auth/me");
 

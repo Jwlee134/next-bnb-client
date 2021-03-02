@@ -6,15 +6,14 @@ import { IUser } from "types/user";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
-    const { firstName, lastName, email, password, birthday } = req.body;
+    const { name, email, password, birthday } = req.body;
 
     const user = await User.findOne({ email });
     if (user) return res.status(409).send("이미 가입된 이메일입니다.");
 
     const hash = bcrypt.hashSync(password, 10);
     const newUser: IUser = await User.create({
-      firstName,
-      lastName,
+      name,
       email,
       password: hash,
       birthday,

@@ -53,8 +53,7 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [month, setMonth] = useState("");
@@ -76,8 +75,7 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
     e.preventDefault();
     setValidation(true);
     if (
-      !firstName ||
-      !lastName ||
+      !name ||
       !email ||
       !password ||
       !month ||
@@ -92,8 +90,7 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
       `${year.slice(0, -1)}-${month.slice(0, -1)}-${day.slice(0, -1)}`
     ).toISOString();
     const body = {
-      firstName,
-      lastName,
+      name,
       email,
       password,
       birthday,
@@ -111,11 +108,8 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
     setValidatePassword(true);
   };
 
-  const handleFirstName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFirstName(e.target.value);
-  };
-  const handleLastName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLastName(e.target.value);
+  const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
   };
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -144,19 +138,10 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
       <InputContainer>
         <Input
           type="text"
-          value={firstName}
+          value={name}
           placeholder="이름"
-          onChange={handleFirstName}
-          isValid={!!firstName}
-        />
-      </InputContainer>
-      <InputContainer>
-        <Input
-          type="text"
-          value={lastName}
-          placeholder="성"
-          onChange={handleLastName}
-          isValid={!!lastName}
+          onChange={handleName}
+          isValid={!!name}
         />
       </InputContainer>
       <InputContainer>

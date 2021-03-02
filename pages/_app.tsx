@@ -26,7 +26,6 @@ MyApp.getInitialProps = async (context: AppContext) => {
   const {
     user: { isLoggedIn },
   } = store.getState();
-  // 서버 사이드일때만 함수 실행
   if (cookie && !isLoggedIn) {
     // 쿠키에 저장되어 있는 JWT 토큰 추출
     const cookieObj = extractToken(cookie);

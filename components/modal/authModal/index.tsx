@@ -77,11 +77,21 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
 
   const isLogin = authMode === "login";
 
-  const handleGithubLogin = async () => {};
-
-  const handleKakaoLogin = async () => {
+  const handleGoogleLogin = () => {
     const link = document.createElement("a");
-    link.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=http://localhost:3000/kakao&response_type=code`;
+    link.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:3000/oauth/google&response_type=code&scope=email profile`;
+    link.click();
+  };
+
+  const handleGithubLogin = () => {
+    const link = document.createElement("a");
+    link.href = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&scope=user`;
+    link.click();
+  };
+
+  const handleKakaoLogin = () => {
+    const link = document.createElement("a");
+    link.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=http://localhost:3000/oauth/kakao&response_type=code`;
     link.click();
   };
 
@@ -101,7 +111,7 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
           <span>또는</span>
         </Divider>
         <ButtonContainer>
-          <Button socialAuthButton={true}>
+          <Button socialAuthButton={true} onClick={handleGoogleLogin}>
             <FcGoogle size={24} />
             Google 계정으로 계속하기
           </Button>

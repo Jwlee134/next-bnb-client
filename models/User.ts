@@ -2,8 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { IUser } from "types/user";
 
 const UserSchema: Schema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
+  name: String,
   email: String,
   password: String,
   birthday: Date,
