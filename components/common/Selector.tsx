@@ -11,7 +11,13 @@ interface ContainerProps {
 
 const Container = styled.div<ContainerProps>`
   width: 100%;
+  span {
+    display: block;
+    color: ${palette.gray_76};
+    margin-bottom: 8px;
+  }
   select {
+    font-size: 14px;
     width: 100%;
     border-radius: 8px;
     height: 48px;
@@ -43,6 +49,7 @@ interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
   style?: Object;
   isValid?: boolean;
   useValidationMode?: boolean;
+  label?: string;
 }
 
 const Selector = ({
@@ -51,6 +58,7 @@ const Selector = ({
   style,
   isValid = true,
   useValidationMode = true,
+  label,
   ...props
 }: Props) => {
   const { validation } = useValidation();
@@ -61,14 +69,17 @@ const Selector = ({
       validation={validation}
       useValidationMode={useValidationMode}
     >
-      <select {...props}>
-        <option value="">{initialValue}</option>
-        {options.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
+      <label>
+        {label && <span>{label}</span>}
+        <select {...props}>
+          <option value="">{initialValue}</option>
+          {options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </label>
     </Container>
   );
 };

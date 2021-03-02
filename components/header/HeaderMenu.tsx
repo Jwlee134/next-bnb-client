@@ -11,6 +11,7 @@ import { useSelector } from "store";
 import { useRouter } from "next/router";
 import { logoutAPI } from "lib/api/auth";
 import { userActions } from "store/user";
+import Link from "next/link";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -135,7 +136,13 @@ const HeaderMenu = () => {
               {isLoggedIn && (
                 <>
                   <ListItem>저장 목록</ListItem>
-                  <ListItem>숙소 등록하기</ListItem>
+                  <Link href="/become-a-host/building">
+                    <a role="presentation">
+                      <ListItem onClick={() => setPopupOpened(false)}>
+                        숙소 등록하기
+                      </ListItem>
+                    </a>
+                  </Link>
                   <Divider />
                   <ListItem onClick={handleLogout}>로그아웃</ListItem>
                 </>

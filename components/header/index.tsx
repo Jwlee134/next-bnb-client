@@ -24,7 +24,7 @@ const RightContainer = styled.div`
   position: relative;
 `;
 
-const Container = styled.header<{ isTop: boolean }>`
+const Container = styled.header<{ isTop: boolean; isHome: boolean }>`
   width: 100%;
   height: 80px;
   position: sticky;
@@ -41,6 +41,13 @@ const Container = styled.header<{ isTop: boolean }>`
       background-color: white;
       box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
       color: #ff395b;
+    `}
+  ${({ isHome }) =>
+    !isHome &&
+    css`
+      color: #ff395b;
+      box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
+      background-color: white;
     `}
 `;
 
@@ -66,7 +73,7 @@ const Header = () => {
   }, [pathname]);
 
   return (
-    <Container isTop={isTop}>
+    <Container isTop={isTop} isHome={pathname === "/"}>
       <Link href="/">
         <LeftContainer>
           <SiAirbnb size={32} />
