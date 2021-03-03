@@ -1,4 +1,4 @@
-import Selector from "components/common/Selector";
+import AdvancedSelector from "components/common/AdvancedSelector";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 import {
@@ -21,7 +21,6 @@ import Footer from "../Footer";
 const Container = styled.div``;
 
 const SelectorContainer = styled.div`
-  width: 320px;
   margin-bottom: 32px;
 `;
 
@@ -31,8 +30,21 @@ const Building = () => {
   );
   const dispatch = useDispatch();
 
-  const buildingTypeList = useMemo(() => {
-    switch (largeBuildingType) {
+  const handleLargeBuildingType = ({
+    label,
+    description,
+  }: {
+    label: string;
+    description: string;
+  }) => {
+    dispatch(hostingActions.setLargeBuildingType({ label, description }));
+    dispatch(
+      hostingActions.setBuildingType({ label: null, description: null })
+    );
+  };
+
+  const detailBuildingTypeList = useMemo(() => {
+    switch (largeBuildingType.label) {
       case "아파트":
         return apartmentBuildingTypeList;
       case "주택":
@@ -43,46 +55,50 @@ const Building = () => {
         return uniqueSpaceBuildingTypeList;
       case "B&B":
         return bnbBuildingTypeList;
-      case "부티크호텔":
+      case "부티크 호텔":
         return boutiquesHotelBuildingTypeList;
       default:
         return [];
     }
   }, [largeBuildingType]);
 
+  const handleDetailBuildingType = ({
+    label,
+    description,
+  }: {
+    label: string;
+    description: string;
+  }) => {
+    dispatch(hostingActions.setBuildingType({ label, description }));
+  };
+
   return (
     <>
       <Container>
         <h1>등록하실 숙소 종류는 무엇인가요?</h1>
-        <h2>1단계</h2>
         <SelectorContainer>
-          <Selector
-            label="우선 범위를 좁혀볼까요?"
+          <AdvancedSelector
+            title="숙소의 건물 유형을 선택해주세요."
             options={largeBuildingTypeList}
-            initialValue="옵션을 선택해주세요."
-            onChange={(e) => {
-              dispatch(hostingActions.setLargeBuildingType(e.target.value));
-              dispatch(hostingActions.setBuildingType(null));
-            }}
-            value={largeBuildingType || "옵션을 선택해주세요."}
-            isValid={!!largeBuildingType}
+            value={largeBuildingType.label}
+            description={largeBuildingType.description}
+            onClick={handleLargeBuildingType}
+            isValid={!!largeBuildingType.label}
           />
         </SelectorContainer>
-        {largeBuildingType && (
+        {largeBuildingType.label && (
           <>
             <SelectorContainer>
-              <Selector
-                label="건물 유형을 선택하세요."
-                initialValue="옵션을 선택해주세요."
-                options={buildingTypeList}
-                onChange={(e) => {
-                  dispatch(hostingActions.setBuildingType(e.target.value));
-                }}
-                value={buildingType || "옵션을 선택해주세요."}
-                isValid={!!buildingType}
+              <AdvancedSelector
+                title="이제 더 구체적인 유형을 선택해주세요."
+                options={detailBuildingTypeList}
+                value={buildingType.label}
+                description={buildingType.description}
+                onClick={handleDetailBuildingType}
+                isValid={!!buildingType.label}
               />
             </SelectorContainer>
-            {buildingType && (
+            {buildingType.label && (
               <>
                 <RadioInput
                   title="게스트가 묵게 될 숙소 유형을 골라주세요."

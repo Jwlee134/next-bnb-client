@@ -31,7 +31,7 @@ const Footer = ({
   isValid = true,
 }: {
   nextHref: string;
-  isValid: boolean;
+  isValid?: boolean;
 }) => {
   const router = useRouter();
   const { setValidation } = useValidation();

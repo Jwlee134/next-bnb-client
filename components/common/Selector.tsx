@@ -13,7 +13,6 @@ const Container = styled.div<ContainerProps>`
   width: 100%;
   span {
     display: block;
-    color: ${palette.gray_76};
     margin-bottom: 8px;
   }
   select {
@@ -72,7 +71,7 @@ const Selector = ({
       <label>
         {label && <span>{label}</span>}
         <select {...props}>
-          <option value="">{initialValue}</option>
+          {initialValue && <option disabled>{initialValue}</option>}
           {options.map((option, index) => (
             <option key={index} value={option}>
               {option}

@@ -7,25 +7,20 @@ import Building from "./building";
 
 const Container = styled.div`
   width: 100%;
+  max-width: 550px;
   padding: 62px 30px 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: calc(100vh - 80px);
   h1 {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 56px;
-  }
-  h2 {
-    font-size: 16px;
-    color: ${palette.gray_76};
-    margin-bottom: 6px;
-    font-weight: 700;
+    margin-bottom: 24px;
   }
   h3 {
     color: ${palette.gray_76};
-    margin-bottom: 8px;
+    margin-bottom: 24px;
   }
 `;
 

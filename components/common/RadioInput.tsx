@@ -16,7 +16,6 @@ const Container = styled.div`
 `;
 
 const Title = styled.p`
-  color: ${palette.gray_76};
   margin-bottom: 32px;
 `;
 
@@ -69,13 +68,15 @@ const Block = styled.div<BlockProps>`
 `;
 
 const Label = styled.p`
+  font-weight: 300;
   margin-bottom: 5px;
 `;
 
 const Description = styled.p`
   font-weight: 300;
-  font-size: 15px;
+  font-size: 14px;
   margin-left: 30px;
+  opacity: 0.7;
 `;
 
 const ErrorMessage = styled.div`

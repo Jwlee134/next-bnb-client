@@ -46,6 +46,7 @@ module.exports = {
     "no-plusplus": "off",
     "no-undef": "off",
     "no-alert": "off",
+    "no-shadow": "off",
     "import/no-unresolved": "off",
     "react/button-has-type": "off",
     "no-underscore-dangle": "off",

@@ -184,7 +184,7 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
         <Selector
           options={months}
           initialValue="월"
-          value={month}
+          value={month || "월"}
           style={{ marginRight: 16 }}
           onChange={handleMonth}
           isValid={!!month}
@@ -192,7 +192,7 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
         <Selector
           options={days}
           initialValue="일"
-          value={day}
+          value={day || "일"}
           style={{ marginRight: 16 }}
           onChange={handleDay}
           isValid={!!day}
@@ -200,7 +200,7 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
         <Selector
           options={years}
           initialValue="년"
-          value={year}
+          value={year || "년"}
           onChange={handleYear}
           isValid={!!year}
         />
