@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
+import Bathroom from "./bathroom";
 import Bedroom from "./bedroom";
 import Building from "./building";
 
@@ -31,6 +32,7 @@ const Hosting = () => {
     <Container>
       {path === "building" && <Building />}
       {path === "bedroom" && <Bedroom />}
+      {path === "bathroom" && <Bathroom />}
     </Container>
   );
 };

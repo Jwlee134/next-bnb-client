@@ -16,6 +16,7 @@ interface IState {
   bedCount: number;
   bedType: { id: number; beds: { type: string; count: number }[] }[];
   publicBedType: { type: string; count: number }[];
+  bathroomCount: number;
 }
 
 const initialState: IState = {
@@ -34,6 +35,7 @@ const initialState: IState = {
   bedCount: 1,
   bedType: [],
   publicBedType: [],
+  bathroomCount: 1,
 };
 
 const hosting = createSlice({
@@ -114,6 +116,9 @@ const hosting = createSlice({
       if (value === 0) {
         state.publicBedType.splice(index, 1);
       }
+    },
+    setBathroomCount: (state, action: PayloadAction<number>) => {
+      state.bathroomCount = action.payload;
     },
   },
 });
