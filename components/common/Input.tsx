@@ -53,11 +53,13 @@ const ErrorMessage = styled.div`
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   isValid?: boolean;
   useValidationMode?: boolean;
+  showErrorMessage?: boolean;
 }
 
 const Input = ({
   isValid = true,
   useValidationMode = true,
+  showErrorMessage = true,
   ...props
 }: Props) => {
   const { validation } = useValidation();
@@ -68,7 +70,7 @@ const Input = ({
       useValidationMode={useValidationMode}
     >
       <input {...props} />
-      {!isValid && useValidationMode && validation && (
+      {!isValid && useValidationMode && validation && showErrorMessage && (
         <ErrorMessage>
           <Warning />
           필수 항목입니다.

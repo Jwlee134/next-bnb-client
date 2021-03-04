@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import React from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
@@ -7,23 +8,29 @@ import Bedroom from "./bedroom";
 import Building from "./building";
 import Location from "./location";
 
-const progressWidth = (path: string) => {
+const Pin = dynamic(() => import("./pin"), { ssr: false });
+
+const progressWidth = (path: string | undefined) => {
   switch (path) {
     case "building":
       return css`
-        width: calc(100% * (1 / 4));
+        width: calc(100% * (1 / 10));
       `;
     case "bedroom":
       return css`
-        width: calc(100% * (2 / 4));
+        width: calc(100% * (2 / 10));
       `;
     case "bathroom":
       return css`
-        width: calc(100% * (3 / 4));
+        width: calc(100% * (3 / 10));
       `;
     case "location":
       return css`
-        width: calc(100% * (4 / 4));
+        width: calc(100% * (4 / 10));
+      `;
+    case "pin":
+      return css`
+        width: calc(100% * (5 / 10));
       `;
     default:
       return css`
@@ -34,18 +41,17 @@ const progressWidth = (path: string) => {
 
 const ProgressBar = styled.div`
   width: 100%;
-  height: 5px;
+  height: 10px;
   background-color: #edefed;
   position: fixed;
   top: 80px;
 `;
 
-const Progress = styled.div<{ path: string }>`
+const Progress = styled.div<{ path: string | undefined }>`
   height: 100%;
   background-color: ${palette.dark_cyan};
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  transition: width 1s linear;
   ${({ path }) => progressWidth(path)}
 `;
 
@@ -81,6 +87,7 @@ const Hosting = () => {
         {path === "bedroom" && <Bedroom />}
         {path === "bathroom" && <Bathroom />}
         {path === "location" && <Location />}
+        {path === "pin" && <Pin />}
       </Container>
     </>
   );

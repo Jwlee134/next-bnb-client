@@ -17,6 +17,14 @@ interface IState {
   bedType: { id: number; beds: { type: string; count: number }[] }[];
   publicBedType: { type: string; count: number }[];
   bathroomCount: number;
+  country: string | null;
+  province: string | null;
+  city: string | null;
+  streetAddress: string | null;
+  detailAddress: string | null;
+  postalCode: string | null;
+  latitude: number;
+  longitude: number;
 }
 
 const initialState: IState = {
@@ -36,6 +44,14 @@ const initialState: IState = {
   bedType: [],
   publicBedType: [],
   bathroomCount: 1,
+  country: null,
+  province: null,
+  city: null,
+  streetAddress: null,
+  detailAddress: null,
+  postalCode: null,
+  latitude: 0,
+  longitude: 0,
 };
 
 const hosting = createSlice({
@@ -119,6 +135,30 @@ const hosting = createSlice({
     },
     setBathroomCount: (state, action: PayloadAction<number>) => {
       state.bathroomCount = action.payload;
+    },
+    setCountry: (state, action: PayloadAction<string>) => {
+      state.country = action.payload;
+    },
+    setProvince: (state, action: PayloadAction<string>) => {
+      state.province = action.payload;
+    },
+    setCity: (state, action: PayloadAction<string>) => {
+      state.city = action.payload;
+    },
+    setStreetAddress: (state, action: PayloadAction<string>) => {
+      state.streetAddress = action.payload;
+    },
+    setDetailAddress: (state, action: PayloadAction<string>) => {
+      state.detailAddress = action.payload;
+    },
+    setPostalCode: (state, action: PayloadAction<string>) => {
+      state.postalCode = action.payload;
+    },
+    setLatitude: (state, action: PayloadAction<number>) => {
+      state.latitude = action.payload;
+    },
+    setLongitude: (state, action: PayloadAction<number>) => {
+      state.longitude = action.payload;
     },
   },
 });
