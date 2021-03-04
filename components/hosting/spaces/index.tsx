@@ -26,7 +26,7 @@ const Spaces = () => {
         </h3>
         <Checkbox options={spaceList} items={spaces} onChange={handleChange} />
       </Container>
-      <Footer nextHref="/become-a-host/spaces" />
+      <Footer nextHref="/become-a-host/photos" />
     </>
   );
 };

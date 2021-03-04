@@ -27,6 +27,7 @@ interface IState {
   longitude: number;
   amenities: string[];
   spaces: string[];
+  photos: string[];
 }
 
 const initialState: IState = {
@@ -56,6 +57,7 @@ const initialState: IState = {
   longitude: 0,
   amenities: [],
   spaces: [],
+  photos: [],
 };
 
 const hosting = createSlice({
@@ -169,6 +171,9 @@ const hosting = createSlice({
     },
     setSpaces: (state, action: PayloadAction<string[]>) => {
       state.spaces = action.payload;
+    },
+    setPhotos: (state, action: PayloadAction<string[]>) => {
+      state.photos = action.payload;
     },
   },
 });

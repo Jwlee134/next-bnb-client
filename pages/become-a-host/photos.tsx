@@ -1,17 +1,17 @@
 import Hosting from "components/hosting";
 import { NextPage } from "next";
-import Head from "next/head";
 import React from "react";
+import Head from "next/head";
 
-const spaces: NextPage = () => {
+const photos: NextPage = () => {
   return (
     <>
       <Head>
-        <title>숙소 등록의 기타 사용 가능 공간 단계 수정</title>
+        <title>숙소 등록의 사진 단계 수정</title>
       </Head>
       <Hosting />
     </>
   );
 };
 
-export default spaces;
+export default photos;
