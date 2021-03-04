@@ -25,6 +25,8 @@ interface IState {
   postalCode: string | null;
   latitude: number;
   longitude: number;
+  amenities: string[];
+  spaces: string[];
 }
 
 const initialState: IState = {
@@ -52,6 +54,8 @@ const initialState: IState = {
   postalCode: null,
   latitude: 0,
   longitude: 0,
+  amenities: [],
+  spaces: [],
 };
 
 const hosting = createSlice({
@@ -159,6 +163,12 @@ const hosting = createSlice({
     },
     setLongitude: (state, action: PayloadAction<number>) => {
       state.longitude = action.payload;
+    },
+    setAmenities: (state, action: PayloadAction<string[]>) => {
+      state.amenities = action.payload;
+    },
+    setSpaces: (state, action: PayloadAction<string[]>) => {
+      state.spaces = action.payload;
     },
   },
 });

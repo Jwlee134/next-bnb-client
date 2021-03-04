@@ -7,6 +7,8 @@ import Bathroom from "./bathroom";
 import Bedroom from "./bedroom";
 import Building from "./building";
 import Location from "./location";
+import Amenities from "./amenities";
+import Spaces from "./spaces";
 
 const Pin = dynamic(() => import("./pin"), { ssr: false });
 
@@ -31,6 +33,14 @@ const progressWidth = (path: string | undefined) => {
     case "pin":
       return css`
         width: calc(100% * (5 / 10));
+      `;
+    case "amenities":
+      return css`
+        width: calc(100% * (6 / 10));
+      `;
+    case "spaces":
+      return css`
+        width: calc(100% * (7 / 10));
       `;
     default:
       return css`
@@ -88,6 +98,8 @@ const Hosting = () => {
         {path === "bathroom" && <Bathroom />}
         {path === "location" && <Location />}
         {path === "pin" && <Pin />}
+        {path === "amenities" && <Amenities />}
+        {path === "spaces" && <Spaces />}
       </Container>
     </>
   );
