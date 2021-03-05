@@ -60,6 +60,7 @@ const ProgressBar = styled.div`
   background-color: #edefed;
   position: fixed;
   top: 80px;
+  z-index: 10;
 `;
 
 const Progress = styled.div<{ path: string | undefined }>`

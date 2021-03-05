@@ -10,15 +10,15 @@ export const config = {
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const s3 = new aws.S3({
+    accessKeyId: process.env.S3_ACCESSKEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESSKEY_ID,
+  });
+
   if (req.method === "POST") {
     try {
       const form = new formidable.IncomingForm();
       form.multiples = true;
-
-      const s3 = new aws.S3({
-        accessKeyId: process.env.S3_ACCESSKEY_ID,
-        secretAccessKey: process.env.S3_SECRET_ACCESSKEY_ID,
-      });
 
       // https://cheese10yun.github.io/Node-AWS-S3-Upload/
       const photoArray = await new Promise<string[]>((resolve) => {
@@ -48,5 +48,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(500).send("사진을 업로드하지 못했습니다.");
     }
   }
+
+  if (req.method === "DELETE") {
+    const { key } = req.query;
+    try {
+      s3.deleteObject(
+        { Bucket: process.env.S3_BUCKET_NAME!, Key: key as string },
+        (err) => {
+          if (err) {
+            res.status(500).send("다시 시도해 주세요.");
+          }
+        }
+      );
+    } catch (error) {
+      res.status(500).send("다시 시도해 주세요.");
+    }
+    res.status(200).end();
+  }
+
   res.status(405).end();
 };
