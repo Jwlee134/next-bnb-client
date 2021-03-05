@@ -100,7 +100,10 @@ const Photos = () => {
         )}
         {!isEmpty(photos) && <PhotoList photos={photos} />}
       </Container>
-      <Footer isValid={!isEmpty(photos)} nextHref="/become-a-host/photos" />
+      <Footer
+        isValid={!isEmpty(photos)}
+        nextHref="/become-a-host/description"
+      />
     </>
   );
 };

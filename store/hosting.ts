@@ -29,6 +29,7 @@ interface IState {
   spaces: string[];
   photos: string[];
   description: string | null;
+  title: string | null;
 }
 
 const initialState: IState = {
@@ -60,6 +61,7 @@ const initialState: IState = {
   spaces: [],
   photos: [],
   description: null,
+  title: null,
 };
 
 const hosting = createSlice({
@@ -179,6 +181,9 @@ const hosting = createSlice({
     },
     setDescription: (state, action: PayloadAction<string>) => {
       state.description = action.payload;
+    },
+    setTitle: (state, action: PayloadAction<string>) => {
+      state.title = action.payload;
     },
   },
 });

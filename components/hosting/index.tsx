@@ -10,6 +10,8 @@ import Location from "./location";
 import Amenities from "./amenities";
 import Spaces from "./spaces";
 import Photos from "./photos";
+import Description from "./description";
+import Title from "./title";
 
 const Pin = dynamic(() => import("./pin"), { ssr: false });
 
@@ -47,6 +49,14 @@ const progressWidth = (path: string | undefined) => {
       return css`
         width: calc(100% * (8 / 10));
       `;
+    case "description":
+      return css`
+        width: calc(100% * (9 / 10));
+      `;
+    case "title":
+      return css`
+        width: calc(100% * (10 / 10));
+      `;
     default:
       return css`
         width: 0;
@@ -60,7 +70,7 @@ const ProgressBar = styled.div`
   background-color: #edefed;
   position: fixed;
   top: 80px;
-  z-index: 10;
+  z-index: 9;
 `;
 
 const Progress = styled.div<{ path: string | undefined }>`
@@ -107,6 +117,8 @@ const Hosting = () => {
         {path === "amenities" && <Amenities />}
         {path === "spaces" && <Spaces />}
         {path === "photos" && <Photos />}
+        {path === "description" && <Description />}
+        {path === "title" && <Title />}
       </Container>
     </>
   );
