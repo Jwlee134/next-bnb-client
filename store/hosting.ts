@@ -30,6 +30,8 @@ interface IState {
   photos: string[];
   description: string | null;
   title: string | null;
+  forbiddenRules: string[];
+  customRules: string[];
 }
 
 const initialState: IState = {
@@ -62,6 +64,8 @@ const initialState: IState = {
   photos: [],
   description: null,
   title: null,
+  forbiddenRules: [],
+  customRules: [],
 };
 
 const hosting = createSlice({
@@ -184,6 +188,12 @@ const hosting = createSlice({
     },
     setTitle: (state, action: PayloadAction<string>) => {
       state.title = action.payload;
+    },
+    setCustomRules: (state, action: PayloadAction<string[]>) => {
+      state.customRules = action.payload;
+    },
+    setForbiddenRules: (state, action: PayloadAction<string[]>) => {
+      state.forbiddenRules = action.payload;
     },
   },
 });

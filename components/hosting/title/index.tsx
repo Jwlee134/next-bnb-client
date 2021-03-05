@@ -35,7 +35,7 @@ const Title = () => {
           content={title || ""}
         />
       </Container>
-      <Footer isValid={!!title} nextHref="/become-a-host/title" />
+      <Footer isValid={!!title} nextHref="/become-a-host/rules" />
     </>
   );
 };
