@@ -14,7 +14,7 @@ import Description from "./description";
 import Title from "./title";
 import Rules from "./rules";
 import Availability from "./availability";
-import Calender from "./calender";
+import Calendar from "./calendar";
 
 const Pin = dynamic(() => import("./pin"), { ssr: false });
 
@@ -70,7 +70,7 @@ const progressWidth = (path: string | undefined) => {
       return css`
         width: calc(100% * (12 / ${totalPage}));
       `;
-    case "calender":
+    case "calendar":
       return css`
         width: calc(100% * (13 / ${totalPage}));
       `;
@@ -129,7 +129,7 @@ const Hosting = () => {
   const { pathname } = useRouter();
   const path = pathname.split("/").pop();
 
-  const handleRefresh = (e: BeforeUnloadEvent) => {
+  /*  const handleRefresh = (e: BeforeUnloadEvent) => {
     e.preventDefault();
     e.returnValue = "";
   };
@@ -140,7 +140,7 @@ const Hosting = () => {
       window.removeEventListener("beforeunload", handleRefresh);
     };
   }, []);
-
+ */
   return (
     <>
       <ProgressBar>
@@ -159,7 +159,7 @@ const Hosting = () => {
         {path === "title" && <Title />}
         {path === "rules" && <Rules />}
         {path === "availability" && <Availability />}
-        {path === "calender" && <Calender />}
+        {path === "calendar" && <Calendar />}
       </Container>
     </>
   );

@@ -10,6 +10,8 @@ export const years = Array.from(Array(122), (_, i) => 2021 - i).map(
   (year) => `${year}년`
 );
 
+export const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+
 export const largeBuildingTypeList = [
   {
     label: "아파트",

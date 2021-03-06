@@ -28,7 +28,7 @@ const Availability = () => {
         />
         <h3>팁: 호스트 대부분은 최대 3개월간의 달력을 업데이트합니다.</h3>
       </Container>
-      <Footer nextHref="/become-a-host/calender" />
+      <Footer nextHref="/become-a-host/calendar" />
     </>
   );
 };
