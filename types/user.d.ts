@@ -8,6 +8,8 @@ export interface IUser extends Document {
   avatarUrl: string;
   createdAt: Date;
   updatedAt: Date;
+  rooms: string[];
+  review: string[];
 }
 
 export interface OauthLoginBody {

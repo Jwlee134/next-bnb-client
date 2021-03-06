@@ -41,7 +41,7 @@ const PublicBedType = () => {
   const dispatch = useDispatch();
   const [add, setAdd] = useState(false);
 
-  const addedBedTypeList = publicBedType.map((bed) => bed.type);
+  const addedBedTypeList = publicBedType.map((bed) => bed.label);
 
   const excludedAddedBedType = bedTypeList.filter(
     (bed) => !addedBedTypeList.includes(bed)
@@ -55,8 +55,8 @@ const PublicBedType = () => {
     return total;
   }, [publicBedType]);
 
-  const handleClick = (value: number, type: string) => {
-    dispatch(hostingActions.setPublicBedTypeCount({ value, type }));
+  const handleClick = (value: number, label: string) => {
+    dispatch(hostingActions.setPublicBedTypeCount({ value, label }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -64,7 +64,7 @@ const PublicBedType = () => {
   };
 
   const beds = publicBedType
-    .map((bed) => `${bed.type} ${bed.count}개`)
+    .map((bed) => `${bed.label} ${bed.count}개`)
     .join(", ");
 
   return (
@@ -77,9 +77,9 @@ const PublicBedType = () => {
           publicBedType.map((bed, index) => (
             <CounterContainer key={index}>
               <Counter
-                label={bed.type}
+                label={bed.label}
                 value={bed.count}
-                onClick={(value) => handleClick(value, bed.type)}
+                onClick={(value) => handleClick(value, bed.label)}
                 disableValue={0}
               />
             </CounterContainer>

@@ -7,6 +7,8 @@ const UserSchema: Schema = new mongoose.Schema({
   password: String,
   birthday: Date,
   avatarUrl: String,
+  rooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
+  review: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   createdAt: {
     type: Date,
     default: Date.now,

@@ -1,4 +1,6 @@
-export interface HostingState {
+import { Document } from "mongoose";
+
+export interface HostingState extends Document {
   largeBuildingType: {
     label: string | null;
     description: string | null;
@@ -12,8 +14,8 @@ export interface HostingState {
   maximumGuestCount: number;
   bedroomCount: number;
   bedCount: number;
-  bedType: { id: number; beds: { type: string; count: number }[] }[];
-  publicBedType: { type: string; count: number }[];
+  bedType: { id: number; beds: { label: string; count: number }[] }[];
+  publicBedType: { label: string; count: number }[];
   bathroomCount: number;
   country: string | null;
   province: string | null;

@@ -36,7 +36,7 @@ const RightContainer = styled.div``;
 interface Props {
   bedroom: {
     id: number;
-    beds: { type: string; count: number }[];
+    beds: { label: string; count: number }[];
   };
 }
 
@@ -44,7 +44,7 @@ const BedType = ({ bedroom }: Props) => {
   const dispatch = useDispatch();
   const [add, setAdd] = useState(false);
 
-  const addedBedTypeList = bedroom.beds.map((bed) => bed.type);
+  const addedBedTypeList = bedroom.beds.map((bed) => bed.label);
 
   const excludeAddedBedType = bedTypeList.filter(
     (bed) => !addedBedTypeList.includes(bed)
@@ -58,20 +58,20 @@ const BedType = ({ bedroom }: Props) => {
     return total;
   }, [bedroom]);
 
-  const handleClick = (value: number, type: string, id: number) => {
-    dispatch(hostingActions.setBedTypeCount({ value, type, id }));
+  const handleClick = (value: number, label: string, id: number) => {
+    dispatch(hostingActions.setBedTypeCount({ value, label, id }));
   };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLSelectElement>,
     id: number
   ) => {
-    const type = e.target.value;
-    dispatch(hostingActions.setBedType({ type, id }));
+    const label = e.target.value;
+    dispatch(hostingActions.setBedType({ label, id }));
   };
 
   const beds = bedroom.beds
-    .map((bed) => `${bed.type} ${bed.count}개`)
+    .map((bed) => `${bed.label} ${bed.count}개`)
     .join(", ");
 
   return (
@@ -84,8 +84,8 @@ const BedType = ({ bedroom }: Props) => {
           bedroom.beds.map((bed, index) => (
             <CounterContainer key={index}>
               <Counter
-                onClick={(value) => handleClick(value, bed.type, bedroom.id)}
-                label={bed.type}
+                onClick={(value) => handleClick(value, bed.label, bedroom.id)}
+                label={bed.label}
                 value={bed.count}
                 disableValue={0}
               />

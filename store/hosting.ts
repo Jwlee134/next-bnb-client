@@ -84,19 +84,19 @@ const hosting = createSlice({
     },
     setBedType: (
       state,
-      action: PayloadAction<{ type: string; id: number }>
+      action: PayloadAction<{ label: string; id: number }>
     ) => {
-      const { type, id } = action.payload;
+      const { label, id } = action.payload;
       const index = state.bedType.findIndex((bed) => bed.id === id);
-      state.bedType[index].beds.push({ type, count: 1 });
+      state.bedType[index].beds.push({ label, count: 1 });
     },
     setBedTypeCount: (
       state,
-      action: PayloadAction<{ value: number; type: string; id: number }>
+      action: PayloadAction<{ value: number; label: string; id: number }>
     ) => {
-      const { value, type, id } = action.payload;
+      const { value, label, id } = action.payload;
       const index = state.bedType[id - 1].beds.findIndex(
-        (bed) => bed.type === type
+        (bed) => bed.label === label
       );
       state.bedType[id - 1].beds[index].count = value;
       if (value === 0) {
@@ -104,14 +104,14 @@ const hosting = createSlice({
       }
     },
     setPublicBedType: (state, action: PayloadAction<string>) => {
-      state.publicBedType.push({ type: action.payload, count: 1 });
+      state.publicBedType.push({ label: action.payload, count: 1 });
     },
     setPublicBedTypeCount: (
       state,
-      action: PayloadAction<{ value: number; type: string }>
+      action: PayloadAction<{ value: number; label: string }>
     ) => {
-      const { value, type } = action.payload;
-      const index = state.publicBedType.findIndex((bed) => bed.type === type);
+      const { value, label } = action.payload;
+      const index = state.publicBedType.findIndex((bed) => bed.label === label);
       state.publicBedType[index].count = value;
       if (value === 0) {
         state.publicBedType.splice(index, 1);
