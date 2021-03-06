@@ -32,6 +32,7 @@ interface IState {
   title: string | null;
   forbiddenRules: string[];
   customRules: string[];
+  availability: number;
 }
 
 const initialState: IState = {
@@ -66,6 +67,7 @@ const initialState: IState = {
   title: null,
   forbiddenRules: [],
   customRules: [],
+  availability: 0,
 };
 
 const hosting = createSlice({
@@ -194,6 +196,9 @@ const hosting = createSlice({
     },
     setForbiddenRules: (state, action: PayloadAction<string[]>) => {
       state.forbiddenRules = action.payload;
+    },
+    setAvailabilty: (state, action: PayloadAction<number>) => {
+      state.availability = action.payload;
     },
   },
 });

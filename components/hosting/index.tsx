@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect } from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import Bathroom from "./bathroom";
@@ -13,71 +13,75 @@ import Photos from "./photos";
 import Description from "./description";
 import Title from "./title";
 import Rules from "./rules";
+import Availability from "./availability";
+import Calender from "./calender";
 
 const Pin = dynamic(() => import("./pin"), { ssr: false });
+
+const totalPage = 15;
 
 const progressWidth = (path: string | undefined) => {
   switch (path) {
     case "building":
       return css`
-        width: calc(100% * (1 / 15));
+        width: calc(100% * (1 / ${totalPage}));
       `;
     case "bedroom":
       return css`
-        width: calc(100% * (2 / 15));
+        width: calc(100% * (2 / ${totalPage}));
       `;
     case "bathroom":
       return css`
-        width: calc(100% * (3 / 15));
+        width: calc(100% * (3 / ${totalPage}));
       `;
     case "location":
       return css`
-        width: calc(100% * (4 / 15));
+        width: calc(100% * (4 / ${totalPage}));
       `;
     case "pin":
       return css`
-        width: calc(100% * (5 / 15));
+        width: calc(100% * (5 / ${totalPage}));
       `;
     case "amenities":
       return css`
-        width: calc(100% * (6 / 15));
+        width: calc(100% * (6 / ${totalPage}));
       `;
     case "spaces":
       return css`
-        width: calc(100% * (7 / 15));
+        width: calc(100% * (7 / ${totalPage}));
       `;
     case "photos":
       return css`
-        width: calc(100% * (8 / 15));
+        width: calc(100% * (8 / ${totalPage}));
       `;
     case "description":
       return css`
-        width: calc(100% * (9 / 15));
+        width: calc(100% * (9 / ${totalPage}));
       `;
     case "title":
       return css`
-        width: calc(100% * (10 / 15));
+        width: calc(100% * (10 / ${totalPage}));
       `;
     case "rules":
       return css`
-        width: calc(100% * (11 / 15));
+        width: calc(100% * (11 / ${totalPage}));
+      `;
+    case "availability":
+      return css`
+        width: calc(100% * (12 / ${totalPage}));
+      `;
+    case "calender":
+      return css`
+        width: calc(100% * (13 / ${totalPage}));
+      `;
+    /* case "":
+      return css`
+        width: calc(100% * (14 / ${totalPage}));
       `;
     case "":
       return css`
-        width: calc(100% * (12 / 15));
-      `;
-    case "":
-      return css`
-        width: calc(100% * (13 / 15));
-      `;
-    case "":
-      return css`
-        width: calc(100% * (14 / 15));
-      `;
-    case "":
-      return css`
-        width: calc(100% * (15 / 15));
-      `;
+        width: calc(100% * (15 / ${totalPage}));
+      `; */
     default:
       return css`
         width: 0;
@@ -124,6 +128,19 @@ const Container = styled.div`
 const Hosting = () => {
   const { pathname } = useRouter();
   const path = pathname.split("/").pop();
+
+  const handleRefresh = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "";
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleRefresh);
+    return () => {
+      window.removeEventListener("beforeunload", handleRefresh);
+    };
+  }, []);
+
   return (
     <>
       <ProgressBar>
@@ -141,6 +158,8 @@ const Hosting = () => {
         {path === "description" && <Description />}
         {path === "title" && <Title />}
         {path === "rules" && <Rules />}
+        {path === "availability" && <Availability />}
+        {path === "calender" && <Calender />}
       </Container>
     </>
   );

@@ -715,3 +715,17 @@ export const rulesList = [
   "흡연 금지",
   "파티/이벤트 금지",
 ];
+
+export const availabilityList = [
+  { label: "항상", value: -1 },
+  { label: "3개월", value: 3 },
+  { label: "6개월", value: 6 },
+  { label: "9개월", value: 9 },
+  { label: "1년", value: 12 },
+  {
+    label: "기본적으로 예약 차단",
+    value: 0,
+    description:
+      "달력 전체가 기본적으로 차단됩니다. 예약을 받으려면 날짜를 직접 차단 해제해야 합니다.",
+  },
+];

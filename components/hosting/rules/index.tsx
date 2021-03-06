@@ -37,6 +37,7 @@ const InputContainer = styled.form`
 
 const Text = styled.div`
   margin-bottom: 15px;
+  max-width: 450px;
 `;
 
 const TextContainer = styled.div`
@@ -104,7 +105,7 @@ const Rules = () => {
           <Button onClick={handleAdd}>추가</Button>
         </InputContainer>
       </Container>
-      <Footer nextHref="/become-a-host/title" />
+      <Footer nextHref="/become-a-host/availability" />
     </>
   );
 };

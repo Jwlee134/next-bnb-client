@@ -94,13 +94,13 @@ const ErrorMessage = styled.div`
 `;
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  title: string;
+  title?: string;
   options: {
     label: string;
-    value: string;
+    value: string | number;
     description?: string;
   }[];
-  currentValue: string | null;
+  currentValue: string | number | null;
   isValid?: boolean;
   useValidationMode?: boolean;
 }
@@ -117,7 +117,7 @@ const RadioInput = ({
   return (
     <>
       <Container>
-        <Title>{title}</Title>
+        {title && <Title>{title}</Title>}
         {options.map((option, index) => (
           <InputContainer key={index}>
             <Block
