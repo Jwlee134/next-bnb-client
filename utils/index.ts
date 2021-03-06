@@ -11,3 +11,7 @@ export const extractToken = (cookie: string) => {
   });
   return obj;
 };
+
+export const addComma = (value: string) => {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

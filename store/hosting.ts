@@ -34,6 +34,7 @@ interface IState {
   customRules: string[];
   availability: number;
   blockedDayList: string[];
+  price: number;
 }
 
 const initialState: IState = {
@@ -70,6 +71,7 @@ const initialState: IState = {
   customRules: [],
   availability: -1,
   blockedDayList: [],
+  price: 0,
 };
 
 const hosting = createSlice({
@@ -204,6 +206,9 @@ const hosting = createSlice({
     },
     setBlockedDayList: (state, action: PayloadAction<string[]>) => {
       state.blockedDayList = action.payload;
+    },
+    setPrice: (state, action: PayloadAction<number>) => {
+      state.price = action.payload;
     },
   },
 });

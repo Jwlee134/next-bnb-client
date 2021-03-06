@@ -15,6 +15,7 @@ import Title from "./title";
 import Rules from "./rules";
 import Availability from "./availability";
 import Calendar from "./calendar";
+import Price from "./price";
 
 const Pin = dynamic(() => import("./pin"), { ssr: false });
 
@@ -74,11 +75,11 @@ const progressWidth = (path: string | undefined) => {
       return css`
         width: calc(100% * (13 / ${totalPage}));
       `;
-    /* case "":
+    case "price":
       return css`
         width: calc(100% * (14 / ${totalPage}));
       `;
-    case "":
+    /*case "":
       return css`
         width: calc(100% * (15 / ${totalPage}));
       `; */
@@ -160,6 +161,7 @@ const Hosting = () => {
         {path === "rules" && <Rules />}
         {path === "availability" && <Availability />}
         {path === "calendar" && <Calendar />}
+        {path === "price" && <Price />}
       </Container>
     </>
   );
