@@ -32,7 +32,7 @@ const Title = () => {
           isValid={!!title}
           maxLength={50}
           onChange={handleChange}
-          content={title || ""}
+          value={title || ""}
         />
       </Container>
       <Footer isValid={!!title} nextHref="/become-a-host/rules" />

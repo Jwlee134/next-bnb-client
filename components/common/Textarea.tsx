@@ -54,18 +54,19 @@ interface Props {
   isValid?: boolean;
   maxLength: number;
   onChange: (value: string) => void;
-  content: string;
+  value: string;
 }
 
-const Textarea = ({ isValid = true, maxLength, onChange, content }: Props) => {
+const Textarea = ({ isValid = true, maxLength, onChange, value }: Props) => {
   const { validation } = useValidation();
 
-  const calculateLength = maxLength - content.length;
+  const calculateLength = maxLength - value.length;
 
   return (
     <Container isValid={isValid} validation={validation}>
       <StyledTextarea
         maxLength={maxLength}
+        value={value}
         onChange={(e) => {
           onChange(e.currentTarget.value);
         }}

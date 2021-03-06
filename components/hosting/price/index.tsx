@@ -56,7 +56,7 @@ const Price = () => {
           />
         </InputContainer>
       </Container>
-      <Footer nextHref="/become-a-host/price" />
+      <Footer nextHref="/become-a-host/register" />
     </>
   );
 };

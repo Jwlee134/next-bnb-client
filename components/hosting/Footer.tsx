@@ -10,6 +10,8 @@ import { useSelector } from "store";
 import { getCoordinatesAPI } from "lib/api/location";
 import { useDispatch } from "react-redux";
 import { hostingActions } from "store/hosting";
+import { registerRoomAPI } from "lib/api/register";
+import { IUser } from "types/user";
 
 const Container = styled.div`
   width: 100%;
@@ -58,10 +60,12 @@ const Footer = ({
   nextHref,
   isValid = true,
   isLocation = false,
+  isSubmit = false,
 }: {
-  nextHref: string;
+  nextHref?: string;
   isValid?: boolean;
   isLocation?: boolean;
+  isSubmit?: boolean;
 }) => {
   const router = useRouter();
   const { setValidation } = useValidation();
@@ -70,6 +74,8 @@ const Footer = ({
   const { province, city, streetAddress } = useSelector(
     (state) => state.hosting
   );
+  const hosting = useSelector((state) => state.hosting);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const handleClick = async (
@@ -90,10 +96,19 @@ const Footer = ({
         dispatch(hostingActions.setLatitude(lat));
         dispatch(hostingActions.setLongitude(lng));
         setLoading(false);
-        router.push(nextHref);
+        router.push(nextHref as string);
       } catch (error) {
         alert(error.response.data);
       }
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!isValid) return;
+    try {
+      const { data } = await registerRoomAPI(hosting, user as IUser);
+    } catch (error) {
+      alert(error.response.data);
     }
   };
 
@@ -109,20 +124,34 @@ const Footer = ({
         <IoIosArrowBack size={20} />
         <span>뒤로</span>
       </GoBack>
-      <Link href={nextHref}>
-        <a>
-          <Button
-            onClick={handleClick}
-            style={{
-              width: 62,
-              backgroundColor: palette.dark_cyan,
-              position: "relative",
-            }}
-          >
-            {loading ? <Loader /> : "다음"}
-          </Button>
-        </a>
-      </Link>
+      {nextHref && (
+        <Link href={nextHref}>
+          <a>
+            <Button
+              onClick={handleClick}
+              style={{
+                width: 62,
+                backgroundColor: palette.dark_cyan,
+                position: "relative",
+              }}
+            >
+              {loading ? <Loader /> : "다음"}
+            </Button>
+          </a>
+        </Link>
+      )}
+      {isSubmit && (
+        <Button
+          onClick={handleSubmit}
+          style={{
+            width: 100,
+            backgroundColor: palette.dark_cyan,
+            position: "relative",
+          }}
+        >
+          등록하기
+        </Button>
+      )}
     </Container>
   );
 };

@@ -27,8 +27,8 @@ const Description = () => {
         <Textarea
           isValid={!!description && description.length < 501}
           onChange={handleChange}
-          content={description || ""}
           maxLength={1500}
+          value={description || ""}
         />
       </Container>
       <Footer

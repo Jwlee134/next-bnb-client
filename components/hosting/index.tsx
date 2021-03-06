@@ -3,9 +3,10 @@ import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
+
+import Building from "./building";
 import Bathroom from "./bathroom";
 import Bedroom from "./bedroom";
-import Building from "./building";
 import Location from "./location";
 import Amenities from "./amenities";
 import Spaces from "./spaces";
@@ -16,6 +17,7 @@ import Rules from "./rules";
 import Availability from "./availability";
 import Calendar from "./calendar";
 import Price from "./price";
+import Register from "./register";
 
 const Pin = dynamic(() => import("./pin"), { ssr: false });
 
@@ -79,10 +81,12 @@ const progressWidth = (path: string | undefined) => {
       return css`
         width: calc(100% * (14 / ${totalPage}));
       `;
-    /*case "":
+    case "register":
       return css`
         width: calc(100% * (15 / ${totalPage}));
-      `; */
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      `;
     default:
       return css`
         width: 0;
@@ -162,6 +166,7 @@ const Hosting = () => {
         {path === "availability" && <Availability />}
         {path === "calendar" && <Calendar />}
         {path === "price" && <Price />}
+        {path === "register" && <Register />}
       </Container>
     </>
   );
