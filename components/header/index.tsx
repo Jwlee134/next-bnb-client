@@ -34,7 +34,7 @@ const Container = styled.header<{ isTop: boolean; isHome: boolean }>`
   justify-content: space-between;
   align-items: center;
   color: white;
-  transition: all 0.3s linear;
+  transition: all 0.2s linear;
   ${({ isTop }) =>
     !isTop &&
     css`
@@ -56,7 +56,7 @@ const Header = () => {
   const { pathname } = useRouter();
 
   const handleScroll = throttle(() => {
-    if (window.scrollY > 10) {
+    if (window.scrollY > 0) {
       setIsTop(false);
     } else {
       setIsTop(true);

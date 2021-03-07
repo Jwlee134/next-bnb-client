@@ -17,7 +17,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       currentUser.save();
       res.status(200).end();
     } catch (error) {
-      console.log(error);
       res.status(500).send("등록에 실패하였습니다. 다시 시도해 주세요.");
     }
   }

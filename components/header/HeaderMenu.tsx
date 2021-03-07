@@ -48,7 +48,7 @@ const Image = styled.img`
 const PopupContainer = styled.div`
   position: absolute;
   background-color: white;
-  width: 240px;
+  width: 200px;
   box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.12);
   border-radius: 8px;
   top: 50px;
