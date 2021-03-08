@@ -1,17 +1,20 @@
 import useDebounce from "hooks/useDebounce";
+import { getCoordinatesAPI } from "lib/api/location";
 import { getPlaceAPI } from "lib/api/place";
 import { isEmpty } from "lodash";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
+import { useDispatch } from "react-redux";
+import { useSelector } from "store";
+import { searchActions } from "store/search";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
-
-const Label = styled.label``;
 
 const Input = styled.input`
   all: unset;
   cursor: text;
+  font-size: 14px;
   &::placeholder {
     font-size: 14px;
   }
@@ -53,28 +56,47 @@ const Text = styled.span`
 `;
 
 const Location = () => {
+  const value = useSelector((state) => state.search.value);
   const [popupOpened, setPopupOpened] = useState(false);
-  const [value, setValue] = useState("");
   const [placeList, setPlaceList] = useState<string[]>([]);
 
-  const keyword = useDebounce(value, 500);
+  const dispatch = useDispatch();
+
+  const keyword = useDebounce(value as string, 500);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    dispatch(searchActions.setValue(e.target.value));
   };
 
   const handleNear = () => {
     setPopupOpened(false);
-    setValue("가까운 여행지 둘러보기");
+    dispatch(searchActions.setValue("가까운 여행지 둘러보기"));
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
         const { latitude, longitude } = coords;
+        dispatch(searchActions.setLatitude(latitude));
+        dispatch(searchActions.setLongitude(longitude));
       },
       (err) => {
         alert(err.message);
-        setValue("");
+        dispatch(searchActions.setValue(""));
       }
     );
+  };
+
+  const handleClick = async (value: string) => {
+    try {
+      setPopupOpened(false);
+      dispatch(searchActions.setValue(value));
+      const {
+        data: { lat, lng },
+      } = await getCoordinatesAPI(value);
+      dispatch(searchActions.setLatitude(lat));
+      dispatch(searchActions.setLongitude(lng));
+    } catch (error) {
+      alert(error.response.data);
+      dispatch(searchActions.setValue(""));
+    }
   };
 
   const searchPlaces = async () => {
@@ -87,14 +109,14 @@ const Location = () => {
   };
 
   useEffect(() => {
-    if (keyword) setPlaceList([]);
-    searchPlaces();
+    if (!keyword) setPlaceList([]);
+    if (keyword) searchPlaces();
   }, [keyword]);
 
   return (
     <div className="search-container">
       <OutsideClickHandler onOutsideClick={() => setPopupOpened(false)}>
-        <Label onClick={() => setPopupOpened(true)}>
+        <label>
           <div
             className={`search-item ${
               popupOpened && "search-item-popup-opened"
@@ -102,20 +124,21 @@ const Location = () => {
           >
             <h3 className="search-text">위치</h3>
             <Input
+              onClick={() => setPopupOpened(!popupOpened)}
               value={value}
               onChange={handleChange}
               placeholder="어디로 여행가세요?"
             />
           </div>
-        </Label>
+        </label>
         {popupOpened && (
           <ListContainer typing={!!value && isEmpty(placeList)}>
             {!value && (
               <List onClick={handleNear}>
                 <Image
                   src="/static/image/home/map.png"
-                  width="37"
-                  height="37"
+                  width="35"
+                  height="35"
                 />
                 <Text>가까운 여행지 둘러보기</Text>
               </List>
@@ -123,11 +146,11 @@ const Location = () => {
             {value &&
               !isEmpty(placeList) &&
               placeList.map((place, index) => (
-                <List key={index}>
+                <List key={index} onClick={() => handleClick(place)}>
                   <Image
                     src="/static/image/home/map.png"
-                    width="37"
-                    height="37"
+                    width="35"
+                    height="35"
                   />
                   <Text>{place}</Text>
                 </List>

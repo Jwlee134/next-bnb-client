@@ -1,4 +1,6 @@
-import React from "react";
+import Header from "components/header";
+import { throttle } from "lodash";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchBar from "./searchBar";
 
@@ -21,6 +23,9 @@ const ImageContainer = styled.div`
 const Contents = styled.div`
   padding: 0px 80px 32px 80px;
   height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const LabelContainer = styled.div`
@@ -29,6 +34,7 @@ const LabelContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  float: bottom;
 `;
 
 const Label = styled.h1`
@@ -55,20 +61,52 @@ const Button = styled.button`
 `;
 
 const Home = () => {
+  const [scroll, setScroll] = useState(0);
+  const [animate, setAnimate] = useState(false);
+
+  const handleScroll = throttle(() => {
+    // 스크롤이 일정 부분 넘어가면 함수 종료시켜 불필요한 리렌더링 방지
+    if (window.scrollY > 100) return;
+    setScroll(window.scrollY);
+  }, 50);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // animate값이 true일 때 컴포넌트가 렌더링된다.
+  // animate가 false가 될 때 0.08초 간격을 주어 컴포넌트가 제거되기 전 0.08초 애니메이션 실행
+  useEffect(() => {
+    if (scroll > 0) {
+      setAnimate(true);
+    } else {
+      setTimeout(() => {
+        setAnimate(false);
+      }, 80);
+    }
+  }, [scroll]);
+
   return (
-    <Container>
-      <ImageContainer />
-      <Contents>
-        <SearchBar />
-        <LabelContainer>
-          <Label>
-            이제, 여행은
-            <br /> 가까운 곳에서
-          </Label>
-          <Button>근처의 숙소 둘러보기</Button>
-        </LabelContainer>
-      </Contents>
-    </Container>
+    <>
+      <Header scroll={scroll} animate={animate} />
+      <Container>
+        <ImageContainer />
+        <Contents>
+          {scroll === 0 && <SearchBar scroll={scroll} animate={animate} />}
+          <div />
+          <LabelContainer>
+            <Label>
+              이제, 여행은
+              <br /> 가까운 곳에서
+            </Label>
+            <Button>근처의 숙소 둘러보기</Button>
+          </LabelContainer>
+        </Contents>
+      </Container>
+    </>
   );
 };
 

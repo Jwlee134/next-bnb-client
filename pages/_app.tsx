@@ -3,7 +3,6 @@ import { AppProps } from "next/dist/next-server/lib/router/router";
 import App, { AppContext } from "next/app";
 
 import GlobalStyles from "styles/GlobalStyles";
-import Header from "components/header";
 import { wrapper } from "store";
 import { meAPI } from "lib/api/auth";
 import { userActions } from "store/user";
@@ -13,7 +12,6 @@ import { extractToken } from "utils";
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <>
     <GlobalStyles />
-    <Header />
     <Component {...pageProps} />
     <div id="modal" />
   </>

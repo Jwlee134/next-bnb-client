@@ -47,7 +47,11 @@ const Button = styled.button`
   }
 `;
 
-const Value = styled.span``;
+const SubLabel = styled.div`
+  font-size: 13px;
+  font-weight: 300;
+  opacity: 0.7;
+`;
 
 interface Props {
   description?: string;
@@ -57,6 +61,7 @@ interface Props {
   onClick: (value: number) => void;
   style?: Object;
   disableValue?: number;
+  subLabel?: string;
 }
 
 const Counter = ({
@@ -67,13 +72,17 @@ const Counter = ({
   onClick,
   style,
   disableValue = 1,
+  subLabel,
 }: Props) => {
   return (
     <>
       {description && <Description>{description}</Description>}
       <Container style={style}>
         <ButtonContainer>
-          <Label>{label}</Label>
+          <div>
+            <Label>{label}</Label>
+            {subLabel && <SubLabel>{subLabel}</SubLabel>}
+          </div>
           <CounterContainer>
             <Button
               disabled={value === disableValue}
@@ -81,7 +90,7 @@ const Counter = ({
             >
               –
             </Button>
-            <Value>{value}</Value>
+            <span>{value}</span>
             <Button onClick={() => onClick(value + unitNum)}>+</Button>
           </CounterContainer>
         </ButtonContainer>

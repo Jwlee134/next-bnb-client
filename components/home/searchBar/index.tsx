@@ -1,12 +1,20 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import palette from "styles/palette";
-import CheckIn from "./CheckIn";
-import CheckOut from "./CheckOut";
+import Date from "./Date";
 import Guest from "./Guest";
 import Location from "./Location";
 
-const Container = styled.div`
+const fadeOut = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const Container = styled.div<{ scroll: number; animate: boolean }>`
   width: 100%;
   max-width: 850px;
   height: 64px;
@@ -16,13 +24,19 @@ const Container = styled.div`
   margin: 0 auto;
   display: flex;
   position: relative;
+  ${({ animate, scroll }) =>
+    animate &&
+    scroll === 0 &&
+    css`
+      animation: ${fadeOut} 0.08s linear;
+    `}
   .search-container {
     position: relative;
     flex-grow: 1.5;
     height: 100%;
   }
   .search-date {
-    flex-grow: 1;
+    flex-grow: 1.3;
   }
   .search-item {
     position: absolute;
@@ -36,6 +50,7 @@ const Container = styled.div`
     &:hover {
       background-color: ${palette.gray_eb};
     }
+    cursor: pointer;
   }
   .search-text {
     font-size: 14px;
@@ -56,14 +71,18 @@ const Divider = styled.div`
   margin: auto 0;
 `;
 
-const SearchBar = () => {
+const SearchBar = ({
+  scroll,
+  animate,
+}: {
+  scroll: number;
+  animate: boolean;
+}) => {
   return (
-    <Container>
+    <Container scroll={scroll} animate={animate}>
       <Location />
       <Divider />
-      <CheckIn />
-      <Divider />
-      <CheckOut />
+      <Date />
       <Divider />
       <Guest />
     </Container>
