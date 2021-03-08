@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 
-export interface HostingState extends Document {
+export interface IHostingState {
   largeBuildingType: {
     label: string | null;
     description: string | null;
@@ -36,3 +36,5 @@ export interface HostingState extends Document {
   blockedDayList: string[];
   price: number;
 }
+
+export interface IRoomDetail extends IHostingState, Document {}

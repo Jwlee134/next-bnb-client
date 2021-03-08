@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { HostingState } from "types/room";
+import { IRoomDetail } from "types/room";
 
 const RoomSchema: Schema = new mongoose.Schema({
   largeBuildingType: {
@@ -66,4 +66,4 @@ const RoomSchema: Schema = new mongoose.Schema({
 });
 
 export default mongoose.models.Room ||
-  mongoose.model<HostingState>("Room", RoomSchema);
+  mongoose.model<IRoomDetail>("Room", RoomSchema);

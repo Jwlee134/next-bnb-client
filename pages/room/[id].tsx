@@ -1,9 +1,14 @@
 import React from "react";
 import RoomDetail from "components/room/detail";
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps } from "next";
 import { getRoomDetailAPI } from "lib/api/room";
+import { IRoomDetail } from "types/room";
 
-const roomDetail: NextPage = ({ data }) => {
+interface Props {
+  data: IRoomDetail;
+}
+
+const roomDetail = ({ data }: Props) => {
   return <RoomDetail room={data} />;
 };
 

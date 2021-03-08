@@ -1,6 +1,6 @@
-import { HostingState } from "types/room";
+import { IHostingState, IRoomDetail } from "types/room";
 import { IUser } from "types/user";
 import { api } from ".";
 
-export const registerRoomAPI = (body: HostingState, user: IUser) =>
-  api.post("/api/register/room", { body, user });
+export const registerRoomAPI = (body: IHostingState, user: IUser) =>
+  api.post<IRoomDetail>("/api/register/room", { body, user });

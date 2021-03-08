@@ -1,15 +1,15 @@
 import Room from "models/Room";
 import User from "models/User";
 import { NextApiRequest, NextApiResponse } from "next";
-import { HostingState } from "types/room";
+import { IHostingState, IRoomDetail } from "types/room";
 import { IUser } from "types/user";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     try {
-      const { body, user }: { body: HostingState; user: IUser } = req.body;
+      const { body, user }: { body: IHostingState; user: IUser } = req.body;
       const currentUser: IUser = await User.findById(user._id);
-      const newRoom: HostingState = await Room.create({
+      const newRoom: IRoomDetail = await Room.create({
         ...body,
         creator: user._id,
       });

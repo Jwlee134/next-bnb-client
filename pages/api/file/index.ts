@@ -30,8 +30,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 s3.upload({
                   Bucket: process.env.S3_BUCKET_NAME!,
                   ACL: "public-read",
-                  Key: file.name,
-                  Body: fs.createReadStream(file.path),
+                  Key: (file as any).name,
+                  Body: fs.createReadStream((file as any).path),
                 })
                   .promise()
                   .then((res) => resolve(res.Location))

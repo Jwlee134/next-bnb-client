@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HostingState } from "types/room";
+import { IHostingState } from "types/room";
 
-const initialState: HostingState = {
+const initialState: IHostingState = {
   largeBuildingType: {
     label: null,
     description: null,

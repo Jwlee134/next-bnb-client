@@ -107,6 +107,7 @@ const Footer = ({
     if (!isValid) return;
     try {
       const { data } = await registerRoomAPI(hosting, user as IUser);
+      console.log(data);
     } catch (error) {
       alert(error.response.data);
     }

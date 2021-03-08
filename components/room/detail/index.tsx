@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import Head from "next/head";
-import { HostingState } from "types/room";
+import { IRoomDetail } from "types/room";
 
 const Container = styled.div``;
 
-const RoomDetail = ({ room }: { room: HostingState }) => {
+const RoomDetail = ({ room }: { room: IRoomDetail }) => {
   return (
     <>
       <Head>
