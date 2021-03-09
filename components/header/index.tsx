@@ -21,12 +21,6 @@ interface MiniSearchBarProps {
   miniAnimate: boolean;
 }
 
-const fadeOut = keyframes`
-  100% {
-    opacity: 0;
-  }
-`;
-
 const sizeDown = keyframes`
   0% {
     transform: translateY(65px) scale(1.75, 1);
@@ -44,19 +38,6 @@ const sizeUp = keyframes`
   100% {
     transform: translateY(65px) scale(1.75, 1);
     display: none;
-  }
-`;
-
-const goDown = keyframes`
-  100% {
-    transform: translateY(0px)
-  }
-`;
-
-const goUp = keyframes`
-  100% {
-    background-color: transparent;
-    transform: translateY(-100px)
   }
 `;
 
@@ -103,33 +84,6 @@ const Container = styled.header<ContainerProps>`
       box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
       background-color: white;
     `}
-    ${({ miniAnimate }) =>
-    miniAnimate
-      ? css`
-          &::after {
-            content: "";
-            position: absolute;
-            top: 80px;
-            background-color: white;
-            height: 100px;
-            width: 100%;
-            z-index: -1;
-            transform: translateY(-80px);
-            animation: ${goDown} 0.08s linear forwards;
-          }
-        `
-      : css`
-          &::after {
-            content: "";
-            position: absolute;
-            top: 80px;
-            background-color: white;
-            height: 100px;
-            width: 100%;
-            z-index: -1;
-            animation: ${goUp} 0.08s linear forwards;
-          }
-        `}
 `;
 
 const MiniSearchBar = styled.div<MiniSearchBarProps>`
@@ -179,7 +133,7 @@ const MiniSearchBar = styled.div<MiniSearchBarProps>`
 
 const SearchBarContainer = styled.div`
   position: absolute;
-  top: 80px;
+  top: 100px;
   padding: 0px 80px;
   width: 100%;
   height: 64px;
@@ -220,6 +174,9 @@ const Header = ({ scroll, animate }: { scroll: number; animate: boolean }) => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleMouseDown);
+    return () => {
+      document.removeEventListener("mousedown", handleMouseDown);
+    };
   }, []);
 
   return (
