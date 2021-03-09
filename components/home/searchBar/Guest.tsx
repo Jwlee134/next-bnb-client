@@ -35,7 +35,12 @@ const Container = styled.div<{ popupOpened: boolean }>`
   }
 `;
 
-const Label = styled.label``;
+const Label = styled.label<{ popupOpened: boolean }>`
+  > div {
+    padding-right: ${({ popupOpened }) =>
+      popupOpened ? "100px !important" : "65px !important"};
+  }
+`;
 
 const ListContainer = styled.ul`
   position: absolute;
@@ -85,7 +90,10 @@ const Guest = () => {
   return (
     <Container className="search-container" popupOpened={popupOpened}>
       <OutsideClickHandler onOutsideClick={() => setPopupOpened(false)}>
-        <Label onClick={() => setPopupOpened(!popupOpened)}>
+        <Label
+          popupOpened={popupOpened}
+          onClick={() => setPopupOpened(!popupOpened)}
+        >
           <div
             className={`search-item ${
               popupOpened && "search-item-popup-opened"

@@ -1,7 +1,6 @@
 import Header from "components/header";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import SearchBar from "./searchBar";
 
 const Container = styled.div`
   height: 200vh;
@@ -94,7 +93,6 @@ const Home = () => {
       <Container>
         <ImageContainer />
         <Contents>
-          {scroll === 0 && <SearchBar animate={animate} />}
           <div />
           <LabelContainer>
             <Label>

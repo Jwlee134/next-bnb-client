@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -53,6 +53,13 @@ const goDown = keyframes`
   }
 `;
 
+const goUp = keyframes`
+  100% {
+    background-color: transparent;
+    transform: translateY(-100px)
+  }
+`;
+
 const LeftContainer = styled.div`
   margin-left: 80px;
   font-size: 24px;
@@ -96,37 +103,33 @@ const Container = styled.header<ContainerProps>`
       box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
       background-color: white;
     `}
-  ${({ miniAnimate, isTop }) =>
-    miniAnimate &&
-    !isTop &&
-    css`
-      &::after {
-        content: "";
-        position: absolute;
-        top: 80px;
-        background-color: white;
-        height: 100px;
-        width: 100%;
-        z-index: -1;
-        transform: translateY(-80px);
-        animation: ${goDown} 0.07s linear forwards;
-      }
-    `}
-  ${({ isTop, hideMiniBar }) =>
-    isTop &&
-    hideMiniBar &&
-    css`
-      &::after {
-        content: "";
-        position: absolute;
-        top: 80px;
-        background-color: white;
-        height: 100px;
-        width: 100%;
-        z-index: -1;
-        animation: ${fadeOut} 0.1s linear forwards;
-      }
-    `}
+    ${({ miniAnimate }) =>
+    miniAnimate
+      ? css`
+          &::after {
+            content: "";
+            position: absolute;
+            top: 80px;
+            background-color: white;
+            height: 100px;
+            width: 100%;
+            z-index: -1;
+            transform: translateY(-80px);
+            animation: ${goDown} 0.08s linear forwards;
+          }
+        `
+      : css`
+          &::after {
+            content: "";
+            position: absolute;
+            top: 80px;
+            background-color: white;
+            height: 100px;
+            width: 100%;
+            z-index: -1;
+            animation: ${goUp} 0.08s linear forwards;
+          }
+        `}
 `;
 
 const MiniSearchBar = styled.div<MiniSearchBarProps>`
@@ -179,10 +182,13 @@ const SearchBarContainer = styled.div`
   top: 80px;
   padding: 0px 80px;
   width: 100%;
+  height: 64px;
 `;
 
 const Header = ({ scroll, animate }: { scroll: number; animate: boolean }) => {
   const { pathname } = useRouter();
+
+  const headerRef = useRef<HTMLElement>(null);
 
   const [hideMiniBar, setHideMiniBar] = useState(false);
   const [miniAnimate, setMiniAnimate] = useState(false);
@@ -203,6 +209,19 @@ const Header = ({ scroll, animate }: { scroll: number; animate: boolean }) => {
     }
   }, [scroll]);
 
+  const handleMouseDown = (e: MouseEvent) => {
+    if (!headerRef.current?.contains(e.target as Node)) {
+      setMiniAnimate(false);
+      setTimeout(() => {
+        setHideMiniBar(false);
+      }, 70);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleMouseDown);
+  }, []);
+
   return (
     <>
       <Container
@@ -210,6 +229,7 @@ const Header = ({ scroll, animate }: { scroll: number; animate: boolean }) => {
         miniAnimate={miniAnimate}
         isHome={pathname === "/"}
         hideMiniBar={hideMiniBar}
+        ref={headerRef}
       >
         <Link href="/">
           <LeftContainer>
@@ -233,11 +253,9 @@ const Header = ({ scroll, animate }: { scroll: number; animate: boolean }) => {
         <RightContainer>
           <HeaderMenu />
         </RightContainer>
-        {hideMiniBar && (
-          <SearchBarContainer>
-            <SearchBar />
-          </SearchBarContainer>
-        )}
+        <SearchBarContainer>
+          <SearchBar animate={animate} hideMiniBar={hideMiniBar} />
+        </SearchBarContainer>
       </Container>
     </>
   );

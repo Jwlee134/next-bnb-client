@@ -5,7 +5,7 @@ import Date from "./Date";
 import Guest from "./Guest";
 import Location from "./Location";
 
-const Container = styled.div<{ animate: boolean }>`
+const Container = styled.div<{ animate: boolean; hideMiniBar: boolean }>`
   width: 100%;
   max-width: 850px;
   height: 64px;
@@ -20,6 +20,11 @@ const Container = styled.div<{ animate: boolean }>`
     animate &&
     css`
       display: none;
+    `}
+  ${({ hideMiniBar }) =>
+    hideMiniBar &&
+    css`
+      display: flex !important;
     `}
   .search-container {
     position: relative;
@@ -62,9 +67,15 @@ const Divider = styled.div`
   margin: auto 0;
 `;
 
-const SearchBar = ({ animate }: { animate?: boolean }) => {
+const SearchBar = ({
+  animate,
+  hideMiniBar,
+}: {
+  animate: boolean;
+  hideMiniBar: boolean;
+}) => {
   return (
-    <Container animate={animate as boolean}>
+    <Container animate={animate} hideMiniBar={hideMiniBar}>
       <Location />
       <Divider />
       <Date />
