@@ -55,6 +55,7 @@ const PopupContainer = styled.div`
   right: 0;
   cursor: default;
   padding: 6px 0px;
+  z-index: 2;
 `;
 
 const List = styled.ul``;

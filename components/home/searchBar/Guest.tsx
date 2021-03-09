@@ -1,39 +1,14 @@
-import Button from "components/common/Button";
 import Counter from "components/common/Counter";
 import React, { useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import { searchActions } from "store/search";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import palette from "styles/palette";
-import { BiSearch } from "react-icons/bi";
+import SearchButton from "./SearchButton";
 
-const Container = styled.div<{ popupOpened: boolean }>`
-  > button {
-    width: 48px;
-    position: absolute;
-    right: 8px;
-    top: 8px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.1s linear;
-    &:hover {
-      background-color: #e44e53;
-    }
-    ${({ popupOpened }) =>
-      popupOpened
-        ? css`
-            width: 84px;
-            border-radius: 32px;
-          `
-        : css`
-            transition: all 0.1s linear;
-          `}
-  }
-`;
+const Container = styled.div``;
 
 const Label = styled.label<{ popupOpened: boolean }>`
   > div {
@@ -88,7 +63,7 @@ const Guest = () => {
   };
 
   return (
-    <Container className="search-container" popupOpened={popupOpened}>
+    <Container className="search-container">
       <OutsideClickHandler onOutsideClick={() => setPopupOpened(false)}>
         <Label
           popupOpened={popupOpened}
@@ -133,11 +108,8 @@ const Guest = () => {
             />
           </ListContainer>
         )}
+        <SearchButton />
       </OutsideClickHandler>
-      <Button>
-        <BiSearch size={24} />
-        {popupOpened && <span>검색</span>}
-      </Button>
     </Container>
   );
 };

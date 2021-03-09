@@ -1,10 +1,10 @@
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps } from "next";
 import React from "react";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import { oauthLoginAPI } from "lib/api/auth";
 
-const github: NextPage = () => {
+const github = () => {
   return <></>;
 };
 

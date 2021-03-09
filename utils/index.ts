@@ -15,3 +15,18 @@ export const extractToken = (cookie: string) => {
 export const addComma = (value: string) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export const makeQueryString = (baseUrl: string, queryObject: Object) => {
+  const keys = Object.keys(queryObject);
+  const values = Object.values(queryObject);
+  let url = `${baseUrl}?`;
+  // value값이 있을때만 url에 추가
+  values.forEach((value, i) => {
+    if (value) {
+      url += `${keys[i]}=${value}&`;
+    }
+  });
+  // 마지막 & 제거
+  const query = url.slice(0, -1);
+  return query;
+};

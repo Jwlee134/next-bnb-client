@@ -10,7 +10,7 @@ import { useSelector } from "store";
 import { getCoordinatesAPI } from "lib/api/location";
 import { useDispatch } from "react-redux";
 import { hostingActions } from "store/hosting";
-import { registerRoomAPI } from "lib/api/register";
+import { registerRoomAPI } from "lib/api/room";
 import { IUser } from "types/user";
 
 const Container = styled.div`
