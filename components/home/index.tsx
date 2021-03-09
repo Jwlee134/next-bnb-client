@@ -1,5 +1,4 @@
 import Header from "components/header";
-import { throttle } from "lodash";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchBar from "./searchBar";
@@ -64,11 +63,11 @@ const Home = () => {
   const [scroll, setScroll] = useState(0);
   const [animate, setAnimate] = useState(false);
 
-  const handleScroll = throttle(() => {
+  const handleScroll = () => {
     // 스크롤이 일정 부분 넘어가면 함수 종료시켜 불필요한 리렌더링 방지
     if (window.scrollY > 100) return;
     setScroll(window.scrollY);
-  }, 50);
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -85,7 +84,7 @@ const Home = () => {
     } else {
       setTimeout(() => {
         setAnimate(false);
-      }, 80);
+      }, 70);
     }
   }, [scroll]);
 
@@ -95,7 +94,7 @@ const Home = () => {
       <Container>
         <ImageContainer />
         <Contents>
-          {scroll === 0 && <SearchBar scroll={scroll} animate={animate} />}
+          {scroll === 0 && <SearchBar animate={animate} />}
           <div />
           <LabelContainer>
             <Label>

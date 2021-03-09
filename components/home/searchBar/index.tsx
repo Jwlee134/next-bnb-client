@@ -1,34 +1,25 @@
 import React from "react";
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import Date from "./Date";
 import Guest from "./Guest";
 import Location from "./Location";
 
-const fadeOut = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
-
-const Container = styled.div<{ scroll: number; animate: boolean }>`
+const Container = styled.div<{ animate: boolean }>`
   width: 100%;
   max-width: 850px;
   height: 64px;
+  color: black;
   background-color: white;
   box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15), 0px 3px 8px rgba(0, 0, 0, 0.1);
   border-radius: 32px;
   margin: 0 auto;
   display: flex;
   position: relative;
-  ${({ animate, scroll }) =>
+  ${({ animate }) =>
     animate &&
-    scroll === 0 &&
     css`
-      animation: ${fadeOut} 0.08s linear;
+      display: none;
     `}
   .search-container {
     position: relative;
@@ -71,15 +62,9 @@ const Divider = styled.div`
   margin: auto 0;
 `;
 
-const SearchBar = ({
-  scroll,
-  animate,
-}: {
-  scroll: number;
-  animate: boolean;
-}) => {
+const SearchBar = ({ animate }: { animate?: boolean }) => {
   return (
-    <Container scroll={scroll} animate={animate}>
+    <Container animate={animate as boolean}>
       <Location />
       <Divider />
       <Date />
