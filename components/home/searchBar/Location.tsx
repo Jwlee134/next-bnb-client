@@ -55,9 +55,14 @@ const Text = styled.span`
   max-width: 400px;
 `;
 
-const Location = () => {
+const Location = ({
+  locationPopup,
+  setLocationPopup,
+}: {
+  locationPopup: boolean;
+  setLocationPopup: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const value = useSelector((state) => state.search.value);
-  const [popupOpened, setPopupOpened] = useState(false);
   const [placeList, setPlaceList] = useState<string[]>([]);
 
   const dispatch = useDispatch();
@@ -69,7 +74,8 @@ const Location = () => {
   };
 
   const handleNear = () => {
-    setPopupOpened(false);
+    setLocationPopup(false);
+    document.getElementById("dateRangePicker-start")?.focus();
     dispatch(searchActions.setValue("가까운 여행지 둘러보기"));
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
@@ -86,7 +92,8 @@ const Location = () => {
 
   const handleClick = async (value: string) => {
     try {
-      setPopupOpened(false);
+      setLocationPopup(false);
+      document.getElementById("dateRangePicker-start")?.focus();
       dispatch(searchActions.setValue(value));
       const {
         data: { lat, lng },
@@ -115,23 +122,23 @@ const Location = () => {
 
   return (
     <div className="search-container">
-      <OutsideClickHandler onOutsideClick={() => setPopupOpened(false)}>
+      <OutsideClickHandler onOutsideClick={() => setLocationPopup(false)}>
         <label>
           <div
             className={`search-item ${
-              popupOpened && "search-item-popup-opened"
+              locationPopup && "search-item-popup-opened"
             }`}
           >
             <h3 className="search-text">위치</h3>
             <Input
-              onClick={() => setPopupOpened(!popupOpened)}
+              onClick={() => setLocationPopup(!locationPopup)}
               value={value}
               onChange={handleChange}
               placeholder="어디로 여행가세요?"
             />
           </div>
         </label>
-        {popupOpened && (
+        {locationPopup && (
           <ListContainer typing={!!value && isEmpty(placeList)}>
             {!value && (
               <List onClick={handleNear}>

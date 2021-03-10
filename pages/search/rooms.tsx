@@ -8,25 +8,9 @@ const rooms = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const {
-    latitude,
-    longitude,
-    checkIn,
-    checkOut,
-    adults,
-    children,
-    infants,
-  } = query;
   try {
-    const { data } = await searchRoomAPI({
-      latitude,
-      longitude,
-      checkIn,
-      checkOut,
-      adults,
-      children,
-      infants,
-    });
+    const { data } = await searchRoomAPI(query);
+    console.log(data);
     return { props: {} };
   } catch (error) {
     return {

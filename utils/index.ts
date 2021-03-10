@@ -16,7 +16,7 @@ export const addComma = (value: string) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-export const makeQueryString = (baseUrl: string, queryObject: Object) => {
+/* export const makeQueryString = (baseUrl: string, queryObject: Object) => {
   const keys = Object.keys(queryObject);
   const values = Object.values(queryObject);
   let url = `${baseUrl}?`;
@@ -29,4 +29,4 @@ export const makeQueryString = (baseUrl: string, queryObject: Object) => {
   // 마지막 & 제거
   const query = url.slice(0, -1);
   return query;
-};
+}; */

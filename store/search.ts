@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface IState {
+type IState = {
   value: string;
   latitude: number;
   longitude: number;
@@ -9,7 +9,7 @@ interface IState {
   adults: number;
   children: number;
   infants: number;
-}
+};
 
 const initialState: IState = {
   value: "",

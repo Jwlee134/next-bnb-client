@@ -11,7 +11,7 @@ import palette from "styles/palette";
 
 moment.locale("ko");
 
-const Container = styled.div<{ focused: boolean }>`
+const Container = styled.div<{ focused: "startDate" | "endDate" }>`
   .DateRangePicker {
     position: absolute;
     width: 100%;
@@ -26,21 +26,42 @@ const Container = styled.div<{ focused: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 32px;
-    &:hover {
-      background-color: ${palette.gray_eb};
+    /* .DateInput:first-child {
+      ::after {
+        position: absolute;
+        content: "체크인";
+        color: black;
+        left: 20px;
+        font-size: 14px;
+        top: 15px;
+      }
+    } */
+    .DateInput:last-child {
+      ::after {
+        position: absolute;
+        content: "체크아웃";
+        color: black;
+        left: 20px;
+        font-size: 14px;
+        top: 15px;
+      }
     }
-    ${({ focused }) =>
-      focused &&
-      css`
-        &:hover {
-          background-color: white;
-        }
-        box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
-          0px 3px 8px rgba(0, 0, 0, 0.1);
-      `}
   }
-  .DateInput_fang {
+  .DateInput_screenReaderMessage {
+  }
+  #DateInput__screen-reader-message-dateRangePicker-start {
+    ::after {
+      position: absolute;
+      content: "체크인";
+      color: black;
+      left: 20px;
+      font-size: 14px;
+      top: 15px;
+    }
+  }
+  .DateInput_fang,
+  .DayPickerKeyboardShortcuts_buttonReset,
+  .DateRangePickerInput_arrow_svg {
     display: none;
   }
   .DateRangePicker_picker {
@@ -66,20 +87,24 @@ const Container = styled.div<{ focused: boolean }>`
     cursor: default;
   }
   .DateInput {
+    width: 100%;
     height: 100%;
+    position: relative;
     input {
       padding: 0;
       height: 100%;
       border-bottom: 0;
       cursor: pointer;
-      text-align: center;
+      padding: 0px 20px;
+      border-radius: 32px;
+      &:hover {
+        background-color: ${palette.gray_eb};
+      }
+      padding-top: 15px;
     }
   }
   .DateInput_input__focused {
     border-bottom: 0;
-  }
-  .DayPickerKeyboardShortcuts_buttonReset {
-    display: none;
   }
   .CalendarDay {
     border: none;
@@ -113,6 +138,36 @@ const Container = styled.div<{ focused: boolean }>`
     outline: none;
     border-radius: 100px;
   }
+  ${({ focused }) =>
+    focused === "startDate" &&
+    css`
+      #dateRangePicker-start {
+        border-radius: 32px;
+        &:hover {
+          background-color: white;
+        }
+        box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
+          0px 3px 8px rgba(0, 0, 0, 0.1);
+      }
+    `};
+  ${({ focused }) =>
+    focused === "endDate" &&
+    css`
+      #dateRangePicker-end {
+        border-radius: 32px;
+        &:hover {
+          background-color: white;
+        }
+        box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
+          0px 3px 8px rgba(0, 0, 0, 0.1);
+      }
+    `};
+  .DateRangePickerInput_arrow {
+    width: 1px;
+    background-color: ${palette.gray_eb};
+    height: 28px;
+    margin: auto 0;
+  }
 `;
 
 interface Props {
@@ -135,7 +190,7 @@ const DateRangePicker = ({ checkIn, checkOut, onChange }: Props) => {
   };
 
   return (
-    <Container focused={focused !== null}>
+    <Container focused={focused as "startDate" | "endDate"}>
       <RangePicker
         startDate={checkIn}
         endDate={checkOut}
@@ -144,13 +199,14 @@ const DateRangePicker = ({ checkIn, checkOut, onChange }: Props) => {
         }}
         focusedInput={focused}
         onFocusChange={handleFocus}
-        startDateId="your_unique_start_date_id"
-        endDateId="your_unique_end_date_id"
-        startDatePlaceholderText="체크인"
-        endDatePlaceholderText="체크아웃"
+        startDateId="dateRangePicker-start"
+        endDateId="dateRangePicker-end"
+        startDatePlaceholderText="날짜 선택"
+        endDatePlaceholderText="날짜 선택"
         noBorder
         readOnly
         displayFormat="MM월 DD일"
+        keepOpenOnDateSelect
       />
     </Container>
   );

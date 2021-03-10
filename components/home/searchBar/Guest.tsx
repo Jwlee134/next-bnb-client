@@ -6,7 +6,6 @@ import { useSelector } from "store";
 import { searchActions } from "store/search";
 import styled from "styled-components";
 import palette from "styles/palette";
-import SearchButton from "./SearchButton";
 
 const Container = styled.div``;
 
@@ -63,7 +62,7 @@ const Guest = () => {
   };
 
   return (
-    <Container className="search-container">
+    <Container className="search-container search-guest">
       <OutsideClickHandler onOutsideClick={() => setPopupOpened(false)}>
         <Label
           popupOpened={popupOpened}
@@ -108,7 +107,6 @@ const Guest = () => {
             />
           </ListContainer>
         )}
-        <SearchButton />
       </OutsideClickHandler>
     </Container>
   );

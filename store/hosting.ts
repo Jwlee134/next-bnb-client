@@ -33,7 +33,7 @@ const initialState: IHostingState = {
   title: null,
   forbiddenRules: [],
   customRules: [],
-  availability: -1,
+  availability: 1,
   blockedDayList: [],
   price: 0,
 };

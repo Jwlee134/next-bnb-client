@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import Date from "./Date";
 import Guest from "./Guest";
 import Location from "./Location";
+import SearchButton from "./SearchButton";
 
 const Container = styled.div<{ animate: boolean; hideMiniBar: boolean }>`
   width: 100%;
@@ -32,7 +33,10 @@ const Container = styled.div<{ animate: boolean; hideMiniBar: boolean }>`
     height: 100%;
   }
   .search-date {
-    flex-grow: 1.3;
+    flex-grow: 1.5;
+  }
+  .search-guest {
+    flex-grow: 1;
   }
   .search-item {
     position: absolute;
@@ -41,7 +45,7 @@ const Container = styled.div<{ animate: boolean; hideMiniBar: boolean }>`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0px 30px;
+    padding: 0px 20px;
     border-radius: 32px;
     &:hover {
       background-color: ${palette.gray_eb};
@@ -74,13 +78,19 @@ const SearchBar = ({
   animate: boolean;
   hideMiniBar: boolean;
 }) => {
+  const [locationPopup, setLocationPopup] = useState(false);
+
   return (
     <Container animate={animate} hideMiniBar={hideMiniBar}>
-      <Location />
+      <Location
+        locationPopup={locationPopup}
+        setLocationPopup={setLocationPopup}
+      />
       <Divider />
       <Date />
       <Divider />
       <Guest />
+      <SearchButton setLocationPopup={setLocationPopup} />
     </Container>
   );
 };

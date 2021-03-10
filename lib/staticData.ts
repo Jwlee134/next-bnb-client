@@ -719,7 +719,7 @@ export const rulesList = [
 ];
 
 export const availabilityList = [
-  { label: "항상", value: -1 },
+  { label: "항상", value: 1 },
   { label: "3개월", value: 3 },
   { label: "6개월", value: 6 },
   { label: "9개월", value: 9 },

@@ -4,7 +4,7 @@ import React from "react";
 import { BiSearch } from "react-icons/bi";
 import { useSelector } from "store";
 import styled from "styled-components";
-import { makeQueryString } from "utils";
+import querystring from "querystring";
 
 const Container = styled.div`
   button {
@@ -23,16 +23,25 @@ const Container = styled.div`
   }
 `;
 
-const SearchButton = () => {
+const SearchButton = ({
+  setLocationPopup,
+}: {
+  setLocationPopup: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const search = useSelector((state) => state.search);
 
-  const queryUrl = makeQueryString("/search/rooms", search);
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!search.latitude && !search.longitude) {
+      e.preventDefault();
+      setLocationPopup(true);
+    }
+  };
 
   return (
     <Container>
-      <Link href={queryUrl}>
+      <Link href={`/search/rooms?${querystring.stringify(search)}`}>
         <a>
-          <Button>
+          <Button onClick={handleClick}>
             <BiSearch size={24} />
           </Button>
         </a>
