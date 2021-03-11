@@ -1,5 +1,5 @@
 import Header from "components/header";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -59,37 +59,9 @@ const Button = styled.button`
 `;
 
 const Home = () => {
-  const [scroll, setScroll] = useState(0);
-  const [animate, setAnimate] = useState(false);
-
-  const handleScroll = () => {
-    // 스크롤이 일정 부분 넘어가면 함수 종료시켜 불필요한 리렌더링 방지
-    if (window.scrollY > 100) return;
-    setScroll(window.scrollY);
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  // animate값이 true일 때 컴포넌트가 렌더링된다.
-  // animate가 false가 될 때 0.08초 간격을 주어 컴포넌트가 제거되기 전 0.08초 애니메이션 실행
-  useEffect(() => {
-    if (scroll > 0) {
-      setAnimate(true);
-    } else {
-      setTimeout(() => {
-        setAnimate(false);
-      }, 70);
-    }
-  }, [scroll]);
-
   return (
     <>
-      <Header scroll={scroll} animate={animate} />
+      <Header />
       <Container>
         <ImageContainer />
         <Contents>

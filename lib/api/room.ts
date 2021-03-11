@@ -11,4 +11,4 @@ export const getRoomDetailAPI = (id: string) =>
   api.get<IRoomDetail>(`/api/room/detail?id=${id}`);
 
 export const searchRoomAPI = (query: ParsedUrlQuery) =>
-  api.get(`/api/room/search?${querystring.stringify(query)}`);
+  api.get<IRoomDetail[]>(`/api/room/search?${querystring.stringify(query)}`);

@@ -1,12 +1,19 @@
-import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import palette from "styles/palette";
 import Date from "./Date";
 import Guest from "./Guest";
 import Location from "./Location";
 import SearchButton from "./SearchButton";
 
-const Container = styled.div<{ animate: boolean; hideMiniBar: boolean }>`
+const SearchBarContainer = styled.div`
+  position: absolute;
+  top: 100px;
+  width: 100%;
+  padding: 0px 30px;
+`;
+
+const Container = styled.div`
   width: 100%;
   max-width: 850px;
   height: 64px;
@@ -17,16 +24,6 @@ const Container = styled.div<{ animate: boolean; hideMiniBar: boolean }>`
   margin: 0 auto;
   display: flex;
   position: relative;
-  ${({ animate }) =>
-    animate &&
-    css`
-      display: none;
-    `}
-  ${({ hideMiniBar }) =>
-    hideMiniBar &&
-    css`
-      display: flex !important;
-    `}
   .search-container {
     position: relative;
     flex-grow: 1.5;
@@ -72,26 +69,49 @@ const Divider = styled.div`
 `;
 
 const SearchBar = ({
-  animate,
-  hideMiniBar,
+  isHome,
+  scroll,
+  showBar,
+  setShowBar,
 }: {
-  animate: boolean;
-  hideMiniBar: boolean;
+  isHome: boolean;
+  scroll: number;
+  showBar: boolean;
+  setShowBar: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [locationPopup, setLocationPopup] = useState(false);
 
+  useEffect(() => {
+    // 스크롤이 움직일 땐 큰 검색바 숨김
+    if (scroll) {
+      setShowBar(false);
+    }
+    if (isHome) {
+      // 홈 화면 스크롤 이벤트
+      if (!scroll) {
+        // 스크롤이 0이 되면 미니바 사이즈업 애니메이션 기다린 후 보여줌
+        setTimeout(() => {
+          setShowBar(true);
+        }, 80);
+      }
+    }
+  }, [scroll]);
+
+  if (!showBar) return null;
   return (
-    <Container animate={animate} hideMiniBar={hideMiniBar}>
-      <Location
-        locationPopup={locationPopup}
-        setLocationPopup={setLocationPopup}
-      />
-      <Divider />
-      <Date />
-      <Divider />
-      <Guest />
-      <SearchButton setLocationPopup={setLocationPopup} />
-    </Container>
+    <SearchBarContainer>
+      <Container>
+        <Location
+          locationPopup={locationPopup}
+          setLocationPopup={setLocationPopup}
+        />
+        <Divider />
+        <Date />
+        <Divider />
+        <Guest />
+        <SearchButton setLocationPopup={setLocationPopup} />
+      </Container>
+    </SearchBarContainer>
   );
 };
 

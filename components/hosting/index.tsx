@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
+import { SiAirbnb } from "react-icons/si";
 
 import Building from "./building";
 import Bathroom from "./bathroom";
@@ -130,11 +131,27 @@ const Container = styled.div`
   }
 `;
 
-const Hosting = () => {
-  const { pathname } = useRouter();
-  const path = pathname.split("/").pop();
+const Header = styled.div`
+  width: 100%;
+  height: 80px;
+  padding: 0px 30px;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  svg {
+    color: ${palette.dark_cyan};
+    cursor: pointer;
+  }
+  z-index: 10;
+`;
 
-  /*  const handleRefresh = (e: BeforeUnloadEvent) => {
+const Hosting = () => {
+  const router = useRouter();
+  const path = router.pathname.split("/").pop();
+
+  const handleRefresh = (e: BeforeUnloadEvent) => {
     e.preventDefault();
     e.returnValue = "";
   };
@@ -145,9 +162,12 @@ const Hosting = () => {
       window.removeEventListener("beforeunload", handleRefresh);
     };
   }, []);
- */
+
   return (
     <>
+      <Header>
+        <SiAirbnb size={32} onClick={() => router.push("/")} />
+      </Header>
       <ProgressBar>
         <Progress path={path} />
       </ProgressBar>

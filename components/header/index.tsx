@@ -1,45 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { SiAirbnb } from "react-icons/si";
-import Button from "components/common/Button";
-import { BiSearch } from "react-icons/bi";
-import SearchBar from "components/home/searchBar";
+import SearchBar from "components/header/searchBar";
+import { throttle } from "lodash";
 import HeaderMenu from "./HeaderMenu";
+import MiniSearchBar from "./miniSearchBar";
 
 interface ContainerProps {
   isTop: boolean;
   isHome: boolean;
-  miniAnimate: boolean;
-  hideMiniBar: boolean;
 }
-
-interface MiniSearchBarProps {
-  scroll: number;
-  hideMiniBar: boolean;
-  miniAnimate: boolean;
-}
-
-const sizeDown = keyframes`
-  0% {
-    transform: translateY(65px) scale(1.75, 1);
-    display: none;
-  }
-  100% {
-    transform: translateY(0px) scale(1, 1);
-  }
-`;
-
-const sizeUp = keyframes`
-  0% {
-    transform: translateY(0px) scale(1, 1);
-  }
-  100% {
-    transform: translateY(65px) scale(1.75, 1);
-    display: none;
-  }
-`;
 
 const LeftContainer = styled.div`
   margin-left: 80px;
@@ -69,7 +41,7 @@ const Container = styled.header<ContainerProps>`
   justify-content: space-between;
   align-items: center;
   color: white;
-  transition: all 0.1s linear;
+  transition: all 0.15s linear;
   ${({ isHome }) =>
     !isHome &&
     css`
@@ -86,134 +58,76 @@ const Container = styled.header<ContainerProps>`
     `}
 `;
 
-const MiniSearchBar = styled.div<MiniSearchBarProps>`
-  width: 350px;
-  height: 48px;
-  border: 1px solid #dddddd;
-  border-radius: 24px;
-  transition: all 0.2s linear;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  background-color: white;
-  &:hover {
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
-  }
-  span {
-    color: black;
-    margin-left: 18px;
-  }
-  button {
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    margin-right: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  ${({ scroll }) =>
-    scroll !== 0
-      ? css`
-          animation: ${sizeDown} 0.07s linear forwards;
-        `
-      : css`
-          animation: ${sizeUp} 0.07s linear forwards !important;
-        `}
-  ${({ miniAnimate }) =>
-    miniAnimate
-      ? css`
-          animation: ${sizeUp} 0.07s linear forwards;
-        `
-      : css`
-          animation: ${sizeDown} 0.07s linear forwards;
-        `}
-`;
-
-const SearchBarContainer = styled.div`
-  position: absolute;
-  top: 100px;
-  padding: 0px 80px;
+const Background = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 64px;
+  height: 100%;
+  margin-top: 80px;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 1;
 `;
 
-const Header = ({ scroll, animate }: { scroll: number; animate: boolean }) => {
+const Header = () => {
   const { pathname } = useRouter();
 
   const headerRef = useRef<HTMLElement>(null);
 
-  const [hideMiniBar, setHideMiniBar] = useState(false);
-  const [miniAnimate, setMiniAnimate] = useState(false);
+  const [scroll, setScroll] = useState(0);
+  const [hideMiniBar, setHideMiniBar] = useState(pathname === "/" && true);
+  const [showBar, setShowBar] = useState(pathname === "/" && true);
+  const [sizeDownAnimate, setSizeDownAnimate] = useState(false);
 
-  const handleClick = () => {
-    setMiniAnimate(true);
-    setTimeout(() => {
-      setHideMiniBar(true);
-    }, 70);
-  };
-
-  useEffect(() => {
-    if (scroll === 0) {
-      setMiniAnimate(false);
-      setTimeout(() => {
-        setHideMiniBar(false);
-      }, 70);
-    }
-  }, [scroll]);
-
-  const handleMouseDown = (e: MouseEvent) => {
-    if (!headerRef.current?.contains(e.target as Node)) {
-      setMiniAnimate(false);
-      setTimeout(() => {
-        setHideMiniBar(false);
-      }, 70);
-    }
-  };
+  const handleScroll = throttle(() => {
+    setScroll(window.scrollY);
+  }, 100);
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      document.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
+  const handleClick = () => {
+    setSizeDownAnimate(true);
+    setHideMiniBar(false);
+    setShowBar(false);
+    setTimeout(() => {
+      setSizeDownAnimate(false);
+    }, 80);
+  };
+
   return (
     <>
-      <Container
-        isTop={scroll === 0}
-        miniAnimate={miniAnimate}
-        isHome={pathname === "/"}
-        hideMiniBar={hideMiniBar}
-        ref={headerRef}
-      >
+      <Container ref={headerRef} isTop={scroll === 0} isHome={pathname === "/"}>
         <Link href="/">
           <LeftContainer>
             <SiAirbnb size={32} />
             airbnb
           </LeftContainer>
         </Link>
-        {pathname === "/" && animate && !hideMiniBar && (
-          <MiniSearchBar
-            scroll={scroll}
-            hideMiniBar={hideMiniBar}
-            miniAnimate={miniAnimate}
-            onClick={handleClick}
-          >
-            <span>검색 시작하기</span>
-            <Button>
-              <BiSearch size={18} />
-            </Button>
-          </MiniSearchBar>
-        )}
+        <MiniSearchBar
+          scroll={scroll}
+          isHome={pathname === "/"}
+          hideMiniBar={hideMiniBar}
+          setHideMiniBar={setHideMiniBar}
+          setShowBar={setShowBar}
+          sizeDownAnimate={sizeDownAnimate}
+          setSizeDownAnimate={setSizeDownAnimate}
+        />
         <RightContainer>
           <HeaderMenu />
         </RightContainer>
-        <SearchBarContainer>
-          <SearchBar animate={animate} hideMiniBar={hideMiniBar} />
-        </SearchBarContainer>
+        <SearchBar
+          scroll={scroll}
+          isHome={pathname === "/"}
+          showBar={showBar}
+          setShowBar={setShowBar}
+        />
       </Container>
+      {showBar && pathname !== "/" && <Background onClick={handleClick} />}
     </>
   );
 };

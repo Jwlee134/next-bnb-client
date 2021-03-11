@@ -26,7 +26,7 @@ const Container = styled.div<{ focused: "startDate" | "endDate" }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    /* .DateInput:first-child {
+    .DateInput:first-child {
       ::after {
         position: absolute;
         content: "체크인";
@@ -35,7 +35,17 @@ const Container = styled.div<{ focused: "startDate" | "endDate" }>`
         font-size: 14px;
         top: 15px;
       }
-    } */
+      ${({ focused }) =>
+        focused === "startDate" &&
+        css`
+          border-radius: 32px;
+          &:hover {
+            background-color: white;
+          }
+          box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
+            0px 3px 8px rgba(0, 0, 0, 0.1);
+        `};
+    }
     .DateInput:last-child {
       ::after {
         position: absolute;
@@ -45,18 +55,16 @@ const Container = styled.div<{ focused: "startDate" | "endDate" }>`
         font-size: 14px;
         top: 15px;
       }
-    }
-  }
-  .DateInput_screenReaderMessage {
-  }
-  #DateInput__screen-reader-message-dateRangePicker-start {
-    ::after {
-      position: absolute;
-      content: "체크인";
-      color: black;
-      left: 20px;
-      font-size: 14px;
-      top: 15px;
+      ${({ focused }) =>
+        focused === "endDate" &&
+        css`
+          border-radius: 32px;
+          &:hover {
+            background-color: white;
+          }
+          box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
+            0px 3px 8px rgba(0, 0, 0, 0.1);
+        `};
     }
   }
   .DateInput_fang,
@@ -90,17 +98,25 @@ const Container = styled.div<{ focused: "startDate" | "endDate" }>`
     width: 100%;
     height: 100%;
     position: relative;
+    border-radius: 32px;
+    &:hover {
+      background-color: ${palette.gray_eb};
+    }
     input {
       padding: 0;
       height: 100%;
       border-bottom: 0;
       cursor: pointer;
       padding: 0px 20px;
-      border-radius: 32px;
-      &:hover {
-        background-color: ${palette.gray_eb};
-      }
       padding-top: 15px;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      ::placeholder {
+        font-weight: 400;
+      }
     }
   }
   .DateInput_input__focused {
@@ -138,30 +154,6 @@ const Container = styled.div<{ focused: "startDate" | "endDate" }>`
     outline: none;
     border-radius: 100px;
   }
-  ${({ focused }) =>
-    focused === "startDate" &&
-    css`
-      #dateRangePicker-start {
-        border-radius: 32px;
-        &:hover {
-          background-color: white;
-        }
-        box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
-          0px 3px 8px rgba(0, 0, 0, 0.1);
-      }
-    `};
-  ${({ focused }) =>
-    focused === "endDate" &&
-    css`
-      #dateRangePicker-end {
-        border-radius: 32px;
-        &:hover {
-          background-color: white;
-        }
-        box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
-          0px 3px 8px rgba(0, 0, 0, 0.1);
-      }
-    `};
   .DateRangePickerInput_arrow {
     width: 1px;
     background-color: ${palette.gray_eb};
