@@ -9,16 +9,7 @@ const rooms = ({ data }: { data: IRoomDetail[] }) => (
 );
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const {
-    latitude,
-    longitude,
-    checkIn,
-    checkOut,
-    adults,
-    children,
-    page = "1",
-    limit = "5",
-  } = query;
+  const { latitude, longitude, checkIn, checkOut, adults, children } = query;
   try {
     const { data } = await searchRoomAPI({
       latitude,
@@ -27,8 +18,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       checkOut,
       adults,
       children,
-      page,
-      limit,
     });
     return { props: { data } };
   } catch (error) {

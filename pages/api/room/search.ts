@@ -12,8 +12,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       checkOut,
       adults,
       children,
-      page,
-      limit,
     } = req.query;
 
     let formatDates: string[] = [];
@@ -52,9 +50,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       availability: {
         $gte: 1,
       },
-    })
-      .limit(Number(limit))
-      .skip((Number(page) - 1) * Number(limit));
+    });
 
     // 호스트가 설정해둔 최대 예약 가능 월보다 체크인, 체크아웃 날짜가 넘어가면 필터링
     if (checkIn && checkOut) {

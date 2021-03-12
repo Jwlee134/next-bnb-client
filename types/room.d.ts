@@ -1,4 +1,12 @@
 import { Document } from "mongoose";
+import { IUser } from "./user";
+
+export interface IReview extends Document {
+  text: string;
+  creator: IUser["_id"];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface IHostingState {
   largeBuildingType: {
@@ -37,4 +45,9 @@ export interface IHostingState {
   price: number;
 }
 
-export interface IRoomDetail extends IHostingState, Document {}
+export interface IRoomDetail extends IHostingState, Document {
+  rating: number;
+  createdAt: Date;
+  updatedAt: Date;
+  review: IReview["_id"];
+}

@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import Button from "components/common/Button";
 import { BiSearch } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { commonActions } from "store/common";
+import { useSelector } from "store";
+import { useRouter } from "next/router";
 
 interface MiniSearchBarProps {
   isHome: boolean;
   scroll: number;
   sizeUpAnimate: boolean;
-  sizeDownAnimate: boolean;
+  scaleDown: boolean;
 }
 
 const sizeDown = keyframes`
@@ -80,80 +84,74 @@ const Container = styled.div<MiniSearchBarProps>`
     css`
       animation: ${sizeUp} 0.08s linear forwards;
     `}
-    ${({ sizeDownAnimate }) =>
-    sizeDownAnimate &&
+    ${({ scaleDown }) =>
+    scaleDown &&
     css`
       animation: ${sizeDown} 0.08s linear forwards;
     `}
 `;
 
 interface Props {
-  isHome: boolean;
   scroll: number;
-  hideMiniBar: boolean;
-  sizeDownAnimate: boolean;
-  setHideMiniBar: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowBar: React.Dispatch<React.SetStateAction<boolean>>;
-  setSizeDownAnimate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MiniSearchBar = ({
-  isHome,
-  scroll,
-  hideMiniBar,
-  sizeDownAnimate,
-  setHideMiniBar,
-  setShowBar,
-  setSizeDownAnimate,
-}: Props) => {
+const MiniSearchBar = ({ scroll }: Props) => {
+  const showMiniSearchBar = useSelector(
+    (state) => state.common.showMiniSearchBar
+  );
+  const scaleDown = useSelector((state) => state.common.scaleDown);
   const [sizeUpAnimate, setSizeUpAnimate] = useState(false);
+  const dispatch = useDispatch();
+
+  const { pathname } = useRouter();
 
   const handleClick = () => {
     // 미니바 클릭 시 사이즈업 애니메이션 즉시 실행
     setSizeUpAnimate(true);
     // 애니메이션 종료되면(0.08초) 미니바 숨기고 큰 검색바 보여줌
     setTimeout(() => {
-      setHideMiniBar(true);
-      setShowBar(true);
+      dispatch(commonActions.setShowMiniSearchBar(false));
+      dispatch(commonActions.setShowSearchBar(true));
       setSizeUpAnimate(false);
     }, 80);
   };
 
   useEffect(() => {
-    if (isHome) {
+    if (pathname === "/") {
       // 홈 화면 스크롤 이벤트
-      if (scroll) {
-        // 스크롤이 움직이면 미니바 보여줌
-        setHideMiniBar(false);
-      } else {
-        // 스크롤이 0이 되면 0.08초 후 미니바 숨김
+      if (scroll && !showMiniSearchBar) {
+        // 스크롤이 움직이기 시작하면 미니바 보여줌
+        dispatch(commonActions.setShowMiniSearchBar(true));
+      }
+      // 스크롤이 0이 되면 0.08초 후 미니바 숨김
+      if (!scroll && showMiniSearchBar) {
         setTimeout(() => {
-          setHideMiniBar(true);
+          dispatch(commonActions.setShowMiniSearchBar(false));
         }, 80);
       }
     }
-    if (!isHome) {
+    if (pathname !== "/") {
       // 홈 화면 이외의 스크롤 이벤트
-      if (scroll && hideMiniBar) {
+      if (scroll && !showMiniSearchBar) {
         // 미니바가 숨겨진 상태에서(큰 검색바가 있을 때) 스크롤이 움직이면
         // 미니바를 보여줌과 동시에 사이즈다운 애니메이션 즉시 실행
-        setSizeDownAnimate(true);
-        setHideMiniBar(false);
+        dispatch(commonActions.setScaleDown(true));
+        dispatch(commonActions.setShowMiniSearchBar(true));
         setTimeout(() => {
-          setSizeDownAnimate(false);
+          dispatch(commonActions.setScaleDown(false));
         }, 80);
       }
     }
   }, [scroll]);
 
   // 홈 화면에서는 미니바가 기본적으로 숨겨짐
-  if (hideMiniBar) return null;
+  if (!showMiniSearchBar) return null;
   return (
     <Container
-      isHome={isHome}
+      isHome={pathname === "/"}
       scroll={scroll}
       sizeUpAnimate={sizeUpAnimate}
-      sizeDownAnimate={sizeDownAnimate}
+      scaleDown={scaleDown}
       onClick={handleClick}
     >
       <span>검색 시작하기</span>

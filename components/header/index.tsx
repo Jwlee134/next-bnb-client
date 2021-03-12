@@ -5,16 +5,19 @@ import { useRouter } from "next/router";
 import { SiAirbnb } from "react-icons/si";
 import SearchBar from "components/header/searchBar";
 import { throttle } from "lodash";
+import { useSelector } from "store";
 import HeaderMenu from "./HeaderMenu";
 import MiniSearchBar from "./miniSearchBar";
+import { useDispatch } from "react-redux";
+import { commonActions } from "store/common";
 
 interface ContainerProps {
   isTop: boolean;
-  isHome: boolean;
+  pathname: string;
+  showMap: boolean;
 }
 
 const LeftContainer = styled.div`
-  margin-left: 80px;
   font-size: 24px;
   font-weight: 600;
   display: flex;
@@ -26,7 +29,6 @@ const LeftContainer = styled.div`
 `;
 
 const RightContainer = styled.div`
-  margin-right: 80px;
   color: black;
   position: relative;
 `;
@@ -41,13 +43,17 @@ const Container = styled.header<ContainerProps>`
   justify-content: space-between;
   align-items: center;
   color: white;
-  transition: all 0.15s linear;
-  ${({ isHome }) =>
-    !isHome &&
+  transition: color 0.15s linear;
+  transition: box-shadow 0.15s linear;
+  transition: background-color 0.15s linear;
+  padding: 0px 80px;
+  ${({ pathname }) =>
+    pathname !== "/" &&
     css`
       color: #ff395b;
       box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
       background-color: white;
+      padding: 0px 24px;
     `}
   ${({ isTop }) =>
     !isTop &&
@@ -55,6 +61,11 @@ const Container = styled.header<ContainerProps>`
       color: #ff395b;
       box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
       background-color: white;
+    `}
+    ${({ pathname, showMap }) =>
+    pathname.includes("search") &&
+    css`
+      padding: ${showMap ? "0px 24px" : "0px 80px"};
     `}
 `;
 
@@ -66,18 +77,18 @@ const Background = styled.div`
   height: 100%;
   margin-top: 80px;
   background-color: rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 2;
 `;
 
 const Header = () => {
+  const { showMap, showSearchBar } = useSelector((state) => state.common);
   const { pathname } = useRouter();
+
+  const dispatch = useDispatch();
 
   const headerRef = useRef<HTMLElement>(null);
 
   const [scroll, setScroll] = useState(0);
-  const [hideMiniBar, setHideMiniBar] = useState(pathname === "/" && true);
-  const [showBar, setShowBar] = useState(pathname === "/" && true);
-  const [sizeDownAnimate, setSizeDownAnimate] = useState(false);
 
   const handleScroll = throttle(() => {
     setScroll(window.scrollY);
@@ -91,43 +102,37 @@ const Header = () => {
   }, []);
 
   const handleClick = () => {
-    setSizeDownAnimate(true);
-    setHideMiniBar(false);
-    setShowBar(false);
+    dispatch(commonActions.setScaleDown(true));
+    dispatch(commonActions.setShowMiniSearchBar(true));
+    dispatch(commonActions.setShowSearchBar(false));
     setTimeout(() => {
-      setSizeDownAnimate(false);
+      dispatch(commonActions.setScaleDown(false));
     }, 80);
   };
 
   return (
     <>
-      <Container ref={headerRef} isTop={scroll === 0} isHome={pathname === "/"}>
+      <Container
+        showMap={showMap}
+        ref={headerRef}
+        isTop={scroll === 0}
+        pathname={pathname}
+      >
         <Link href="/">
           <LeftContainer>
             <SiAirbnb size={32} />
             airbnb
           </LeftContainer>
         </Link>
-        <MiniSearchBar
-          scroll={scroll}
-          isHome={pathname === "/"}
-          hideMiniBar={hideMiniBar}
-          setHideMiniBar={setHideMiniBar}
-          setShowBar={setShowBar}
-          sizeDownAnimate={sizeDownAnimate}
-          setSizeDownAnimate={setSizeDownAnimate}
-        />
+        <MiniSearchBar scroll={scroll} />
         <RightContainer>
           <HeaderMenu />
         </RightContainer>
-        <SearchBar
-          scroll={scroll}
-          isHome={pathname === "/"}
-          showBar={showBar}
-          setShowBar={setShowBar}
-        />
+        <SearchBar scroll={scroll} />
       </Container>
-      {showBar && pathname !== "/" && <Background onClick={handleClick} />}
+      {showSearchBar && pathname !== "/" && (
+        <Background onClick={handleClick} />
+      )}
     </>
   );
 };
