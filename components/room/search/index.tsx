@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
-import { IRoomDetail } from "types/room";
 import { ImMap2 } from "react-icons/im";
 import { useSelector } from "store";
 import { useDispatch } from "react-redux";
@@ -19,12 +18,17 @@ const Container = styled.div`
 const ListContainer = styled.div<{ showMap: boolean }>`
   width: 100vw;
   padding: 50px 80px;
+  display: flex;
+  flex-direction: column;
   ${({ showMap }) =>
-    showMap &&
-    css`
-      width: 55vw;
-      padding: 50px 24px;
-    `}
+    showMap
+      ? css`
+          width: 55vw;
+          padding: 50px 24px;
+        `
+      : css`
+          min-height: calc(100vh - 80px);
+        `}
 `;
 
 const MapContainer = styled.div`
@@ -93,8 +97,11 @@ const Alert = styled.div`
   padding-bottom: 15px;
 `;
 
-const SearchResults = ({ data }: { data: IRoomDetail[] }) => {
-  const { showMap } = useSelector((state) => state.common);
+const SearchResults = () => {
+  const showMap = useSelector((state) => state.common.showMap);
+  const originalLength = useSelector(
+    (state) => state.room.search.originalLength
+  );
   const dispatch = useDispatch();
   const { query } = useRouter();
 
@@ -103,7 +110,7 @@ const SearchResults = ({ data }: { data: IRoomDetail[] }) => {
     dispatch(commonActions.setShowSearchBar(false));
   }, []);
 
-  const searchInfo = `${data.length}개의 숙소 
+  const searchInfo = `${originalLength}개의 숙소 
   ${
     query.checkIn &&
     query.checkOut &&
@@ -121,27 +128,29 @@ const SearchResults = ({ data }: { data: IRoomDetail[] }) => {
       <Header />
       <Container>
         <ListContainer showMap={showMap}>
-          <Info>{searchInfo}</Info>
-          <Title>{query.value}</Title>
-          <Options>
-            <FilterContainer>
-              <Filter>숙소 유형</Filter>
-              <Filter>요금</Filter>
-              <Filter>필터 추가하기</Filter>
-            </FilterContainer>
-            <ShowMap
-              onClick={() => dispatch(commonActions.setShowMap(!showMap))}
-            >
-              <ImMap2 size={16} />
-              {showMap ? "지도 숨기기" : "지도 표시하기"}
-            </ShowMap>
-          </Options>
-          {!query.checkIn && !query.checkOut && (
-            <Alert>
-              여행 날짜를 입력하면 1박당 총 요금을 확인할 수 있습니다.
-            </Alert>
-          )}
-          <RoomList data={data} />
+          <div>
+            <Info>{searchInfo}</Info>
+            <Title>{query.value}</Title>
+            <Options>
+              <FilterContainer>
+                <Filter>숙소 유형</Filter>
+                <Filter>요금</Filter>
+                <Filter>필터 추가하기</Filter>
+              </FilterContainer>
+              <ShowMap
+                onClick={() => dispatch(commonActions.setShowMap(!showMap))}
+              >
+                <ImMap2 size={16} />
+                {showMap ? "지도 숨기기" : "지도 표시하기"}
+              </ShowMap>
+            </Options>
+            {!query.checkIn && !query.checkOut && (
+              <Alert>
+                여행 날짜를 입력하면 1박당 총 요금을 확인할 수 있습니다.
+              </Alert>
+            )}
+          </div>
+          <RoomList />
         </ListContainer>
         {showMap && <MapContainer></MapContainer>}
       </Container>

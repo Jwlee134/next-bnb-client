@@ -38,13 +38,13 @@ const homeCss = (scroll: number) => {
   if (scroll) {
     // 홈 화면에서 스크롤이 움직이기 시작할 때 사이즈다운 애니메이션
     return css`
-      animation: ${sizeDown} 0.08s linear forwards;
+      animation: ${sizeDown} 0.1s linear forwards;
     `;
   }
   if (!scroll) {
     // 홈 화면에서 스크롤이 0이 되면 사이즈업 애니메이션
     return css`
-      animation: ${sizeUp} 0.08s linear forwards;
+      animation: ${sizeUp} 0.1s linear forwards;
     `;
   }
   return css``;
@@ -82,12 +82,12 @@ const Container = styled.div<MiniSearchBarProps>`
   ${({ sizeUpAnimate }) =>
     sizeUpAnimate &&
     css`
-      animation: ${sizeUp} 0.08s linear forwards;
+      animation: ${sizeUp} 0.1s linear forwards;
     `}
     ${({ scaleDown }) =>
     scaleDown &&
     css`
-      animation: ${sizeDown} 0.08s linear forwards;
+      animation: ${sizeDown} 0.1s linear forwards;
     `}
 `;
 
@@ -113,7 +113,7 @@ const MiniSearchBar = ({ scroll }: Props) => {
       dispatch(commonActions.setShowMiniSearchBar(false));
       dispatch(commonActions.setShowSearchBar(true));
       setSizeUpAnimate(false);
-    }, 80);
+    }, 100);
   };
 
   useEffect(() => {
@@ -127,7 +127,7 @@ const MiniSearchBar = ({ scroll }: Props) => {
       if (!scroll && showMiniSearchBar) {
         setTimeout(() => {
           dispatch(commonActions.setShowMiniSearchBar(false));
-        }, 80);
+        }, 100);
       }
     }
     if (pathname !== "/") {
@@ -139,7 +139,7 @@ const MiniSearchBar = ({ scroll }: Props) => {
         dispatch(commonActions.setShowMiniSearchBar(true));
         setTimeout(() => {
           dispatch(commonActions.setScaleDown(false));
-        }, 80);
+        }, 100);
       }
     }
   }, [scroll]);

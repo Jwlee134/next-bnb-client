@@ -1,9 +1,14 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { IRoomDetail } from "types/room";
 import ReactPaginate from "react-paginate";
 import palette from "styles/palette";
 import { isEmpty } from "lodash";
+import { useRouter } from "next/router";
+import { useSelector } from "store";
+import querystring from "querystring";
+import RoomCardSkeleton from "components/common/RoomCardSkeleton";
+import { useDispatch } from "react-redux";
+import { roomActions } from "store/room";
 import RoomCard from "./RoomCard";
 
 const Container = styled.div`
@@ -58,35 +63,87 @@ const Info = styled.div`
   font-size: 14px;
 `;
 
-const limit = 5;
+const Empty = styled.div`
+  width: 70%;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0 auto;
+  text-align: center;
+`;
 
-const RoomList = ({ data }: { data: IRoomDetail[] }) => {
-  const [page, setPage] = useState(1);
+const RoomList = () => {
+  const searchResults = useSelector((state) => state.room.search.searchResults);
+  const originalLength = useSelector(
+    (state) => state.room.search.originalLength
+  );
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
-  const slicedData = data.slice((page - 1) * limit, page * limit);
+  const router = useRouter();
+  const { page = "1", limit = "10" } = router.query;
 
   const handleChange = ({ selected }: { selected: number }) => {
-    setPage(selected + 1);
+    setLoading(true);
+    dispatch(roomActions.setSearchResults({ data: [], originalLength }));
     window.scrollTo(0, 0);
+    if (router.query.page) delete router.query.page;
+    router.push(
+      `${router.pathname}?${querystring.stringify(router.query)}&page=${
+        selected + 1
+      }`
+    );
   };
 
+  useEffect(() => {
+    if (!isEmpty(searchResults) && loading) setLoading(false);
+  }, [searchResults]);
+
   const info = useMemo(() => {
-    if ((page - 1) * limit + 1 === (page - 1) * limit + slicedData.length) {
-      return `${data.length}개의 숙소 중 ${(page - 1) * limit + 1}`;
+    if (
+      (Number(page) - 1) * Number(limit) + 1 ===
+      (Number(page) - 1) * Number(limit) + searchResults.length
+    ) {
+      return `${originalLength}개의 숙소 중 ${
+        (Number(page) - 1) * Number(limit) + 1
+      }`;
     }
-    return `${data.length}개의 숙소 중 ${(page - 1) * limit + 1} -
-          ${(page - 1) * limit + slicedData.length}`;
-  }, [page, slicedData]);
+    return `${originalLength}개의 숙소 중 ${
+      (Number(page) - 1) * Number(limit) + 1
+    } -
+          ${(Number(page) - 1) * Number(limit) + searchResults.length}`;
+  }, [page, searchResults]);
+
+  if (isEmpty(searchResults) && !loading) {
+    return (
+      <Empty>
+        이 지역에는 숙소가 존재하지 않거나 설정하신 조건을 만족하는 숙소가
+        없어요.
+      </Empty>
+    );
+  }
 
   return (
     <Container>
-      {slicedData.map((room, index) => (
+      {searchResults.map((room, index) => (
         <RoomCard key={index} room={room} />
       ))}
-      {!isEmpty(slicedData) && (
+      {loading && (
+        <>
+          <RoomCardSkeleton />
+          <RoomCardSkeleton />
+          <RoomCardSkeleton />
+          <RoomCardSkeleton />
+          <RoomCardSkeleton />
+        </>
+      )}
+      {!isEmpty(searchResults) && (
         <>
           <ReactPaginate
-            pageCount={Math.ceil(data.length / limit)}
+            pageCount={Math.ceil(originalLength / Number(limit))}
             pageRangeDisplayed={3}
             marginPagesDisplayed={5}
             previousLabel="<"
@@ -97,6 +154,7 @@ const RoomList = ({ data }: { data: IRoomDetail[] }) => {
             activeClassName="paginate-actived"
             onPageChange={handleChange}
             disabledClassName="disabled"
+            forcePage={Number(page) - 1}
           />
           <Info>{info}</Info>
         </>

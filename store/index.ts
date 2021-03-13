@@ -9,12 +9,14 @@ import common from "./common";
 import user from "./user";
 import hosting from "./hosting";
 import search from "./search";
+import room from "./room";
 
 const rootReducer = combineReducers({
   common,
   user,
   hosting,
   search,
+  room,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

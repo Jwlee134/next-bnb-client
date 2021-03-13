@@ -50,6 +50,7 @@ module.exports = {
     "import/no-unresolved": "off",
     "react/button-has-type": "off",
     "no-underscore-dangle": "off",
+    "react/prop-types": "off",
     "react/jsx-filename-extension": [
       1,
       { extensions: [".js", ".jsx", ".tsx"] }, // jsx를 사용가능한 파일 확장자명 설정

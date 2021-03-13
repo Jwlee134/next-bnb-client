@@ -5,6 +5,9 @@ import { BiSearch } from "react-icons/bi";
 import { useSelector } from "store";
 import styled from "styled-components";
 import querystring from "querystring";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { commonActions } from "store/common";
 
 const Container = styled.div`
   button {
@@ -47,9 +50,20 @@ const SearchButton = () => {
     (state) => state.common.isGettingCoordinates
   );
 
+  const { pathname } = useRouter();
+  const dispatch = useDispatch();
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!search.latitude && !search.longitude) {
       e.preventDefault();
+    }
+    if (pathname !== "/") {
+      dispatch(commonActions.setShowSearchBar(false));
+      dispatch(commonActions.setShowMiniSearchBar(true));
+      dispatch(commonActions.setScaleDown(true));
+      setTimeout(() => {
+        dispatch(commonActions.setScaleDown(false));
+      }, 100);
     }
   };
 

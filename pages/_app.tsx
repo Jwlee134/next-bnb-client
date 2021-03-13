@@ -9,13 +9,15 @@ import { userActions } from "store/user";
 import { api } from "lib/api";
 import { extractToken } from "utils";
 
-const MyApp = ({ Component, pageProps }: AppProps) => (
-  <>
-    <GlobalStyles />
-    <Component {...pageProps} />
-    <div id="modal" />
-  </>
-);
+const MyApp = ({ Component, pageProps }: AppProps) => {
+  return (
+    <>
+      <GlobalStyles />
+      <Component {...pageProps} />
+      <div id="modal" />
+    </>
+  );
+};
 
 MyApp.getInitialProps = async (context: AppContext) => {
   const appProps = await App.getInitialProps(context);

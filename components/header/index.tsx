@@ -6,10 +6,10 @@ import { SiAirbnb } from "react-icons/si";
 import SearchBar from "components/header/searchBar";
 import { throttle } from "lodash";
 import { useSelector } from "store";
-import HeaderMenu from "./HeaderMenu";
-import MiniSearchBar from "./miniSearchBar";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
+import HeaderMenu from "./HeaderMenu";
+import MiniSearchBar from "./miniSearchBar";
 
 interface ContainerProps {
   isTop: boolean;

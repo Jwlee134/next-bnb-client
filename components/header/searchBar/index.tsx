@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import { commonActions } from "store/common";
@@ -106,7 +106,7 @@ const SearchBar = ({ scroll }: { scroll: number }) => {
         // 스크롤이 0이 되면 미니바 사이즈업 애니메이션 기다린 후 보여줌
         setTimeout(() => {
           dispatch(commonActions.setShowSearchBar(true));
-        }, 80);
+        }, 100);
       }
     }
   }, [scroll]);
