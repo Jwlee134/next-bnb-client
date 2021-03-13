@@ -7,6 +7,7 @@ interface IState {
   showSearchBar: boolean;
   showMiniSearchBar: boolean;
   scaleDown: boolean;
+  isGettingCoordinates: boolean;
 }
 
 const initialState: IState = {
@@ -16,6 +17,7 @@ const initialState: IState = {
   showSearchBar: true,
   showMiniSearchBar: false,
   scaleDown: false,
+  isGettingCoordinates: false,
 };
 
 const common = createSlice({
@@ -39,6 +41,9 @@ const common = createSlice({
     },
     setScaleDown: (state, action: PayloadAction<boolean>) => {
       state.scaleDown = action.payload;
+    },
+    setIsGettingCoordinates: (state, action: PayloadAction<boolean>) => {
+      state.isGettingCoordinates = action.payload;
     },
   },
 });

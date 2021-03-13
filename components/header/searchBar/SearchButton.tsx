@@ -23,17 +23,33 @@ const Container = styled.div`
   }
 `;
 
-const SearchButton = ({
-  setLocationPopup,
-}: {
-  setLocationPopup: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const Loader = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -12.5px 0 0 -12.5px;
+  width: 25px;
+  height: 25px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s linear infinite;
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+const SearchButton = () => {
   const search = useSelector((state) => state.search);
+  const isGettingCoordinates = useSelector(
+    (state) => state.common.isGettingCoordinates
+  );
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!search.latitude && !search.longitude) {
       e.preventDefault();
-      setLocationPopup(true);
     }
   };
 
@@ -42,7 +58,8 @@ const SearchButton = ({
       <Link href={`/search/rooms?${querystring.stringify(search)}`}>
         <a>
           <Button onClick={handleClick}>
-            <BiSearch size={24} />
+            {!isGettingCoordinates && <BiSearch size={24} />}
+            {isGettingCoordinates && <Loader />}
           </Button>
         </a>
       </Link>

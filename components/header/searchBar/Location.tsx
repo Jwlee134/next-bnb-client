@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
+import { commonActions } from "store/common";
 import { searchActions } from "store/search";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
@@ -55,17 +56,13 @@ const Text = styled.span`
   max-width: 400px;
 `;
 
-const Location = ({
-  locationPopup,
-  setLocationPopup,
-}: {
-  locationPopup: boolean;
-  setLocationPopup: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const Location = () => {
   const value = useSelector((state) => state.search.value);
   const [placeList, setPlaceList] = useState<string[]>([]);
 
   const dispatch = useDispatch();
+
+  const [locationPopup, setLocationPopup] = useState(false);
 
   const keyword = useDebounce(value as string, 500);
 
@@ -75,6 +72,7 @@ const Location = ({
 
   const handleNear = () => {
     setLocationPopup(false);
+    dispatch(commonActions.setIsGettingCoordinates(true));
     document.getElementById("dateRangePicker-start")?.focus();
     dispatch(searchActions.setValue("가까운 여행지 둘러보기"));
     navigator.geolocation.getCurrentPosition(
@@ -82,10 +80,12 @@ const Location = ({
         const { latitude, longitude } = coords;
         dispatch(searchActions.setLatitude(latitude));
         dispatch(searchActions.setLongitude(longitude));
+        dispatch(commonActions.setIsGettingCoordinates(false));
       },
       (err) => {
         alert(err.message);
         dispatch(searchActions.setValue(""));
+        dispatch(commonActions.setIsGettingCoordinates(false));
       }
     );
   };
@@ -93,6 +93,7 @@ const Location = ({
   const handleClick = async (value: string) => {
     try {
       setLocationPopup(false);
+      dispatch(commonActions.setIsGettingCoordinates(true));
       document.getElementById("dateRangePicker-start")?.focus();
       dispatch(searchActions.setValue(value));
       const {
@@ -102,7 +103,9 @@ const Location = ({
       dispatch(searchActions.setLongitude(lng));
     } catch (error) {
       alert(error.response.data);
+    } finally {
       dispatch(searchActions.setValue(""));
+      dispatch(commonActions.setIsGettingCoordinates(false));
     }
   };
 

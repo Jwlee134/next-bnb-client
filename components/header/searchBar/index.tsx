@@ -81,8 +81,6 @@ const SearchBar = ({ scroll }: { scroll: number }) => {
 
   const dispatch = useDispatch();
 
-  const [locationPopup, setLocationPopup] = useState(false);
-
   const {
     pathname,
     query: {
@@ -140,15 +138,12 @@ const SearchBar = ({ scroll }: { scroll: number }) => {
   return (
     <SearchBarContainer>
       <Container>
-        <Location
-          locationPopup={locationPopup}
-          setLocationPopup={setLocationPopup}
-        />
+        <Location />
         <Divider />
         <Date />
         <Divider />
         <Guest />
-        <SearchButton setLocationPopup={setLocationPopup} />
+        <SearchButton />
       </Container>
     </SearchBarContainer>
   );
