@@ -15,6 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         children,
         page,
         limit,
+        roomType,
       } = req.query;
 
       let formatDates: string[] = [];
@@ -52,6 +53,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         // 기본적으로 예약 차단(0)이면 필터링
         availability: {
           $gte: 1,
+        },
+        // 검색 필터(집 전체, 개인실, 다인실)
+        roomType: {
+          $in: roomType,
         },
       });
       // 호스트가 설정해둔 최대 예약 가능 월보다 체크인, 체크아웃 날짜가 넘어가면 필터링

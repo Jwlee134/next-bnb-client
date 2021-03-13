@@ -10,6 +10,7 @@ import { useSelector } from "store";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import RoomList from "./RoomList";
+import Filter from "./filter";
 
 const Container = styled.div`
   display: flex;
@@ -54,25 +55,6 @@ const Options = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 15px 0px;
-`;
-
-const FilterContainer = styled.div`
-  display: flex;
-`;
-
-const Filter = styled.div`
-  padding: 10px 15px;
-  border: 1px solid ${palette.gray_b0};
-  border-radius: 32px;
-  font-weight: 300;
-  font-size: 15px;
-  cursor: pointer;
-  &:hover {
-    border-color: ${palette.gray_71};
-  }
-  &:not(:last-child) {
-    margin-right: 10px;
-  }
 `;
 
 const ShowMap = styled.div`
@@ -132,11 +114,7 @@ const SearchResults = () => {
             <Info>{searchInfo}</Info>
             <Title>{query.value}</Title>
             <Options>
-              <FilterContainer>
-                <Filter>숙소 유형</Filter>
-                <Filter>요금</Filter>
-                <Filter>필터 추가하기</Filter>
-              </FilterContainer>
+              <Filter />
               <ShowMap
                 onClick={() => dispatch(commonActions.setShowMap(!showMap))}
               >

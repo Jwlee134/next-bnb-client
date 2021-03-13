@@ -24,6 +24,7 @@ rooms.getInitialProps = async ({ store, query }) => {
     children,
     page = "1",
     limit = "10",
+    roomType = ["entire", "public", "private"],
   } = query;
   try {
     const { data } = await searchRoomAPI({
@@ -35,6 +36,7 @@ rooms.getInitialProps = async ({ store, query }) => {
       children,
       page,
       limit,
+      roomType,
     });
     store.dispatch(roomActions.setSearchResults(data));
     return { error: null };

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IRoomDetail } from "types/room";
 
 interface IState {
@@ -6,6 +6,7 @@ interface IState {
     searchResults: IRoomDetail[];
     originalLength: number;
   };
+  isLoading: boolean;
 }
 
 const initialState: IState = {
@@ -13,6 +14,7 @@ const initialState: IState = {
     searchResults: [],
     originalLength: 0,
   },
+  isLoading: false,
 };
 
 const room = createSlice({
@@ -23,6 +25,9 @@ const room = createSlice({
       const { data, originalLength } = action.payload;
       state.search.searchResults = data;
       state.search.originalLength = originalLength;
+    },
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     },
   },
 });

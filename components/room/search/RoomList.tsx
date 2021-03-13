@@ -13,9 +13,10 @@ import RoomCard from "./RoomCard";
 
 const Container = styled.div`
   .paginate-container {
-    margin-top: 50px;
+    padding-top: 50px;
     display: flex;
     justify-content: center;
+    border-top: 1px solid ${palette.gray_eb};
   }
   .paginate-number,
   .break,
@@ -80,6 +81,7 @@ const RoomList = () => {
   const originalLength = useSelector(
     (state) => state.room.search.originalLength
   );
+  const isLoading = useSelector((state) => state.room.isLoading);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
@@ -100,6 +102,7 @@ const RoomList = () => {
 
   useEffect(() => {
     if (!isEmpty(searchResults) && loading) setLoading(false);
+    if (isLoading) dispatch(roomActions.setIsLoading(false));
   }, [searchResults]);
 
   const info = useMemo(() => {
