@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import querystring from "querystring";
 import { useRouter } from "next/router";
 import { roomActions } from "store/room";
-import { extractCustomQuery } from "utils";
+import { addComma, extractCustomQuery } from "utils";
 import Footer from "./Footer";
 
 interface Props {
@@ -45,7 +45,7 @@ const Label = styled.div`
   font-size: 13px;
   font-weight: 300;
   opacity: 0.7;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 `;
 
 const InputItem = styled.label`
@@ -53,7 +53,7 @@ const InputItem = styled.label`
   height: 56px;
   border: 1px solid ${palette.gray_b0};
   border-radius: 8px;
-  padding: 10px;
+  padding: 8px;
   position: relative;
 `;
 
@@ -85,7 +85,7 @@ const Input = styled.input`
   &:focus {
     box-shadow: 0 0 0 1px black;
   }
-  padding: 27px 10px 10px 32px;
+  padding: 27px 10px 10px 30px;
   box-sizing: border-box;
 `;
 
@@ -106,6 +106,7 @@ const Price = () => {
       `/search/rooms?${querystring.stringify(search)}&${querystring.stringify(
         extractCustomQuery({
           ...query,
+          page: "1",
           minPrice: minimum,
           maxPrice: maximum,
         })
@@ -119,10 +120,10 @@ const Price = () => {
   };
 
   const handleMinimum = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setMinimum(e.target.value);
+    setMinimum(e.target.value.replace(/[^0-9]/g, ""));
 
   const handleMaximum = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setMaximum(e.target.value);
+    setMaximum(e.target.value.replace(/[^0-9]/g, ""));
 
   useEffect(() => {
     if (query.minPrice) {
@@ -153,7 +154,12 @@ const Price = () => {
                   <span>
                     <BiWon />
                   </span>
-                  <Input type="text" onChange={handleMinimum} value={minimum} />
+                  <Input
+                    type="text"
+                    onChange={handleMinimum}
+                    value={addComma(minimum)}
+                    maxLength={11}
+                  />
                 </InputBox>
               </InputItem>
               <span>-</span>
@@ -163,7 +169,12 @@ const Price = () => {
                   <span>
                     <BiWon />
                   </span>
-                  <Input type="text" onChange={handleMaximum} value={maximum} />
+                  <Input
+                    type="text"
+                    onChange={handleMaximum}
+                    value={addComma(maximum)}
+                    maxLength={11}
+                  />
                 </InputBox>
               </InputItem>
             </InputContainer>

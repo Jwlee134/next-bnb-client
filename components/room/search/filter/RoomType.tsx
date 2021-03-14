@@ -52,6 +52,7 @@ const RoomType = () => {
       `/search/rooms?${querystring.stringify(search)}&${querystring.stringify(
         extractCustomQuery({
           ...query,
+          page: "1",
           roomType: options,
         })
       )}`

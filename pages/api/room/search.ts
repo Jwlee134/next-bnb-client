@@ -62,8 +62,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         },
         // 가격 필터
         price: {
-          $gte: Number(minPrice) || 0,
-          $lte: Number(maxPrice) || 10000000000,
+          $gte: Number(minPrice),
+          $lte: Number(maxPrice),
         },
       });
       // 호스트가 설정해둔 최대 예약 가능 월보다 체크인, 체크아웃 날짜가 넘어가면 필터링
