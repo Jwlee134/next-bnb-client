@@ -20,6 +20,15 @@ const Container = styled.div`
       border-color: ${palette.gray_71};
     }
   }
+  .filter-popup {
+    width: 360px;
+    background-color: white;
+    position: absolute;
+    z-index: 2;
+    box-shadow: 0px 10px 37px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    top: 55px;
+  }
 `;
 
 const SearchFilter = () => {

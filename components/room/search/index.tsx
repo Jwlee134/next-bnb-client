@@ -80,6 +80,7 @@ const Alert = styled.div`
 `;
 
 const SearchResults = () => {
+  const search = useSelector((state) => state.search);
   const showMap = useSelector((state) => state.common.showMap);
   const originalLength = useSelector(
     (state) => state.room.search.originalLength

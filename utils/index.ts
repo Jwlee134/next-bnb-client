@@ -16,17 +16,32 @@ export const addComma = (value: string) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-/* export const makeQueryString = (baseUrl: string, queryObject: Object) => {
-  const keys = Object.keys(queryObject);
-  const values = Object.values(queryObject);
-  let url = `${baseUrl}?`;
-  // value값이 있을때만 url에 추가
-  values.forEach((value, i) => {
-    if (value) {
-      url += `${keys[i]}=${value}&`;
+export const extractCustomQuery = (query: {
+  [key: string]: string | string[] | undefined;
+}) => {
+  const essentialQueries = [
+    "value",
+    "latitude",
+    "longitude",
+    "checkIn",
+    "checkOut",
+    "adults",
+    "children",
+    "infants",
+  ];
+  const newObj: { [key: string]: string | string[] | undefined } = {};
+  const keys = Object.keys(query);
+  const values = Object.values(query);
+
+  keys.forEach((key, i) => {
+    if (essentialQueries.includes(key)) {
+      return;
     }
+    if (!values[i]) {
+      return;
+    }
+    newObj[key] = values[i];
   });
-  // 마지막 & 제거
-  const query = url.slice(0, -1);
-  return query;
-}; */
+
+  return newObj;
+};

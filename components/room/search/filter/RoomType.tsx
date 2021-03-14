@@ -4,12 +4,12 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import styled, { css } from "styled-components";
-import palette from "styles/palette";
 import querystring from "querystring";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
 import { useSelector } from "store";
-import { isEmpty } from "lodash";
+import Footer from "./Footer";
+import { extractCustomQuery } from "utils";
 
 interface Props {
   opened: boolean;
@@ -32,36 +32,8 @@ const Title = styled.div<Props>`
         `}
 `;
 
-const List = styled.ul`
-  width: 360px;
-  background-color: white;
-  position: absolute;
-  z-index: 2;
-  box-shadow: 0px 10px 37px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  top: 55px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px;
-  button {
-    color: white;
-    background-color: ${palette.dark_cyan};
-    outline: none;
-    border: none;
-    padding: 5px 15px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-`;
-
-const Delete = styled.span`
-  text-decoration: underline;
-  cursor: pointer;
+const CheckBoxContainer = styled.div`
+  padding: 20px 20px 0px;
 `;
 
 const RoomType = () => {
@@ -74,12 +46,15 @@ const RoomType = () => {
 
   const handleChange = (value: string[]) => setOptions(value);
 
-  const handleClick = () => {
+  const handleSave = () => {
     dispatch(roomActions.setIsLoading(true));
     router.push(
-      `/search/rooms?${querystring.stringify(search)}&${querystring.stringify({
-        roomType: options,
-      })}`
+      `/search/rooms?${querystring.stringify(search)}&${querystring.stringify(
+        extractCustomQuery({
+          ...query,
+          roomType: options,
+        })
+      )}`
     );
     setOpened(false);
   };
@@ -128,17 +103,16 @@ const RoomType = () => {
           {getText()}
         </Title>
         {opened && (
-          <List>
-            <Checkbox
-              options={roomTypeRadioOptions}
-              items={options}
-              onChange={handleChange}
-            />
-            <ButtonContainer>
-              <Delete onClick={handleDelete}>지우기</Delete>
-              <button onClick={handleClick}>저장</button>
-            </ButtonContainer>
-          </List>
+          <ul className="filter-popup">
+            <CheckBoxContainer>
+              <Checkbox
+                options={roomTypeRadioOptions}
+                items={options}
+                onChange={handleChange}
+              />
+            </CheckBoxContainer>
+            <Footer handleDelete={handleDelete} handleSave={handleSave} />
+          </ul>
         )}
       </OutsideClickHandler>
     </Container>

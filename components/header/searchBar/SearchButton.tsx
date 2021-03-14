@@ -8,6 +8,7 @@ import querystring from "querystring";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
+import { extractCustomQuery } from "utils";
 
 const Container = styled.div`
   button {
@@ -67,21 +68,12 @@ const SearchButton = () => {
     }
   };
 
-  // 쿼리에서 리덕스에 있는 검색 파라미터들을 제거하여 커스텀 필터의 쿼리만 남기는 작업
-  useEffect(() => {
-    if (query) {
-      Object.keys(search).forEach((key) => {
-        delete query[key];
-      });
-    }
-  }, [search]);
-
   return (
     <Container>
       <Link
         href={`/search/rooms?${querystring.stringify(
           search
-        )}&${querystring.stringify(query)}`}
+        )}&${querystring.stringify(extractCustomQuery(query))}`}
       >
         <a>
           <Button onClick={handleClick}>

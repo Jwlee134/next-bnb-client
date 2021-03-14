@@ -1,18 +1,9 @@
-import { useRouter } from "next/router";
 import React from "react";
-import styled, { css } from "styled-components";
-import palette from "styles/palette";
+import styled from "styled-components";
 
-const Container = styled.div<{ pathname: string }>`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
-  ${({ pathname }) =>
-    pathname.includes("search") &&
-    css`
-      border-bottom: 1px solid ${palette.gray_eb};
-      width: 100%;
-      padding: 20px 20px 0px;
-    `}
 `;
 
 const InputContainer = styled.label`
@@ -55,8 +46,6 @@ interface Props {
 }
 
 const Checkbox = ({ options, items, onChange }: Props) => {
-  const { pathname } = useRouter();
-
   const isDetailOptions = (
     option: string | DetailOptions
   ): option is DetailOptions => {
@@ -64,7 +53,7 @@ const Checkbox = ({ options, items, onChange }: Props) => {
   };
 
   return (
-    <Container pathname={pathname}>
+    <Container>
       {options &&
         options.map((option: string | DetailOptions, index: number) => (
           <InputContainer key={index}>

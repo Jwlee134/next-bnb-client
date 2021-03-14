@@ -16,6 +16,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         page,
         limit,
         roomType,
+        minPrice,
+        maxPrice,
       } = req.query;
 
       let formatDates: string[] = [];
@@ -57,6 +59,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         // 검색 필터(집 전체, 개인실, 다인실)
         roomType: {
           $in: roomType,
+        },
+        // 가격 필터
+        price: {
+          $gte: Number(minPrice) || 0,
+          $lte: Number(maxPrice) || 10000000000,
         },
       });
       // 호스트가 설정해둔 최대 예약 가능 월보다 체크인, 체크아웃 날짜가 넘어가면 필터링

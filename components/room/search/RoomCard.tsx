@@ -180,6 +180,19 @@ const RoomCard = ({ room }: { room: IRoomDetail }) => {
     new Date(checkIn as string)
   );
 
+  const getRoomTypeText = () => {
+    switch (room.roomType) {
+      case "entire":
+        return "집 전체";
+      case "private":
+        return "개인실";
+      case "public":
+        return "다인실";
+      default:
+        return "";
+    }
+  };
+
   return (
     <Container>
       <ImageContainer>
@@ -199,7 +212,7 @@ const RoomCard = ({ room }: { room: IRoomDetail }) => {
         <TopContainer>
           <LeftContainer>
             <InfoText>
-              {room.city}의 {room.buildingType.label}
+              {room.city}의 {room.buildingType.label} {getRoomTypeText()}
             </InfoText>
             <Title>{room.title}</Title>
             <Divider />
