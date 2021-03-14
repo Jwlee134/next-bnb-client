@@ -123,16 +123,7 @@ const SearchBar = ({ scroll }: { scroll: number }) => {
       dispatch(searchActions.setChildren(Number(children as string)));
       dispatch(searchActions.setInfants(Number(infants as string)));
     }
-  }, [
-    keyword,
-    latitude,
-    longitude,
-    checkIn,
-    checkOut,
-    adults,
-    children,
-    infants,
-  ]);
+  }, []);
 
   if (!showSearchBar) return null;
   return (

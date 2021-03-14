@@ -29,24 +29,22 @@ const BottomContainer = styled.div`
   align-items: flex-end;
 `;
 
-const RoomCardSkeleton = () => {
-  return (
-    <Container>
-      <Skeleton width={300} height={200} style={{ marginRight: 12 }} />
-      <InfoContainer>
-        <TopContainer>
-          <Skeleton width={200} height={16.8} />
-          <Skeleton width={300} height={24} />
-          <Skeleton width={250} height={16.8} style={{ marginTop: 22 }} />
-          <Skeleton width={300} height={16.8} />
-        </TopContainer>
-        <BottomContainer>
-          <Skeleton width={60} height={16.8} />
-          <Skeleton width={110} height={32} />
-        </BottomContainer>
-      </InfoContainer>
-    </Container>
-  );
-};
+const RoomCardSkeleton = () => (
+  <Container>
+    <Skeleton width={300} height={200} style={{ marginRight: 12 }} />
+    <InfoContainer>
+      <TopContainer>
+        <Skeleton width={200} height={16.8} />
+        <Skeleton width={300} height={24} />
+        <Skeleton width={250} height={16.8} style={{ marginTop: 22 }} />
+        <Skeleton width={300} height={16.8} />
+      </TopContainer>
+      <BottomContainer>
+        <Skeleton width={60} height={16.8} />
+        <Skeleton width={110} height={32} />
+      </BottomContainer>
+    </InfoContainer>
+  </Container>
+);
 
 export default RoomCardSkeleton;

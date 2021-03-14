@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import palette from "styles/palette";
@@ -83,16 +83,18 @@ const RoomList = () => {
   );
   const isLoading = useSelector((state) => state.room.isLoading);
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const { page = "1", limit = "10" } = router.query;
 
   const handleChange = ({ selected }: { selected: number }) => {
-    setLoading(true);
+    // 페이지 숫자를 클릭하면 로딩 true
+    dispatch(roomActions.setIsLoading(true));
+    // 기존의 searchResults 배열은 비워두고 총 개수는 그대로 둠
     dispatch(roomActions.setSearchResults({ data: [], originalLength }));
     window.scrollTo(0, 0);
     if (router.query.page) delete router.query.page;
+    // 해당 주소로 쿼리를 보내면 getInitialProps가 실행되어 필터링된 searchResults 배열 다시 채워짐
     router.push(
       `${router.pathname}?${querystring.stringify(router.query)}&page=${
         selected + 1
@@ -101,11 +103,17 @@ const RoomList = () => {
   };
 
   useEffect(() => {
-    if (!isEmpty(searchResults) && loading) setLoading(false);
-    if (isLoading) dispatch(roomActions.setIsLoading(false));
-  }, [searchResults]);
+    // searchResults 배열이 채워진 상태에서 로딩이 true라면 로딩 false, searchResults 배열 표시
+    if (!isEmpty(searchResults) && isLoading) {
+      dispatch(roomActions.setIsLoading(false));
+    }
+    // 총 개수가 0이라면 로딩 false, Empty 문구 표시
+    if (!originalLength) {
+      dispatch(roomActions.setIsLoading(false));
+    }
+  }, [searchResults, originalLength]);
 
-  const info = useMemo(() => {
+  const info = () => {
     if (
       (Number(page) - 1) * Number(limit) + 1 ===
       (Number(page) - 1) * Number(limit) + searchResults.length
@@ -118,9 +126,21 @@ const RoomList = () => {
       (Number(page) - 1) * Number(limit) + 1
     } -
           ${(Number(page) - 1) * Number(limit) + searchResults.length}`;
-  }, [page, searchResults]);
+  };
 
-  if (isEmpty(searchResults) && !loading) {
+  if (isLoading) {
+    return (
+      <>
+        <RoomCardSkeleton />
+        <RoomCardSkeleton />
+        <RoomCardSkeleton />
+        <RoomCardSkeleton />
+        <RoomCardSkeleton />
+      </>
+    );
+  }
+
+  if (!originalLength) {
     return (
       <Empty>
         이 지역에는 숙소가 존재하지 않거나 설정하신 조건을 만족하는 숙소가
@@ -134,34 +154,21 @@ const RoomList = () => {
       {searchResults.map((room, index) => (
         <RoomCard key={index} room={room} />
       ))}
-      {loading && (
-        <>
-          <RoomCardSkeleton />
-          <RoomCardSkeleton />
-          <RoomCardSkeleton />
-          <RoomCardSkeleton />
-          <RoomCardSkeleton />
-        </>
-      )}
-      {!isEmpty(searchResults) && (
-        <>
-          <ReactPaginate
-            pageCount={Math.ceil(originalLength / Number(limit))}
-            pageRangeDisplayed={3}
-            marginPagesDisplayed={5}
-            previousLabel="<"
-            nextLabel=">"
-            breakLabel="···"
-            containerClassName="paginate-container"
-            pageClassName="paginate-number"
-            activeClassName="paginate-actived"
-            onPageChange={handleChange}
-            disabledClassName="disabled"
-            forcePage={Number(page) - 1}
-          />
-          <Info>{info}</Info>
-        </>
-      )}
+      <ReactPaginate
+        pageCount={Math.ceil(originalLength / Number(limit))}
+        pageRangeDisplayed={3}
+        marginPagesDisplayed={5}
+        previousLabel="<"
+        nextLabel=">"
+        breakLabel="···"
+        containerClassName="paginate-container"
+        pageClassName="paginate-number"
+        activeClassName="paginate-actived"
+        onPageChange={handleChange}
+        disabledClassName="disabled"
+        forcePage={Number(page) - 1}
+      />
+      <Info>{info()}</Info>
     </Container>
   );
 };

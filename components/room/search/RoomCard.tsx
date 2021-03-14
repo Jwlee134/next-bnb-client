@@ -170,7 +170,6 @@ const TotalPrice = styled.div`
 `;
 
 const RoomCard = ({ room }: { room: IRoomDetail }) => {
-  const isLoading = useSelector((state) => state.room.isLoading);
   const {
     query: { checkIn, checkOut },
   } = useRouter();
@@ -184,20 +183,17 @@ const RoomCard = ({ room }: { room: IRoomDetail }) => {
   return (
     <Container>
       <ImageContainer>
-        {isLoading && <Skeleton width={300} height={201} duration={0.5} />}
-        {!isLoading && (
-          <Slider slidesToScroll={1} slidesToShow={1} infinite={true}>
-            {room.photos.map((photo, index) => (
-              <Image
-                key={index}
-                src={photo}
-                width={300}
-                height={201}
-                quality="50"
-              />
-            ))}
-          </Slider>
-        )}
+        <Slider slidesToScroll={1} slidesToShow={1} infinite={true}>
+          {room.photos.map((photo, index) => (
+            <Image
+              key={index}
+              src={photo}
+              width={300}
+              height={201}
+              quality="50"
+            />
+          ))}
+        </Slider>
       </ImageContainer>
       <InfoContainer>
         <TopContainer>

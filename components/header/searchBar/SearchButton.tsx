@@ -1,6 +1,6 @@
 import Button from "components/common/Button";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { useSelector } from "store";
 import styled from "styled-components";
@@ -50,7 +50,7 @@ const SearchButton = () => {
     (state) => state.common.isGettingCoordinates
   );
 
-  const { pathname } = useRouter();
+  const { pathname, query } = useRouter();
   const dispatch = useDispatch();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,9 +67,22 @@ const SearchButton = () => {
     }
   };
 
+  // 쿼리에서 리덕스에 있는 검색 파라미터들을 제거하여 커스텀 필터의 쿼리만 남기는 작업
+  useEffect(() => {
+    if (query) {
+      Object.keys(search).forEach((key) => {
+        delete query[key];
+      });
+    }
+  }, [search]);
+
   return (
     <Container>
-      <Link href={`/search/rooms?${querystring.stringify(search)}`}>
+      <Link
+        href={`/search/rooms?${querystring.stringify(
+          search
+        )}&${querystring.stringify(query)}`}
+      >
         <a>
           <Button onClick={handleClick}>
             {!isGettingCoordinates && <BiSearch size={24} />}
