@@ -154,6 +154,13 @@ const OthersModalContents = ({ closeModal }: { closeModal: () => void }) => {
         setAmenities(query.amenities);
       }
     }
+    if (query.spaces) {
+      if (typeof query.spaces === "string") {
+        setSpaces([query.spaces]);
+      } else {
+        setSpaces(query.spaces);
+      }
+    }
   }, []);
 
   return (
