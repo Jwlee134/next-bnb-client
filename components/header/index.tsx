@@ -8,6 +8,7 @@ import { throttle } from "lodash";
 import { useSelector } from "store";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
+import rafSchd from "raf-schd";
 import HeaderMenu from "./HeaderMenu";
 import MiniSearchBar from "./miniSearchBar";
 
@@ -90,14 +91,18 @@ const Header = () => {
 
   const [scroll, setScroll] = useState(0);
 
-  const handleScroll = throttle(() => {
-    setScroll(window.scrollY);
-  }, 100);
+  const handleScroll = (scroll: number) => setScroll(scroll);
+
+  const schedule = rafSchd(handleScroll);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", () => {
+      schedule(window.scrollY);
+    });
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", () => {
+        schedule(window.scrollY);
+      });
     };
   }, []);
 
