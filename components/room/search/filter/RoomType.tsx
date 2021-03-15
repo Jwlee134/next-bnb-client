@@ -8,8 +8,8 @@ import querystring from "querystring";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
 import { useSelector } from "store";
-import Footer from "./Footer";
 import { extractCustomQuery } from "utils";
+import Footer from "./Footer";
 
 interface Props {
   opened: boolean;
@@ -68,8 +68,10 @@ const RoomType = () => {
         return;
       }
       setOptions(query.roomType as string[]);
+    } else {
+      setOptions([]);
     }
-  }, []);
+  }, [opened]);
 
   const handleDelete = () => setOptions([]);
 

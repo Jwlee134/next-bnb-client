@@ -128,11 +128,15 @@ const Price = () => {
   useEffect(() => {
     if (query.minPrice) {
       setMinimum(query.minPrice as string);
+    } else {
+      setMinimum("");
     }
     if (query.maxPrice) {
       setMaximum(query.maxPrice as string);
+    } else {
+      setMaximum("");
     }
-  }, []);
+  }, [opened]);
 
   return (
     <Container>
