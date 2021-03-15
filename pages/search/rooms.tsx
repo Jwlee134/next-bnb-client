@@ -15,32 +15,9 @@ const rooms: NextPage<Props> = ({ error }) => {
 };
 
 rooms.getInitialProps = async ({ store, query }) => {
-  const {
-    latitude,
-    longitude,
-    checkIn,
-    checkOut,
-    adults,
-    children,
-    page = "1",
-    limit = "10",
-    roomType = ["entire", "public", "private"],
-    minPrice = "0",
-    maxPrice = "999999999999",
-  } = query;
   try {
     const { data } = await searchRoomAPI({
-      latitude,
-      longitude,
-      checkIn,
-      checkOut,
-      adults,
-      children,
-      page,
-      limit,
-      roomType,
-      minPrice,
-      maxPrice,
+      ...query,
     });
     store.dispatch(roomActions.setSearchResults(data));
     return { error: null };

@@ -2,6 +2,7 @@ import Room from "models/Room";
 import { NextApiRequest, NextApiResponse } from "next";
 import { addHours, eachDayOfInterval, addMonths } from "date-fns";
 import { IRoomDetail } from "types/room";
+import { amenityList, largeBuildingTypeList, spaceList } from "lib/staticData";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
@@ -13,11 +14,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         checkOut,
         adults,
         children,
-        page,
-        limit,
-        roomType,
-        minPrice,
-        maxPrice,
+        page = "1",
+        limit = "10",
+        roomType = ["entire", "public", "private"],
+        minPrice = "0",
+        maxPrice = "999999999999",
+        bedCount = "0",
+        bedroomCount = "0",
+        bathroomCount = "0",
+        buildingType = largeBuildingTypeList.map((building) => building.label),
+        amenities = [],
+        spaces = [],
       } = req.query;
 
       let formatDates: string[] = [];
@@ -65,10 +72,56 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           $gte: Number(minPrice),
           $lte: Number(maxPrice),
         },
+        // 셋 중 하나라도 만족하지 않으면 필터링
+        $and: [
+          {
+            bedCount: {
+              $gte: Number(bedCount),
+            },
+          },
+          {
+            bedroomCount: {
+              $gte: Number(bedroomCount),
+            },
+          },
+          {
+            bathroomCount: {
+              $gte: Number(bathroomCount),
+            },
+          },
+        ],
+      });
+      // 건물 유형으로 필터링
+      const filteredByBuildingType = data.filter(
+        ({ largeBuildingType: { label } }) => {
+          return buildingType.includes(label as string);
+        }
+      );
+      // 편의 시설로 필터링
+      const filteredByAmenities = filteredByBuildingType.filter((room) => {
+        let options: string[] = [];
+        if (typeof amenities === "string") {
+          options = [amenities];
+        } else {
+          options = amenities;
+        }
+        if (amenities.length === 0) return true;
+        return options.every((option) => room.amenities.includes(option));
+      });
+      // 시설로 필터링
+      const filteredBySpaces = filteredByAmenities.filter((room) => {
+        let options: string[] = [];
+        if (typeof spaces === "string") {
+          options = [spaces];
+        } else {
+          options = spaces;
+        }
+        if (spaces.length === 0) return true;
+        return options.every((option) => room.spaces.includes(option));
       });
       // 호스트가 설정해둔 최대 예약 가능 월보다 체크인, 체크아웃 날짜가 넘어가면 필터링
       if (checkIn && checkOut) {
-        const filteredByAvailability = data.filter((room) => {
+        const filteredByAvailability = filteredBySpaces.filter((room) => {
           // 항상 가능이면 필터링하지 않음
           if (room.availability === 1) return true;
           const availability = addMonths(new Date(), room.availability);
@@ -86,7 +139,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
 
-      const slicedData = data.slice(
+      const slicedData = filteredBySpaces.slice(
         (Number(page) - 1) * Number(limit),
         Number(page) * Number(limit)
       );
@@ -95,7 +148,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         originalLength: data.length,
       });
     } catch (error) {
-      return res.status(500).end();
+      return res.status(500).send("숙소를 불러올 수 없습니다.");
     }
   }
   return res.status(405).end();

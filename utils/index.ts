@@ -1,3 +1,5 @@
+import querystring from "querystring";
+
 export const extractToken = (cookie: string) => {
   // key=value; key=value => ["key=value", "key=value"]
   const cookieArray = cookie.split(/\s*;\s*/);
@@ -37,11 +39,15 @@ export const extractCustomQuery = (query: {
     if (essentialQueries.includes(key)) {
       return;
     }
-    if (!values[i]) {
+    if (!values[i] || values[i] === "0" || values[i]?.length === 0) {
       return;
     }
     newObj[key] = values[i];
   });
 
-  return newObj;
+  const queryString = `${
+    Object.keys(newObj).length > 0 ? "&" : ""
+  }${querystring.stringify(newObj)}`;
+
+  return queryString;
 };

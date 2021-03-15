@@ -35,7 +35,7 @@ const Description = styled.div`
 
 interface DetailOptions {
   label: string;
-  value: string;
+  value?: string;
   description: string;
 }
 
@@ -59,7 +59,9 @@ const Checkbox = ({ options, items, onChange }: Props) => {
           <InputContainer key={index}>
             <input
               type="checkbox"
-              value={isDetailOptions(option) ? option.value : option}
+              value={
+                isDetailOptions(option) ? option.value || option.label : option
+              }
               onChange={(e) => {
                 if (e.target.checked) {
                   onChange([...items, e.target.value]);
@@ -71,10 +73,10 @@ const Checkbox = ({ options, items, onChange }: Props) => {
                 }
               }}
               checked={items.includes(
-                isDetailOptions(option) ? option.value : option
+                isDetailOptions(option) ? option.value || option.label : option
               )}
             />
-            {isDetailOptions(option) && !option.label && <Text>{option}</Text>}
+            {!isDetailOptions(option) && <Text>{option}</Text>}
             {isDetailOptions(option) && option.label && (
               <TextContainer>
                 <Text>{option.label}</Text>
@@ -87,4 +89,4 @@ const Checkbox = ({ options, items, onChange }: Props) => {
   );
 };
 
-export default Checkbox;
+export default React.memo(Checkbox);

@@ -103,14 +103,12 @@ const Price = () => {
     dispatch(roomActions.setIsLoading(true));
     setOpened(false);
     router.push(
-      `/search/rooms?${querystring.stringify(search)}&${querystring.stringify(
-        extractCustomQuery({
-          ...query,
-          page: "1",
-          minPrice: minimum,
-          maxPrice: maximum,
-        })
-      )}`
+      `/search/rooms?${querystring.stringify(search)}${extractCustomQuery({
+        ...query,
+        page: "1",
+        minPrice: minimum,
+        maxPrice: maximum,
+      })}`
     );
   };
 
@@ -182,7 +180,9 @@ const Price = () => {
                 </InputBox>
               </InputItem>
             </InputContainer>
-            <Footer handleDelete={handleDelete} handleSave={handleSave} />
+            <Footer handleDelete={handleDelete} handleSave={handleSave}>
+              저장
+            </Footer>
           </div>
         )}
       </OutsideClickHandler>

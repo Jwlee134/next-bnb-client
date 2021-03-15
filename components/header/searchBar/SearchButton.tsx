@@ -73,7 +73,7 @@ const SearchButton = () => {
       <Link
         href={`/search/rooms?${querystring.stringify(
           search
-        )}&${querystring.stringify(extractCustomQuery(query))}`}
+        )}${extractCustomQuery(query)}`}
       >
         <a>
           <Button onClick={handleClick}>

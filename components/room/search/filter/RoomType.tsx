@@ -49,25 +49,22 @@ const RoomType = () => {
   const handleSave = () => {
     dispatch(roomActions.setIsLoading(true));
     router.push(
-      `/search/rooms?${querystring.stringify(search)}&${querystring.stringify(
-        extractCustomQuery({
-          ...query,
-          page: "1",
-          roomType: options,
-        })
-      )}`
+      `/search/rooms?${querystring.stringify(search)}${extractCustomQuery({
+        ...query,
+        page: "1",
+        roomType: options,
+      })}`
     );
     setOpened(false);
   };
 
-  // roomType이 하나면 스트링, 두개 이상이면 배열임
   useEffect(() => {
     if (query.roomType) {
-      if (query.roomType.length > 3) {
-        setOptions([query.roomType as string]);
+      if (typeof query.roomType === "string") {
+        setOptions([query.roomType]);
         return;
       }
-      setOptions(query.roomType as string[]);
+      setOptions(query.roomType);
     } else {
       setOptions([]);
     }
@@ -114,7 +111,9 @@ const RoomType = () => {
                 onChange={handleChange}
               />
             </CheckBoxContainer>
-            <Footer handleDelete={handleDelete} handleSave={handleSave} />
+            <Footer handleDelete={handleDelete} handleSave={handleSave}>
+              저장
+            </Footer>
           </ul>
         )}
       </OutsideClickHandler>

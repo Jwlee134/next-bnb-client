@@ -143,8 +143,7 @@ const RoomList = () => {
   if (!originalLength) {
     return (
       <Empty>
-        이 지역에는 숙소가 존재하지 않거나 설정하신 조건을 만족하는 숙소가
-        없어요.
+        숙소가 존재하지 않거나 설정하신 조건을 만족하는 숙소가 없어요.
       </Empty>
     );
   }

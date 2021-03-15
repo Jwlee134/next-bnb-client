@@ -28,14 +28,16 @@ const Delete = styled.span`
 const Footer = ({
   handleDelete,
   handleSave,
+  children,
 }: {
   handleDelete: () => void;
   handleSave: () => void;
+  children: React.ReactNode;
 }) => {
   return (
     <Container>
       <Delete onClick={handleDelete}>지우기</Delete>
-      <button onClick={handleSave}>저장</button>
+      <button onClick={handleSave}>{children}</button>
     </Container>
   );
 };
