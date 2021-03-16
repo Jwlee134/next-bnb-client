@@ -9,8 +9,11 @@ import { ImMap2 } from "react-icons/im";
 import { useSelector } from "store";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
+import dynamic from "next/dynamic";
 import RoomList from "./RoomList";
 import Filter from "./filter";
+
+const SearchMap = dynamic(() => import("./SearchMap"), { ssr: false });
 
 const Container = styled.div`
   display: flex;
@@ -30,14 +33,6 @@ const ListContainer = styled.div<{ showMap: boolean }>`
       : css`
           min-height: calc(100vh - 80px);
         `}
-`;
-
-const MapContainer = styled.div`
-  width: 45vw;
-  height: calc(100vh - 80px);
-  background-color: burlywood;
-  position: sticky;
-  top: 80px;
 `;
 
 const Info = styled.div`
@@ -80,7 +75,6 @@ const Alert = styled.div`
 `;
 
 const SearchResults = () => {
-  const search = useSelector((state) => state.search);
   const showMap = useSelector((state) => state.common.showMap);
   const originalLength = useSelector(
     (state) => state.room.search.originalLength
@@ -131,7 +125,7 @@ const SearchResults = () => {
           </div>
           <RoomList />
         </ListContainer>
-        {showMap && <MapContainer></MapContainer>}
+        {showMap && <SearchMap />}
       </Container>
     </>
   );

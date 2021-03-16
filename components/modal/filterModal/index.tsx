@@ -11,7 +11,7 @@ import { extractCustomQuery } from "utils";
 import { searchRoomAPI } from "lib/api/room";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
-import Footer from "./Footer";
+import Footer from "../../room/search/filter/Footer";
 
 const Container = styled.div`
   padding: 20px 20px 0px 20px;

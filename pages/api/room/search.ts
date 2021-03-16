@@ -2,7 +2,7 @@ import Room from "models/Room";
 import { NextApiRequest, NextApiResponse } from "next";
 import { addHours, eachDayOfInterval, addMonths } from "date-fns";
 import { IRoomDetail } from "types/room";
-import { amenityList, largeBuildingTypeList, spaceList } from "lib/staticData";
+import { largeBuildingTypeList } from "lib/staticData";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
@@ -42,14 +42,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       const data: IRoomDetail[] = await Room.find({
-        // 숙소의 위도 경도가 현재 위도 경도 기준 ±0.5 이내인 것들로 필터링
+        // 숙소의 위도 경도가 현재 위도 경도 기준 ±0.02 이내인 것들로 필터링
         latitude: {
-          $gte: Number(latitude) - 0.5,
-          $lte: Number(latitude) + 0.5,
+          $gte: Number(latitude) - 0.02,
+          $lte: Number(latitude) + 0.02,
         },
         longitude: {
-          $gte: Number(longitude) - 0.5,
-          $lte: Number(longitude) + 0.5,
+          $gte: Number(longitude) - 0.02,
+          $lte: Number(longitude) + 0.02,
         },
         // 호스트가 설정해둔 예약 불가 날짜에 체크인, 체크아웃 날짜가 포함되어 있으면 필터링
         blockedDayList: {

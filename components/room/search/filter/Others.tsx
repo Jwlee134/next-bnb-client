@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import { IoCloseSharp } from "react-icons/io5";
-import OthersModalContents from "./OtherModalContents";
+import OthersModalContents from "../../../modal/filterModal";
 
 const Container = styled.div``;
 

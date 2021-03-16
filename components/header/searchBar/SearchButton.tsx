@@ -1,6 +1,6 @@
 import Button from "components/common/Button";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React from "react";
 import { BiSearch } from "react-icons/bi";
 import { useSelector } from "store";
 import styled from "styled-components";

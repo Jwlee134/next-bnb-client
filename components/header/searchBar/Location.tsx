@@ -104,7 +104,6 @@ const Location = () => {
     } catch (error) {
       alert(error.response.data);
     } finally {
-      dispatch(searchActions.setValue(""));
       dispatch(commonActions.setIsGettingCoordinates(false));
     }
   };
