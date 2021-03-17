@@ -171,7 +171,7 @@ const TotalPrice = styled.div`
   text-align: right;
 `;
 
-const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
+const RoomCard = ({ room }: { room: IRoomDetail }) => {
   const {
     query: { checkIn, checkOut },
   } = useRouter();

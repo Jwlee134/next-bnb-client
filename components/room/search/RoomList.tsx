@@ -90,8 +90,6 @@ const RoomList = () => {
   const handleChange = ({ selected }: { selected: number }) => {
     // 페이지 숫자를 클릭하면 로딩 true
     dispatch(roomActions.setIsLoading(true));
-    // 기존의 searchResults 배열은 비워두고 총 개수는 그대로 둠
-    dispatch(roomActions.setSearchResults({ data: [], originalLength }));
     window.scrollTo(0, 0);
     if (router.query.page) delete router.query.page;
     // 해당 주소로 쿼리를 보내면 getInitialProps가 실행되어 필터링된 searchResults 배열 다시 채워짐
@@ -103,12 +101,7 @@ const RoomList = () => {
   };
 
   useEffect(() => {
-    // searchResults 배열이 채워진 상태에서 로딩이 true라면 로딩 false, searchResults 배열 표시
-    if (!isEmpty(searchResults) && isLoading) {
-      dispatch(roomActions.setIsLoading(false));
-    }
-    // 총 개수가 0이라면 로딩 false, Empty 문구 표시
-    if (!originalLength) {
+    if (isLoading || !originalLength) {
       dispatch(roomActions.setIsLoading(false));
     }
   }, [searchResults, originalLength]);

@@ -62,13 +62,13 @@ const Location = () => {
 
   const dispatch = useDispatch();
 
+  const [text, setText] = useState("");
   const [locationPopup, setLocationPopup] = useState(false);
 
-  const keyword = useDebounce(value as string, 500);
+  const keyword = useDebounce(text as string, 500);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(searchActions.setValue(e.target.value));
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setText(e.target.value);
 
   const handleNear = () => {
     setLocationPopup(false);
@@ -96,6 +96,7 @@ const Location = () => {
       dispatch(commonActions.setIsGettingCoordinates(true));
       document.getElementById("dateRangePicker-start")?.focus();
       dispatch(searchActions.setValue(value));
+      setText(value);
       const {
         data: { lat, lng },
       } = await getCoordinatesAPI(value);
@@ -122,6 +123,10 @@ const Location = () => {
     if (keyword) searchPlaces();
   }, [keyword]);
 
+  useEffect(() => {
+    if (!text) setText(value);
+  }, []);
+
   return (
     <div className="search-container">
       <OutsideClickHandler onOutsideClick={() => setLocationPopup(false)}>
@@ -133,16 +138,16 @@ const Location = () => {
           >
             <h3 className="search-text">위치</h3>
             <Input
-              onClick={() => setLocationPopup(!locationPopup)}
-              value={value}
+              onClick={() => setLocationPopup(true)}
+              value={text}
               onChange={handleChange}
               placeholder="어디로 여행가세요?"
             />
           </div>
         </label>
         {locationPopup && (
-          <ListContainer typing={!!value && isEmpty(placeList)}>
-            {!value && (
+          <ListContainer typing={!!text && isEmpty(placeList)}>
+            {!text && (
               <List onClick={handleNear}>
                 <Image
                   src="/static/image/home/map.png"
@@ -152,7 +157,7 @@ const Location = () => {
                 <Text>가까운 여행지 둘러보기</Text>
               </List>
             )}
-            {value &&
+            {text &&
               !isEmpty(placeList) &&
               placeList.map((place, index) => (
                 <List key={index} onClick={() => handleClick(place)}>

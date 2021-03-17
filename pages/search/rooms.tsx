@@ -4,6 +4,7 @@ import React from "react";
 import { searchRoomAPI } from "lib/api/room";
 import { roomActions } from "store/room";
 import Error from "pages/_error";
+import dbConnect from "utils/dbConnect";
 
 interface Props {
   error?: number | null;
@@ -14,7 +15,8 @@ const rooms: NextPage<Props> = ({ error }) => {
   return <SearchResults />;
 };
 
-rooms.getInitialProps = async ({ store, query }) => {
+rooms.getInitialProps = async ({ store, query, req }) => {
+  if (req) await dbConnect();
   try {
     const { data } = await searchRoomAPI({
       ...query,
