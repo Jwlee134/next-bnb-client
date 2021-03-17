@@ -56,7 +56,10 @@ const SearchButton = () => {
       <Link
         href={`/search/rooms?${querystring.stringify(
           search
-        )}${extractCustomQuery(query)}`}
+        )}${extractCustomQuery({
+          ...query,
+          zoom: "14",
+        })}`}
       >
         <a>
           <Button onClick={handleClick}>

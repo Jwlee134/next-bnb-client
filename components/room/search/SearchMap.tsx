@@ -10,6 +10,8 @@ import { isEmpty } from "lodash";
 import { roomActions } from "store/room";
 import { MdRefresh } from "react-icons/md";
 import Loader from "components/common/Loader";
+import { render } from "react-dom";
+import { IRoomDetail } from "types/room";
 
 const Container = styled.div`
   width: 45vw;
@@ -21,8 +23,17 @@ const Container = styled.div`
     height: 100%;
     .gm-fullscreen-control,
     .gm-svpc,
-    .gm-style-mtc {
-      display: none;
+    .gm-style-mtc,
+    .gm-ui-hover-effect {
+      display: none !important;
+    }
+    .gm-style-iw-c,
+    .gm-style-iw-d {
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+    .gm-style-iw-t {
+      bottom: 55px !important;
     }
     .gm-bundled-control {
       top: 0;
@@ -69,6 +80,11 @@ const Label = styled.label`
     margin-bottom: 2px;
   }
 `;
+const InfoWindow = styled.div`
+  width: 300px;
+  height: 200px;
+  overflow: hidden;
+`;
 
 declare global {
   interface Window {
@@ -88,12 +104,14 @@ const SearchMap = () => {
   const { query } = router;
 
   const [map, setMap] = useState<google.maps.Map<HTMLDivElement> | null>(null);
+  /*   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(
+    null
+  ); */
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [searchWithMoving, setSearchWithMoving] = useState(true);
   const [isMoved, setIsMoved] = useState(false);
 
   const mapRef = useRef<HTMLDivElement>(null);
-
   const lat = Number(query.latitude);
   const lng = Number(query.longitude);
   const zoom = Number(query.zoom);
@@ -110,11 +128,19 @@ const SearchMap = () => {
     }
   };
 
+  // 최초 지도 로드
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
+
   const getNewResults = (map: google.maps.Map<HTMLDivElement>) => {
     const coordsBounds = (
       ((map.getBounds() as google.maps.LatLngBounds).getNorthEast().lat() -
         map.getCenter().lat()) /
-      1.3
+      1.2
     ).toString();
     const latitude = map.getCenter().lat();
     const longitude = map.getCenter().lng();
@@ -126,12 +152,23 @@ const SearchMap = () => {
         latitude,
         longitude,
         value: "지도에서 선택한 지역",
-      })}${extractCustomQuery({ ...query, page: "1", zoom, coordsBounds })}`
+      })}${extractCustomQuery({
+        ...query,
+        page: "1",
+        zoom,
+        coordsBounds,
+      })}`
     );
     dispatch(searchActions.setValue("지도에서 선택한 지역"));
     dispatch(searchActions.setLatitude(latitude));
     dispatch(searchActions.setLongitude(longitude));
   };
+
+  useEffect(() => {
+    if (!map) return;
+    map.setCenter({ lat, lng });
+    map.setZoom(zoom);
+  }, [map, lat, lng, zoom]);
 
   useEffect(() => {
     if (!map) return;
@@ -155,13 +192,26 @@ const SearchMap = () => {
     };
   }, [map, searchWithMoving, query]);
 
-  // 최초 지도 로드
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
-    script.async = true;
-    document.head.appendChild(script);
-  }, []);
+  const createInfoWindow = (
+    e: google.maps.MapMouseEvent,
+    map: google.maps.Map<HTMLDivElement>,
+    room: IRoomDetail
+  ) => {
+    const info = new google.maps.InfoWindow({
+      content: "<div id='infoWindow' />",
+      position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
+    });
+    info.addListener("domready", () => {
+      render(
+        <InfoWindow>{room.title}</InfoWindow>,
+        document.getElementById("infoWindow")
+      );
+    });
+    info.open(map);
+    map.addListener("click", () => {
+      info.close();
+    });
+  };
 
   useEffect(() => {
     if (!map) return;
@@ -178,6 +228,9 @@ const SearchMap = () => {
         map,
       });
       arr.push(marker);
+      marker.addListener("click", (e) => {
+        createInfoWindow(e, map, room);
+      });
     });
     setMarkers(arr);
   }, [map, searchResults]);
@@ -190,11 +243,6 @@ const SearchMap = () => {
       marker?.setAnimation(null);
     };
   }, [hoveredItemIndex]);
-
-  useEffect(() => {
-    if (!map) return;
-    map.setCenter({ lat, lng });
-  }, [map, lat, lng]);
 
   const handleClick = () => {
     if (!isMoved) return;
