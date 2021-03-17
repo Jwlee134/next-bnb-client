@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import { differenceInDays } from "date-fns";
 import { useSelector } from "store";
 import Skeleton from "react-loading-skeleton";
+import { useDispatch } from "react-redux";
+import { roomActions } from "store/room";
 
 const Container = styled.div`
   width: 100%;
@@ -169,10 +171,11 @@ const TotalPrice = styled.div`
   text-align: right;
 `;
 
-const RoomCard = ({ room }: { room: IRoomDetail }) => {
+const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
   const {
     query: { checkIn, checkOut },
   } = useRouter();
+  const dispatch = useDispatch();
   const spaces = room.spaces.join(", ");
 
   const difference = differenceInDays(
@@ -194,7 +197,10 @@ const RoomCard = ({ room }: { room: IRoomDetail }) => {
   };
 
   return (
-    <Container>
+    <Container
+      onMouseOver={() => dispatch(roomActions.setHoveredItem(room._id))}
+      onMouseLeave={() => dispatch(roomActions.setHoveredItem(""))}
+    >
       <ImageContainer>
         <Slider slidesToScroll={1} slidesToShow={1} infinite={true}>
           {room.photos.map((photo, index) => (

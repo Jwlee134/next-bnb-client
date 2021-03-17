@@ -7,6 +7,7 @@ import { searchActions } from "store/search";
 import styled from "styled-components";
 import { extractCustomQuery } from "utils";
 import { isEmpty } from "lodash";
+import { roomActions } from "store/room";
 
 const Container = styled.div`
   width: 45vw;
@@ -42,6 +43,7 @@ declare global {
 
 const SearchMap = () => {
   const searchResults = useSelector((state) => state.room.search.searchResults);
+  const hoveredItem = useSelector((state) => state.room.search.hoveredItem);
   const search = useSelector((state) => state.search);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -54,30 +56,39 @@ const SearchMap = () => {
 
   const lat = Number(query.latitude);
   const lng = Number(query.longitude);
+  const zoom = Number(query.zoom);
 
   window.initMap = () => {
     if (mapRef.current) {
       const map = new google.maps.Map(mapRef.current, {
         center: { lat, lng },
-        zoom: 14,
+        zoom: zoom || 14,
         gestureHandling: "greedy",
       });
       setMap(map);
-      map.addListener("dragend", () => {
-        const latitude = map.getCenter().lat();
-        const longitude = map.getCenter().lng();
-        router.push(
-          `/search/rooms?${querystring.stringify({
-            ...search,
-            latitude,
-            longitude,
-            value: "지도에서 선택한 지역",
-          })}${extractCustomQuery(query)}`
-        );
-        dispatch(searchActions.setValue("지도에서 선택한 지역"));
-      });
     }
   };
+
+  useEffect(() => {
+    if (!map) return;
+    map.addListener("dragend", () => {
+      const latitude = map.getCenter().lat();
+      const longitude = map.getCenter().lng();
+      const zoom = map.getZoom();
+      dispatch(roomActions.setIsLoading(true));
+      router.push(
+        `/search/rooms?${querystring.stringify({
+          ...search,
+          latitude,
+          longitude,
+          value: "지도에서 선택한 지역",
+        })}${extractCustomQuery({ ...query, zoom })}`
+      );
+      dispatch(searchActions.setValue("지도에서 선택한 지역"));
+      dispatch(searchActions.setLatitude(latitude));
+      dispatch(searchActions.setLongitude(longitude));
+    });
+  }, [map]);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -88,20 +99,31 @@ const SearchMap = () => {
 
   useEffect(() => {
     if (!map) return;
+    // 이전 마커들 삭제
     if (!isEmpty(markers)) {
       markers.forEach((marker) => marker.setMap(null));
-      setMarkers([]);
     }
+    setMarkers([]);
+    // 새로운 마커 추가
     const arr: google.maps.Marker[] = [];
     searchResults.forEach((room) => {
       const marker = new google.maps.Marker({
         position: { lat: room.latitude, lng: room.longitude },
         map,
+        title: room._id,
       });
       arr.push(marker);
     });
     setMarkers(arr);
   }, [map, searchResults]);
+
+  useEffect(() => {
+    const marker = markers.find((marker) => marker.getTitle() === hoveredItem);
+    marker?.setAnimation(google.maps.Animation.BOUNCE);
+    return () => {
+      marker?.setAnimation(null);
+    };
+  }, [hoveredItem]);
 
   useEffect(() => {
     if (!map) return;

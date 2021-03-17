@@ -5,6 +5,7 @@ interface IState {
   search: {
     searchResults: IRoomDetail[];
     originalLength: number;
+    hoveredItem: string;
   };
   isLoading: boolean;
 }
@@ -13,6 +14,7 @@ const initialState: IState = {
   search: {
     searchResults: [],
     originalLength: 0,
+    hoveredItem: "",
   },
   isLoading: false,
 };
@@ -28,6 +30,9 @@ const room = createSlice({
     },
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
+    },
+    setHoveredItem: (state, action: PayloadAction<string>) => {
+      state.search.hoveredItem = action.payload;
     },
   },
 });
