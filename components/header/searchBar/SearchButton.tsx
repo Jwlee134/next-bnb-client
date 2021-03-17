@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import { extractCustomQuery } from "utils";
+import Loader from "components/common/Loader";
 
 const Container = styled.div`
   button {
@@ -23,24 +24,6 @@ const Container = styled.div`
     transition: background-color 0.1s linear;
     &:hover {
       background-color: #e44e53;
-    }
-  }
-`;
-
-const Loader = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -12.5px 0 0 -12.5px;
-  width: 25px;
-  height: 25px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s linear infinite;
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
     }
   }
 `;

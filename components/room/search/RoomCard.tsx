@@ -171,7 +171,7 @@ const TotalPrice = styled.div`
   text-align: right;
 `;
 
-const RoomCard = ({ room }: { room: IRoomDetail }) => {
+const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
   const {
     query: { checkIn, checkOut },
   } = useRouter();
@@ -198,8 +198,8 @@ const RoomCard = ({ room }: { room: IRoomDetail }) => {
 
   return (
     <Container
-      onMouseOver={() => dispatch(roomActions.setHoveredItem(room._id))}
-      onMouseLeave={() => dispatch(roomActions.setHoveredItem(""))}
+      onMouseOver={() => dispatch(roomActions.setHoveredItemIndex(index))}
+      onMouseLeave={() => dispatch(roomActions.setHoveredItemIndex(null))}
     >
       <ImageContainer>
         <Slider slidesToScroll={1} slidesToShow={1} infinite={true}>

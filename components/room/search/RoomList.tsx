@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import palette from "styles/palette";
-import { isEmpty } from "lodash";
 import { useRouter } from "next/router";
 import { useSelector } from "store";
 import querystring from "querystring";
@@ -126,9 +125,6 @@ const RoomList = () => {
       <>
         <RoomCardSkeleton />
         <RoomCardSkeleton />
-        <RoomCardSkeleton />
-        <RoomCardSkeleton />
-        <RoomCardSkeleton />
       </>
     );
   }
@@ -144,7 +140,7 @@ const RoomList = () => {
   return (
     <Container>
       {searchResults.map((room, index) => (
-        <RoomCard key={index} room={room} />
+        <RoomCard key={index} index={index} room={room} />
       ))}
       <ReactPaginate
         pageCount={Math.ceil(originalLength / Number(limit))}

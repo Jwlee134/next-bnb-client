@@ -25,6 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         buildingType = largeBuildingTypeList.map((building) => building.label),
         amenities = [],
         spaces = [],
+        coordsBounds = "0.02",
       } = req.query;
 
       let formatDates: string[] = [];
@@ -44,12 +45,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const data: IRoomDetail[] = await Room.find({
         // 숙소의 위도 경도가 현재 위도 경도 기준 ±0.02 이내인 것들로 필터링
         latitude: {
-          $gte: Number(latitude) - 0.02,
-          $lte: Number(latitude) + 0.02,
+          $gte: Number(latitude) - Number(coordsBounds),
+          $lte: Number(latitude) + Number(coordsBounds),
         },
         longitude: {
-          $gte: Number(longitude) - 0.02,
-          $lte: Number(longitude) + 0.02,
+          $gte: Number(longitude) - Number(coordsBounds),
+          $lte: Number(longitude) + Number(coordsBounds),
         },
         // 호스트가 설정해둔 예약 불가 날짜에 체크인, 체크아웃 날짜가 포함되어 있으면 필터링
         blockedDayList: {
@@ -148,6 +149,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         originalLength: data.length,
       });
     } catch (error) {
+      console.log(error);
       return res.status(500).send("숙소를 불러올 수 없습니다.");
     }
   }

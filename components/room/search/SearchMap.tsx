@@ -8,6 +8,8 @@ import styled from "styled-components";
 import { extractCustomQuery } from "utils";
 import { isEmpty } from "lodash";
 import { roomActions } from "store/room";
+import { MdRefresh } from "react-icons/md";
+import Loader from "components/common/Loader";
 
 const Container = styled.div`
   width: 45vw;
@@ -35,6 +37,39 @@ const Container = styled.div`
   }
 `;
 
+const Label = styled.label`
+  min-width: 133px;
+  position: absolute;
+  top: 0;
+  width: fit-content;
+  height: 40px;
+  background-color: white;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px -1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-family: Noto Sans KR;
+  padding: 0px 12px;
+  cursor: pointer;
+  left: 50% !important;
+  transform: translate(-50%) !important;
+  input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    margin-right: 10px;
+  }
+  svg {
+    margin-right: 6px;
+  }
+  div {
+    margin-bottom: 2px;
+  }
+`;
+
 declare global {
   interface Window {
     initMap: () => void;
@@ -43,7 +78,10 @@ declare global {
 
 const SearchMap = () => {
   const searchResults = useSelector((state) => state.room.search.searchResults);
-  const hoveredItem = useSelector((state) => state.room.search.hoveredItem);
+  const hoveredItemIndex = useSelector(
+    (state) => state.room.search.hoveredItemIndex
+  );
+  const isLoading = useSelector((state) => state.room.isLoading);
   const search = useSelector((state) => state.search);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -51,6 +89,8 @@ const SearchMap = () => {
 
   const [map, setMap] = useState<google.maps.Map<HTMLDivElement> | null>(null);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+  const [searchWithMoving, setSearchWithMoving] = useState(true);
+  const [isMoved, setIsMoved] = useState(false);
 
   const mapRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +98,7 @@ const SearchMap = () => {
   const lng = Number(query.longitude);
   const zoom = Number(query.zoom);
 
+  // 지도 로드 직후 콜백함수
   window.initMap = () => {
     if (mapRef.current) {
       const map = new google.maps.Map(mapRef.current, {
@@ -69,27 +110,52 @@ const SearchMap = () => {
     }
   };
 
+  const getNewResults = (map: google.maps.Map<HTMLDivElement>) => {
+    const coordsBounds = (
+      ((map.getBounds() as google.maps.LatLngBounds).getNorthEast().lat() -
+        map.getCenter().lat()) /
+      1.3
+    ).toString();
+    const latitude = map.getCenter().lat();
+    const longitude = map.getCenter().lng();
+    const zoom = map.getZoom().toString();
+    dispatch(roomActions.setIsLoading(true));
+    router.push(
+      `/search/rooms?${querystring.stringify({
+        ...search,
+        latitude,
+        longitude,
+        value: "지도에서 선택한 지역",
+      })}${extractCustomQuery({ ...query, page: "1", zoom, coordsBounds })}`
+    );
+    dispatch(searchActions.setValue("지도에서 선택한 지역"));
+    dispatch(searchActions.setLatitude(latitude));
+    dispatch(searchActions.setLongitude(longitude));
+  };
+
   useEffect(() => {
     if (!map) return;
-    map.addListener("dragend", () => {
-      const latitude = map.getCenter().lat();
-      const longitude = map.getCenter().lng();
-      const zoom = map.getZoom();
-      dispatch(roomActions.setIsLoading(true));
-      router.push(
-        `/search/rooms?${querystring.stringify({
-          ...search,
-          latitude,
-          longitude,
-          value: "지도에서 선택한 지역",
-        })}${extractCustomQuery({ ...query, zoom })}`
-      );
-      dispatch(searchActions.setValue("지도에서 선택한 지역"));
-      dispatch(searchActions.setLatitude(latitude));
-      dispatch(searchActions.setLongitude(longitude));
+    const dragEnd = map.addListener("dragend", () => {
+      if (searchWithMoving) {
+        getNewResults(map);
+      } else {
+        setIsMoved(true);
+      }
     });
-  }, [map]);
+    const zoomChanged = map.addListener("zoom_changed", () => {
+      if (searchWithMoving) {
+        getNewResults(map);
+      } else {
+        setIsMoved(true);
+      }
+    });
+    return () => {
+      dragEnd.remove();
+      zoomChanged.remove();
+    };
+  }, [map, searchWithMoving, query]);
 
+  // 최초 지도 로드
   useEffect(() => {
     const script = document.createElement("script");
     script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}&callback=initMap`;
@@ -99,7 +165,7 @@ const SearchMap = () => {
 
   useEffect(() => {
     if (!map) return;
-    // 이전 마커들 삭제
+    // 마커가 있다면 이전 마커들 삭제
     if (!isEmpty(markers)) {
       markers.forEach((marker) => marker.setMap(null));
     }
@@ -110,29 +176,54 @@ const SearchMap = () => {
       const marker = new google.maps.Marker({
         position: { lat: room.latitude, lng: room.longitude },
         map,
-        title: room._id,
       });
       arr.push(marker);
     });
     setMarkers(arr);
   }, [map, searchResults]);
 
+  // Room card hover 시 마커에 애니메이션 부여
   useEffect(() => {
-    const marker = markers.find((marker) => marker.getTitle() === hoveredItem);
+    const marker = markers.find((_, index) => index === hoveredItemIndex);
     marker?.setAnimation(google.maps.Animation.BOUNCE);
     return () => {
       marker?.setAnimation(null);
     };
-  }, [hoveredItem]);
+  }, [hoveredItemIndex]);
 
   useEffect(() => {
     if (!map) return;
     map.setCenter({ lat, lng });
   }, [map, lat, lng]);
 
+  const handleClick = () => {
+    if (!isMoved) return;
+    getNewResults(map as google.maps.Map<HTMLDivElement>);
+    setIsMoved(false);
+  };
+
+  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setSearchWithMoving(e.target.checked);
+
   return (
     <Container>
       <div ref={mapRef} />
+      <Label onClick={handleClick}>
+        {isLoading && <Loader whiteBackground />}
+        {!isLoading && (
+          <>
+            {!isMoved && (
+              <input
+                type="checkbox"
+                checked={searchWithMoving}
+                onChange={handleCheckbox}
+              />
+            )}
+            {isMoved && <MdRefresh size={20} />}
+            <div>{isMoved ? "이 지역 검색" : "지도를 움직이며 검색하기"}</div>
+          </>
+        )}
+      </Label>
     </Container>
   );
 };
