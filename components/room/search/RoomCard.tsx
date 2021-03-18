@@ -13,6 +13,8 @@ import { useRouter } from "next/router";
 import { differenceInDays } from "date-fns";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
+import { useSelector } from "store";
+import querystring from "querystring";
 import RoomCardSlider from "./RoomCardSlider";
 
 const Container = styled.div`
@@ -128,6 +130,7 @@ const TotalPrice = styled.div`
 `;
 
 const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
+  const search = useSelector((state) => state.search);
   const {
     query: { checkIn, checkOut },
   } = useRouter();
@@ -153,61 +156,66 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
   };
 
   return (
-    <Container
-      onMouseOver={() => dispatch(roomActions.setHoveredItemIndex(index))}
-      onMouseLeave={() => dispatch(roomActions.setHoveredItemIndex(null))}
+    <a
+      href={`/room/${room._id}?${querystring.stringify(search)}`}
+      target="blank"
     >
-      <ImageContainer>
-        <RoomCardSlider>
-          {room.photos.map((photo, index) => (
-            <Image
-              key={index}
-              src={photo}
-              width={300}
-              height={201}
-              quality="50"
-            />
-          ))}
-        </RoomCardSlider>
-      </ImageContainer>
-      <InfoContainer>
-        <TopContainer>
-          <LeftContainer>
-            <InfoText>
-              {room.city}의 {room.buildingType.label} {getRoomTypeText()}
-            </InfoText>
-            <Title>{room.title}</Title>
-            <Divider />
-            <InfoText>
-              최대 인원 {room.maximumGuestCount}명 · 침실 {room.bedroomCount}개
-              · 침대 {room.bedCount}개 · 욕실 {room.bathroomCount}개
-            </InfoText>
-            <InfoText>{spaces}</InfoText>
-          </LeftContainer>
-          <RightContainer>
-            <IoMdHeartEmpty size={25} />
-          </RightContainer>
-        </TopContainer>
-        <BottomContainer>
-          <Rating>
-            <IoIosStar size={18} />
-            <Score>{room.rating}</Score>
-            <RatingCount>({room.review.length})</RatingCount>
-          </Rating>
-          {checkIn && checkOut && (
-            <PriceContainer>
-              <Price>
-                <FaWonSign />
-                {addComma(String(room.price))} <span>/ 박</span>
-              </Price>
-              <TotalPrice>
-                총액 ₩{addComma(String(room.price * difference))}
-              </TotalPrice>
-            </PriceContainer>
-          )}
-        </BottomContainer>
-      </InfoContainer>
-    </Container>
+      <Container
+        onMouseOver={() => dispatch(roomActions.setHoveredItemIndex(index))}
+        onMouseLeave={() => dispatch(roomActions.setHoveredItemIndex(null))}
+      >
+        <ImageContainer>
+          <RoomCardSlider>
+            {room.photos.map((photo, index) => (
+              <Image
+                key={index}
+                src={photo}
+                width={300}
+                height={201}
+                quality="50"
+              />
+            ))}
+          </RoomCardSlider>
+        </ImageContainer>
+        <InfoContainer>
+          <TopContainer>
+            <LeftContainer>
+              <InfoText>
+                {room.city}의 {room.buildingType.label} {getRoomTypeText()}
+              </InfoText>
+              <Title>{room.title}</Title>
+              <Divider />
+              <InfoText>
+                최대 인원 {room.maximumGuestCount}명 · 침실 {room.bedroomCount}
+                개 · 침대 {room.bedCount}개 · 욕실 {room.bathroomCount}개
+              </InfoText>
+              <InfoText>{spaces}</InfoText>
+            </LeftContainer>
+            <RightContainer>
+              <IoMdHeartEmpty size={25} />
+            </RightContainer>
+          </TopContainer>
+          <BottomContainer>
+            <Rating>
+              <IoIosStar size={18} />
+              <Score>{room.rating}</Score>
+              <RatingCount>({room.review.length})</RatingCount>
+            </Rating>
+            {checkIn && checkOut && (
+              <PriceContainer>
+                <Price>
+                  <FaWonSign />
+                  {addComma(String(room.price))} <span>/ 박</span>
+                </Price>
+                <TotalPrice>
+                  총액 ₩{addComma(String(room.price * difference))}
+                </TotalPrice>
+              </PriceContainer>
+            )}
+          </BottomContainer>
+        </InfoContainer>
+      </Container>
+    </a>
   );
 };
 

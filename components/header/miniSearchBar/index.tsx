@@ -8,7 +8,7 @@ import { useSelector } from "store";
 import { useRouter } from "next/router";
 
 interface MiniSearchBarProps {
-  isHome: boolean;
+  pathname: string;
   scroll: number;
   sizeUpAnimate: boolean;
   scaleDown: boolean;
@@ -68,6 +68,7 @@ const Container = styled.div<MiniSearchBarProps>`
     color: black;
     margin-left: 18px;
     font-size: 14px;
+    font-weight: 500;
   }
   button {
     border-radius: 50%;
@@ -78,7 +79,7 @@ const Container = styled.div<MiniSearchBarProps>`
     justify-content: center;
     align-items: center;
   }
-  ${({ isHome, scroll }) => isHome && homeCss(scroll)}
+  ${({ pathname, scroll }) => pathname === "/" && homeCss(scroll)}
   ${({ sizeUpAnimate }) =>
     sizeUpAnimate &&
     css`
@@ -88,6 +89,11 @@ const Container = styled.div<MiniSearchBarProps>`
     scaleDown &&
     css`
       animation: ${sizeDown} 0.1s linear forwards;
+    `}
+    ${({ pathname }) =>
+    pathname === "/room/[id]" &&
+    css`
+      width: 300px;
     `}
 `;
 
@@ -148,7 +154,7 @@ const MiniSearchBar = ({ scroll }: Props) => {
   if (!showMiniSearchBar) return null;
   return (
     <Container
-      isHome={pathname === "/"}
+      pathname={pathname}
       scroll={scroll}
       sizeUpAnimate={sizeUpAnimate}
       scaleDown={scaleDown}

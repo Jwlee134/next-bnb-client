@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { SiAirbnb } from "react-icons/si";
 import SearchBar from "components/header/searchBar";
-import { throttle } from "lodash";
 import { useSelector } from "store";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
@@ -35,39 +34,52 @@ const RightContainer = styled.div`
 `;
 
 const Container = styled.header<ContainerProps>`
+  @media screen and (max-width: 1023px) {
+    > div {
+      padding: 0px 24px !important;
+    }
+  }
   width: 100%;
   height: 80px;
   position: sticky;
   top: 0;
   z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   color: white;
   transition: color 0.15s linear;
   transition: box-shadow 0.15s linear;
   transition: background-color 0.15s linear;
-  padding: 0px 80px;
+  ${({ pathname, isTop }) =>
+    pathname !== "/" || !isTop
+      ? css`
+          color: #ff395b;
+          box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
+          background-color: white;
+        `
+      : css``}
   ${({ pathname }) =>
-    pathname !== "/" &&
+    pathname === "/room/[id]" &&
     css`
-      color: #ff395b;
-      box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
-      background-color: white;
-      padding: 0px 24px;
+      position: relative;
+      > div {
+        max-width: 1280px !important;
+      }
     `}
-  ${({ isTop }) =>
-    !isTop &&
-    css`
-      color: #ff395b;
-      box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
-      background-color: white;
-    `}
+  > div {
+    width: 100%;
+    max-width: 1760px;
+    padding: 0px 80px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     ${({ pathname, showMap }) =>
-    pathname.includes("search") &&
-    css`
-      padding: ${showMap ? "0px 24px" : "0px 80px"};
-    `}
+      pathname.includes("search") &&
+      css`
+        padding: ${showMap ? "0px 24px" : "0px 80px"};
+        max-width: ${showMap && "inherit"};
+      `}
+  }
 `;
 
 const Background = styled.div`
@@ -82,7 +94,8 @@ const Background = styled.div`
 `;
 
 const Header = () => {
-  const { showMap, showSearchBar } = useSelector((state) => state.common);
+  const showMap = useSelector((state) => state.common.showMap);
+  const showSearchBar = useSelector((state) => state.common.showSearchBar);
   const { pathname } = useRouter();
 
   const dispatch = useDispatch();
@@ -123,17 +136,19 @@ const Header = () => {
         isTop={scroll === 0}
         pathname={pathname}
       >
-        <Link href="/">
-          <LeftContainer>
-            <SiAirbnb size={32} />
-            airbnb
-          </LeftContainer>
-        </Link>
-        <MiniSearchBar scroll={scroll} />
-        <RightContainer>
-          <HeaderMenu />
-        </RightContainer>
-        <SearchBar scroll={scroll} />
+        <div>
+          <Link href="/">
+            <LeftContainer>
+              <SiAirbnb size={32} />
+              airbnb
+            </LeftContainer>
+          </Link>
+          <MiniSearchBar scroll={scroll} />
+          <RightContainer>
+            <HeaderMenu />
+          </RightContainer>
+          <SearchBar scroll={scroll} />
+        </div>
       </Container>
       {showSearchBar && pathname !== "/" && (
         <Background onClick={handleClick} />

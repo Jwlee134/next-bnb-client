@@ -27,10 +27,13 @@ const ListContainer = styled.div<{ showMap: boolean }>`
   ${({ showMap }) =>
     showMap
       ? css`
-          width: 55vw;
+          width: 100%;
+          max-width: 840px;
           padding: 50px 24px;
         `
       : css`
+          max-width: 1760px;
+          margin: 0 auto;
           min-height: calc(100vh - 80px);
         `}
 `;

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import palette from "styles/palette";
 import { IRoomDetail } from "types/room";
 import querystring from "querystring";
+import { SearchState } from "store/search";
 import { FaWonSign } from "react-icons/fa";
 import { addComma } from "utils";
 import RoomCardSlider from "./RoomCardSlider";
@@ -76,12 +77,12 @@ const Price = styled.div`
 
 const InfoWindow = ({
   room,
-  query,
+  search,
 }: {
   room: IRoomDetail;
-  query: querystring.ParsedUrlQuery;
+  search: SearchState;
 }) => {
-  const { checkIn, checkOut } = query;
+  const { checkIn, checkOut } = search;
 
   const getRoomTypeText = () => {
     switch (room.roomType) {
@@ -97,7 +98,10 @@ const InfoWindow = ({
   };
 
   return (
-    <a href={`/room/${room._id}`} target="blank">
+    <a
+      href={`/room/${room._id}?${querystring.stringify(search)}`}
+      target="blank"
+    >
       <Container>
         <ImageContainer>
           <RoomCardSlider>
@@ -119,7 +123,7 @@ const InfoWindow = ({
           </div>
           <FlexContainer>
             <Rating>
-              <IoIosStar size={16} />
+              <IoIosStar size={14} />
               <Score>{room.rating}</Score>
               <RatingCount>({room.review.length})</RatingCount>
             </Rating>

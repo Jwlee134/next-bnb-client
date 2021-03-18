@@ -15,7 +15,7 @@ import { IRoomDetail } from "types/room";
 import InfoWindow from "./InfoWindow";
 
 const Container = styled.div`
-  width: 45vw;
+  width: 100%;
   height: calc(100vh - 80px);
   position: sticky;
   top: 80px;
@@ -202,7 +202,7 @@ const SearchMap = () => {
     });
     info.addListener("domready", () => {
       render(
-        <InfoWindow query={query} room={room} />,
+        <InfoWindow search={search} room={room} />,
         document.getElementById("infoWindow")
       );
     });

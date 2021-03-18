@@ -21,7 +21,7 @@ const ImageContainer = styled.div`
 `;
 
 const Contents = styled.div`
-  padding: 0px 80px 32px 80px;
+  padding-bottom: 32px;
   height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
@@ -30,6 +30,9 @@ const Contents = styled.div`
 
 const LabelContainer = styled.div`
   width: 100%;
+  max-width: 1760px;
+  padding: 0px 80px;
+  margin: 0 auto;
   height: calc(100% - 72px);
   display: flex;
   flex-direction: column;

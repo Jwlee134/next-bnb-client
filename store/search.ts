@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type IState = {
+export type SearchState = {
   value: string;
   latitude: number;
   longitude: number;
@@ -11,7 +11,7 @@ type IState = {
   infants: number;
 };
 
-const initialState: IState = {
+const initialState: SearchState = {
   value: "",
   latitude: 0,
   longitude: 0,
