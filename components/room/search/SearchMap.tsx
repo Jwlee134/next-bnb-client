@@ -12,6 +12,7 @@ import { MdRefresh } from "react-icons/md";
 import Loader from "components/common/Loader";
 import { render } from "react-dom";
 import { IRoomDetail } from "types/room";
+import InfoWindow from "./InfoWindow";
 
 const Container = styled.div`
   width: 45vw;
@@ -34,6 +35,9 @@ const Container = styled.div`
     }
     .gm-style-iw-t {
       bottom: 55px !important;
+    }
+    .gm-style-iw-t::after {
+      display: none;
     }
     .gm-bundled-control {
       top: 0;
@@ -80,11 +84,6 @@ const Label = styled.label`
     margin-bottom: 2px;
   }
 `;
-const InfoWindow = styled.div`
-  width: 300px;
-  height: 200px;
-  overflow: hidden;
-`;
 
 declare global {
   interface Window {
@@ -104,9 +103,9 @@ const SearchMap = () => {
   const { query } = router;
 
   const [map, setMap] = useState<google.maps.Map<HTMLDivElement> | null>(null);
-  /*   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(
+  const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(
     null
-  ); */
+  );
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
   const [searchWithMoving, setSearchWithMoving] = useState(true);
   const [isMoved, setIsMoved] = useState(false);
@@ -203,15 +202,44 @@ const SearchMap = () => {
     });
     info.addListener("domready", () => {
       render(
-        <InfoWindow>{room.title}</InfoWindow>,
+        <InfoWindow query={query} room={room} />,
         document.getElementById("infoWindow")
       );
     });
     info.open(map);
-    map.addListener("click", () => {
-      info.close();
-    });
+    setInfoWindow(info);
   };
+
+  useEffect(() => {
+    if (!map) return;
+    const eventArr: google.maps.MapsEventListener[] = [];
+    if (!isEmpty(markers)) {
+      markers.forEach((marker, i) => {
+        const event = marker.addListener("click", (e) => {
+          // 이전 인포윈도우 삭제
+          if (infoWindow) {
+            infoWindow.close();
+            setInfoWindow(null);
+          }
+          // 같은 마커를 한번 더 클릭해도 다시 인포윈도우를 생성하지 않음
+          if (e.latLng.lat() !== infoWindow?.getPosition().lat()) {
+            createInfoWindow(e, map, searchResults[i]);
+          }
+        });
+        eventArr.push(event);
+      });
+    }
+    const clickMapToClose = map.addListener("click", () => {
+      if (infoWindow) infoWindow.close();
+    });
+    // 함수 재실행되기 전마다 이벤트 삭제하여 이벤트 중첩 방지
+    return () => {
+      eventArr.forEach((event) => {
+        event.remove();
+      });
+      clickMapToClose.remove();
+    };
+  }, [map, markers, infoWindow]);
 
   useEffect(() => {
     if (!map) return;
@@ -228,9 +256,6 @@ const SearchMap = () => {
         map,
       });
       arr.push(marker);
-      marker.addListener("click", (e) => {
-        createInfoWindow(e, map, room);
-      });
     });
     setMarkers(arr);
   }, [map, searchResults]);

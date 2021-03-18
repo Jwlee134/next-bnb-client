@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import { IRoomDetail } from "types/room";
-import Slider from "react-slick";
 import Image from "next/image";
 import { IoMdHeart, IoMdHeartEmpty, IoIosStar } from "react-icons/io";
 import { FaWonSign } from "react-icons/fa";
@@ -12,10 +11,9 @@ import "slick-carousel/slick/slick-theme.css";
 import { addComma } from "utils";
 import { useRouter } from "next/router";
 import { differenceInDays } from "date-fns";
-import { useSelector } from "store";
-import Skeleton from "react-loading-skeleton";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
+import RoomCardSlider from "./RoomCardSlider";
 
 const Container = styled.div`
   width: 100%;
@@ -24,48 +22,6 @@ const Container = styled.div`
   padding: 24px 0px;
   display: flex;
   cursor: pointer;
-  .slick-prev {
-    left: 10px;
-    ::before {
-      content: "‹";
-      right: 55%;
-      transform: translate(55%);
-    }
-  }
-  .slick-next {
-    right: 10px;
-    ::before {
-      content: "›";
-      left: 55%;
-      transform: translate(-55%);
-    }
-  }
-  .slick-arrow {
-    border-radius: 50%;
-    display: none !important;
-    z-index: 1;
-    width: 30px;
-    height: 30px;
-    background-color: ${palette.gray_f7};
-    opacity: 0.8;
-    transition: all 0.1s linear;
-    &:hover {
-      background-color: white;
-      opacity: 1;
-      box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.18);
-    }
-    ::before {
-      color: black;
-      font-size: 30px !important;
-      position: absolute;
-      top: -3.5px;
-    }
-  }
-  &:hover {
-    .slick-arrow {
-      display: block !important;
-    }
-  }
 `;
 
 const ImageContainer = styled.div`
@@ -202,7 +158,7 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
       onMouseLeave={() => dispatch(roomActions.setHoveredItemIndex(null))}
     >
       <ImageContainer>
-        <Slider slidesToScroll={1} slidesToShow={1} infinite={true}>
+        <RoomCardSlider>
           {room.photos.map((photo, index) => (
             <Image
               key={index}
@@ -212,7 +168,7 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
               quality="50"
             />
           ))}
-        </Slider>
+        </RoomCardSlider>
       </ImageContainer>
       <InfoContainer>
         <TopContainer>
