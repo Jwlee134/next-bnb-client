@@ -4,7 +4,11 @@ import moment from "moment";
 import "moment/locale/ko";
 
 import "react-dates/initialize";
-import { DateRangePicker as RangePicker, FocusedInputShape } from "react-dates";
+import {
+  DateRangePicker as RangePicker,
+  DisabledShape,
+  FocusedInputShape,
+} from "react-dates";
 import "react-dates/lib/css/_datepicker.css";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
@@ -172,9 +176,10 @@ interface Props {
   }) => void;
   checkIn: moment.Moment | null;
   checkOut: moment.Moment | null;
+  isBlocked?: (day: moment.Moment) => boolean;
 }
 
-const DateRangePicker = ({ checkIn, checkOut, onChange }: Props) => {
+const DateRangePicker = ({ checkIn, checkOut, onChange, isBlocked }: Props) => {
   const [focused, setFocused] = useState<FocusedInputShape | null>(null);
 
   const handleFocus = (focusedInput: FocusedInputShape | null) => {
@@ -199,6 +204,7 @@ const DateRangePicker = ({ checkIn, checkOut, onChange }: Props) => {
         readOnly
         displayFormat="MM월 DD일"
         keepOpenOnDateSelect
+        isDayBlocked={isBlocked}
       />
     </Container>
   );

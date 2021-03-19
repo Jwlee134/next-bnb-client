@@ -65,13 +65,13 @@ const BottomContainer = styled.div`
 `;
 
 const LeftContainer = styled.div`
-  width: 60%;
+  width: 64%;
   display: flex;
   justify-content: space-between;
 `;
 
 const RightContainer = styled.div`
-  width: 40%;
+  width: 36%;
   margin-left: 90px;
   span:first-child {
     margin-bottom: 16px;

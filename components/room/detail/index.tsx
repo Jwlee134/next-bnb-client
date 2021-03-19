@@ -13,7 +13,11 @@ import RoomDetailSkeleton from "components/common/RoomDetailSkeleton";
 import { IoIosStar, IoMdHeartEmpty } from "react-icons/io";
 import { IoShareOutline } from "react-icons/io5";
 import palette from "styles/palette";
+import { isEmpty } from "lodash";
+import Bed from "../../../public/static/svg/room/bed.svg";
 import Photos from "./Photos";
+import Amenity from "./Amenity";
+import BookingWindow from "./BookingWindow";
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -31,23 +35,23 @@ const Container = styled.div`
     padding: 24px 80px;
     max-width: 1280px;
     margin: 0 auto;
-    .detail-title {
+    .detail_title {
       font-size: 28px;
       font-weight: bold;
       margin-bottom: 10px;
     }
-    .detail-subtitle_container {
+    .detail_subtitle-container {
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
-      .detail-subtitle_container-left {
+      .detail_subtitle-container_left {
         display: flex;
         align-items: center;
         font-size: 14px;
         > span {
           margin: 0px 6px;
         }
-        .detail-subtitle_container-rating {
+        .detail_subtitle-container_rating {
           display: flex;
           align-items: center;
           svg {
@@ -64,14 +68,14 @@ const Container = styled.div`
             opacity: 0.7;
           }
         }
-        .detail-subtitle_container-address {
+        .detail_subtitle-container_address {
           font-weight: 500;
           opacity: 0.7;
         }
       }
-      .detail-subtitle_container-right {
+      .detail_subtitle-container_right {
         display: flex;
-        .detail-small_button {
+        .detail_small-button {
           display: flex;
           align-items: center;
           cursor: pointer;
@@ -91,14 +95,98 @@ const Container = styled.div`
         }
       }
     }
-    .detail-photo_container {
+    .detail_photo-container {
       img {
         position: absolute;
         width: 100%;
         height: 100%;
         top: 0;
         left: 0;
-        object-fit: cover;
+      }
+    }
+    .detail_main-container {
+      padding-top: 40px;
+      display: flex;
+      .detail_main-container_left {
+        width: 64%;
+        .main-container_left_title_avatar-url {
+          display: flex;
+          justify-content: space-between;
+          border-bottom: 1px solid ${palette.gray_dd};
+          padding-bottom: 24px;
+          div {
+            div:first-child {
+              font-size: 24px;
+              font-weight: 500;
+              margin-bottom: 5px;
+            }
+            div:last-child {
+              font-weight: 300;
+            }
+          }
+          img {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            cursor: pointer;
+          }
+        }
+        .main-container_left_description {
+          padding: 24px 0px;
+          border-bottom: 1px solid ${palette.gray_dd};
+          line-height: 1.5;
+          font-weight: 300;
+          white-space: pre-wrap;
+        }
+        .main-container_left_bed-type {
+          padding: 48px 0px 24px 0px;
+          border-bottom: 1px solid ${palette.gray_dd};
+          > div:first-child {
+            font-size: 24px;
+            font-weight: 500;
+            padding-bottom: 24px;
+          }
+          > div:last-child {
+            display: flex;
+            flex-wrap: wrap;
+            .bed-type_container {
+              border: 1px solid ${palette.gray_dd};
+              border-radius: 12px;
+              padding: 24px;
+              width: calc(33% - 16px);
+              margin-right: 24px;
+              margin-bottom: 24px;
+              &:nth-child(3n) {
+                margin-right: 0;
+              }
+              svg {
+                margin-bottom: 12px;
+              }
+              div:last-child {
+                font-size: 15px;
+                margin-top: 6px;
+                font-weight: 300;
+              }
+            }
+          }
+        }
+        .main-container_left_amenities {
+          padding: 48px 0px 36px 0px;
+          border-bottom: 1px solid ${palette.gray_dd};
+          > div:first-child {
+            font-size: 24px;
+            font-weight: 500;
+            padding-bottom: 24px;
+          }
+          > div:last-child {
+            display: flex;
+            flex-wrap: wrap;
+          }
+        }
+      }
+      .detail_main-container_right {
+        width: 36%;
+        margin-left: 90px;
       }
     }
   }
@@ -119,6 +207,27 @@ const RoomDetail = () => {
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
   }, []);
+
+  const getRoomTypeText = () => {
+    switch (data?.roomType) {
+      case "entire":
+        return "집 전체";
+      case "private":
+        return "개인실";
+      case "public":
+        return "다인실";
+      default:
+        return "";
+    }
+  };
+
+  const bedTypeCount = (i: number) =>
+    data?.bedType[i].beds
+      .map((bed) => `${bed.label} ${bed.count}개`)
+      .join(", ");
+
+  const publicBedTypeCount = () =>
+    data?.publicBedType.map((bed) => `${bed.label} ${bed.count}개`).join(", ");
 
   if (!id || error) return <Error statusCode={404} />;
   if (!data) {
@@ -147,33 +256,93 @@ const RoomDetail = () => {
       </HeaderContainer>
       <Container>
         <div>
-          <div className="detail-title">{data.title}</div>
-          <div className="detail-subtitle_container">
-            <div className="detail-subtitle_container-left">
-              <div className="detail-subtitle_container-rating">
+          <div className="detail_title">{data.title}</div>
+          <div className="detail_subtitle-container">
+            <div className="detail_subtitle-container_left">
+              <div className="detail_subtitle-container_rating">
                 <IoIosStar size={16} />
                 <span>{data.rating}</span>
                 <span>({data.review.length})</span>
               </div>
               <span>·</span>
-              <div className="detail-subtitle_container-address">
+              <div className="detail_subtitle-container_address">
                 {data.streetAddress}, {data.city}, {data.province},{" "}
                 {data.country}
               </div>
             </div>
-            <div className="detail-subtitle_container-right">
-              <div className="detail-small_button">
+            <div className="detail_subtitle-container_right">
+              <div className="detail_small-button">
                 <IoShareOutline size={18} />
                 <span>공유하기</span>
               </div>
-              <div className="detail-small_button">
+              <div className="detail_small-button">
                 <IoMdHeartEmpty size={18} />
                 <span>저장</span>
               </div>
             </div>
           </div>
-          <div className="detail-photo_container">
+          <div className="detail_photo-container">
             <Photos photos={data.photos} />
+          </div>
+          <div className="detail_main-container">
+            <div className="detail_main-container_left">
+              <div className="main-container_left_title_avatar-url">
+                <div>
+                  <div>
+                    {data.creator.name}님이 호스팅하는{" "}
+                    {data.largeBuildingType.label} {getRoomTypeText()}
+                  </div>
+                  <div>
+                    최대 인원 {data.maximumGuestCount}명 · 침실{" "}
+                    {data.bedroomCount}개 · 침대 {data.bedCount}개 · 욕실{" "}
+                    {data.bathroomCount}개
+                  </div>
+                </div>
+                <img src={data.creator.avatarUrl} alt="" />
+              </div>
+              <pre className="main-container_left_description">
+                {data.description}
+              </pre>
+              <div className="main-container_left_bed-type">
+                <div>침대/침구 유형</div>
+                <div>
+                  {data.bedType.map((bedroom, i) => (
+                    <div className="bed-type_container" key={i}>
+                      <div>
+                        <Bed />
+                      </div>
+                      <div>{bedroom.id}번 침실</div>
+                      <div>{bedTypeCount(i)}</div>
+                    </div>
+                  ))}
+                  {data.publicBedType.map((_, i) => (
+                    <div className="bed-type_container" key={i}>
+                      <div>
+                        <Bed />
+                      </div>
+                      <div>공용 공간</div>
+                      <div>{publicBedTypeCount()}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {!isEmpty(data.amenities) && (
+                <div className="main-container_left_amenities">
+                  <div>편의시설</div>
+                  <div>
+                    {data.amenities.map((amenity, i) => (
+                      <Amenity amenity={amenity} key={i} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="detail_main-container_right">
+              <BookingWindow
+                blockedDayList={data.blockedDayList}
+                availability={data.availability}
+              />
+            </div>
           </div>
         </div>
       </Container>

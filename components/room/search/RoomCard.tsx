@@ -158,7 +158,8 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
   return (
     <a
       href={`/room/${room._id}?${querystring.stringify(search)}`}
-      target="blank"
+      target="_blank"
+      rel="noreferrer"
     >
       <Container
         onMouseOver={() => dispatch(roomActions.setHoveredItemIndex(index))}

@@ -100,7 +100,8 @@ const InfoWindow = ({
   return (
     <a
       href={`/room/${room._id}?${querystring.stringify(search)}`}
-      target="blank"
+      target="_blank"
+      rel="noreferrer"
     >
       <Container>
         <ImageContainer>
