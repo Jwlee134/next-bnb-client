@@ -10,6 +10,7 @@ import user from "./user";
 import hosting from "./hosting";
 import search from "./search";
 import room from "./room";
+import wishlist from "./wishlist";
 
 const rootReducer = combineReducers({
   common,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   hosting,
   search,
   room,
+  wishlist,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
