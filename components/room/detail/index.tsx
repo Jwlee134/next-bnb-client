@@ -14,6 +14,9 @@ import { IoIosStar, IoMdHeartEmpty } from "react-icons/io";
 import { IoShareOutline } from "react-icons/io5";
 import palette from "styles/palette";
 import { isEmpty } from "lodash";
+import { roomActions } from "store/room";
+import querystring from "querystring";
+import { deleteIdFromQuery } from "utils";
 import Bed from "../../../public/static/svg/room/bed.svg";
 import Photos from "./Photos";
 import Amenity from "./Amenity";
@@ -196,9 +199,9 @@ const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const RoomDetail = () => {
   const router = useRouter();
-  const id = router.asPath.split("/").pop()?.split("?")[0];
+  const { query } = router;
   const { data, error } = useSWR<IRoomDetail, any>(
-    `/api/room/detail?id=${id}`,
+    `/api/room/detail?id=${query.id}`,
     fetcher
   );
   const dispatch = useDispatch();
@@ -206,12 +209,37 @@ const RoomDetail = () => {
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
+    if (Number(query.adults) < 1) {
+      router.push(
+        `/room/${query.id}?${querystring.stringify(
+          deleteIdFromQuery({ ...query, adults: "1" })
+        )}`
+      );
+    }
+    if (Number(query.children) < 0) {
+      router.push(
+        `/room/${query.id}?${querystring.stringify(
+          deleteIdFromQuery({ ...query, children: "0" })
+        )}`
+      );
+    }
+    if (Number(query.infants) < 0) {
+      router.push(
+        `/room/${query.id}?${querystring.stringify(
+          deleteIdFromQuery({ ...query, infants: "0" })
+        )}`
+      );
+    }
   }, []);
+
+  useEffect(() => {
+    if (data) dispatch(roomActions.setRoom(data));
+  }, [data]);
 
   const getRoomTypeText = () => {
     switch (data?.roomType) {
       case "entire":
-        return "집 전체";
+        return "전체";
       case "private":
         return "개인실";
       case "public":
@@ -229,7 +257,7 @@ const RoomDetail = () => {
   const publicBedTypeCount = () =>
     data?.publicBedType.map((bed) => `${bed.label} ${bed.count}개`).join(", ");
 
-  if (!id || error) return <Error statusCode={404} />;
+  if (!query.id || error) return <Error statusCode={404} />;
   if (!data) {
     return (
       <>
@@ -338,10 +366,7 @@ const RoomDetail = () => {
               )}
             </div>
             <div className="detail_main-container_right">
-              <BookingWindow
-                blockedDayList={data.blockedDayList}
-                availability={data.availability}
-              />
+              <BookingWindow />
             </div>
           </div>
         </div>

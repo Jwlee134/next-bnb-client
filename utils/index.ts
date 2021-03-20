@@ -18,10 +18,10 @@ export const addComma = (value: string) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-export const extractCustomQuery = (query: {
+export const extractFilterQuery = (query: {
   [key: string]: string | string[] | undefined;
 }) => {
-  const essentialQueries = [
+  const keywords = [
     "value",
     "latitude",
     "longitude",
@@ -30,13 +30,14 @@ export const extractCustomQuery = (query: {
     "adults",
     "children",
     "infants",
+    "id",
   ];
   const newObj: { [key: string]: string | string[] | undefined } = {};
   const keys = Object.keys(query);
   const values = Object.values(query);
 
   keys.forEach((key, i) => {
-    if (essentialQueries.includes(key)) {
+    if (keywords.includes(key)) {
       return;
     }
     if (!values[i] || values[i] === "0" || values[i]?.length === 0) {
@@ -50,4 +51,42 @@ export const extractCustomQuery = (query: {
   }${querystring.stringify(newObj)}`;
 
   return queryString;
+};
+
+export const deleteIdFromQuery = (query: {
+  [key: string]: string | string[] | undefined;
+}) => {
+  const keys = Object.keys(query);
+  const values = Object.values(query);
+
+  const newObj: { [key: string]: string | string[] | undefined } = {};
+  const filtered = keys.filter((key) => key !== "id");
+  filtered.forEach((key, i) => {
+    newObj[key] = values[i];
+  });
+  return newObj;
+};
+
+export const extractKeywords = (query: {
+  [key: string]: string | string[] | undefined;
+}) => {
+  const keywords = [
+    "value",
+    "latitude",
+    "longitude",
+    "checkIn",
+    "checkOut",
+    "adults",
+    "children",
+    "infants",
+  ];
+  const keys = Object.keys(query);
+  const values = Object.values(query);
+
+  const newObj: { [key: string]: string | string[] | undefined } = {};
+  keys.forEach((key, i) => {
+    if (!keywords.includes(key)) return;
+    newObj[key] = values[i];
+  });
+  return newObj;
 };

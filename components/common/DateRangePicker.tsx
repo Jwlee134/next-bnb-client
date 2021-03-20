@@ -4,18 +4,35 @@ import moment from "moment";
 import "moment/locale/ko";
 
 import "react-dates/initialize";
-import {
-  DateRangePicker as RangePicker,
-  DisabledShape,
-  FocusedInputShape,
-} from "react-dates";
+import { DateRangePicker as RangePicker, FocusedInputShape } from "react-dates";
 import "react-dates/lib/css/_datepicker.css";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
 
 moment.locale("ko");
 
-const Container = styled.div<{ focused: "startDate" | "endDate" }>`
+interface ContainerProps {
+  focused: "startDate" | "endDate";
+  focusEffect: "normal" | "boldBorder";
+}
+
+const getFocusEffect = (focusEffect: "normal" | "boldBorder") => {
+  if (focusEffect === "normal") {
+    return css`
+      border-radius: 32px;
+      &:hover {
+        background-color: white;
+      }
+      box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
+        0px 3px 8px rgba(0, 0, 0, 0.1);
+    `;
+  }
+  return css`
+    box-shadow: 0 0 0 1px black;
+  `;
+};
+
+const Container = styled.div<ContainerProps>`
   .DateRangePicker {
     position: absolute;
     width: 100%;
@@ -39,16 +56,8 @@ const Container = styled.div<{ focused: "startDate" | "endDate" }>`
         font-size: 14px;
         top: 15px;
       }
-      ${({ focused }) =>
-        focused === "startDate" &&
-        css`
-          border-radius: 32px;
-          &:hover {
-            background-color: white;
-          }
-          box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
-            0px 3px 8px rgba(0, 0, 0, 0.1);
-        `};
+      ${({ focused, focusEffect }) =>
+        focused === "startDate" && getFocusEffect(focusEffect)};
     }
     .DateInput:last-child {
       ::after {
@@ -59,16 +68,8 @@ const Container = styled.div<{ focused: "startDate" | "endDate" }>`
         font-size: 14px;
         top: 15px;
       }
-      ${({ focused }) =>
-        focused === "endDate" &&
-        css`
-          border-radius: 32px;
-          &:hover {
-            background-color: white;
-          }
-          box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.15),
-            0px 3px 8px rgba(0, 0, 0, 0.1);
-        `};
+      ${({ focused, focusEffect }) =>
+        focused === "endDate" && getFocusEffect(focusEffect)};
     }
   }
   .DateInput_fang,
@@ -177,9 +178,20 @@ interface Props {
   checkIn: moment.Moment | null;
   checkOut: moment.Moment | null;
   isBlocked?: (day: moment.Moment) => boolean;
+  maxDate?: moment.Moment;
+  focusEffect?: string;
+  keepOpenOnDateSelect?: boolean;
 }
 
-const DateRangePicker = ({ checkIn, checkOut, onChange, isBlocked }: Props) => {
+const DateRangePicker = ({
+  checkIn,
+  checkOut,
+  onChange,
+  isBlocked,
+  maxDate,
+  focusEffect = "normal",
+  keepOpenOnDateSelect = true,
+}: Props) => {
   const [focused, setFocused] = useState<FocusedInputShape | null>(null);
 
   const handleFocus = (focusedInput: FocusedInputShape | null) => {
@@ -187,7 +199,10 @@ const DateRangePicker = ({ checkIn, checkOut, onChange, isBlocked }: Props) => {
   };
 
   return (
-    <Container focused={focused as "startDate" | "endDate"}>
+    <Container
+      focused={focused as "startDate" | "endDate"}
+      focusEffect={focusEffect as "normal" | "boldBorder"}
+    >
       <RangePicker
         startDate={checkIn}
         endDate={checkOut}
@@ -203,8 +218,14 @@ const DateRangePicker = ({ checkIn, checkOut, onChange, isBlocked }: Props) => {
         noBorder
         readOnly
         displayFormat="MM월 DD일"
-        keepOpenOnDateSelect
+        keepOpenOnDateSelect={keepOpenOnDateSelect}
         isDayBlocked={isBlocked}
+        minDate={moment(new Date())}
+        maxDate={maxDate}
+        isOutsideRange={(day) =>
+          day.isBefore(moment(new Date()), "day") ||
+          (maxDate ? day.isAfter(maxDate, "day") : false)
+        }
       />
     </Container>
   );

@@ -7,7 +7,7 @@ import styled from "styled-components";
 import palette from "styles/palette";
 import querystring from "querystring";
 import { useSelector } from "store";
-import { extractCustomQuery } from "utils";
+import { extractFilterQuery } from "utils";
 import { searchRoomAPI } from "lib/api/room";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
@@ -112,7 +112,7 @@ const OthersModalContents = ({ closeModal }: { closeModal: () => void }) => {
     setTimeout(() => {
       dispatch(roomActions.setIsLoading(true));
       router.push(
-        `/search/rooms?${querystring.stringify(search)}${extractCustomQuery({
+        `/search/rooms?${querystring.stringify(search)}${extractFilterQuery({
           ...query,
           ...filterObject,
         })}`

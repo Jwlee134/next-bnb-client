@@ -50,6 +50,10 @@ const search = createSlice({
     setInfants: (state, action: PayloadAction<number>) => {
       state.infants = action.payload;
     },
+    setSearch: (state, action) => {
+      state = action.payload;
+      return state;
+    },
   },
 });
 

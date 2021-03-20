@@ -8,7 +8,7 @@ import querystring from "querystring";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import { extractCustomQuery } from "utils";
+import { extractFilterQuery } from "utils";
 import Loader from "components/common/Loader";
 
 const Container = styled.div`
@@ -56,9 +56,10 @@ const SearchButton = () => {
       <Link
         href={`/search/rooms?${querystring.stringify(
           search
-        )}${extractCustomQuery({
+        )}${extractFilterQuery({
           ...query,
           zoom: "14",
+          coordsBounds: "0.019114425627257958",
         })}`}
       >
         <a>

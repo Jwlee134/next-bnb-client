@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import querystring from "querystring";
 import { useRouter } from "next/router";
 import { roomActions } from "store/room";
-import { addComma, extractCustomQuery } from "utils";
+import { addComma, extractFilterQuery } from "utils";
 import Footer from "./Footer";
 
 interface Props {
@@ -38,6 +38,10 @@ const InputContainer = styled.div`
   align-items: center;
   span {
     margin: 0px 8px;
+  }
+  p {
+    margin: 0 auto;
+    font-weight: 300;
   }
 `;
 
@@ -103,7 +107,7 @@ const Price = () => {
     dispatch(roomActions.setIsLoading(true));
     setOpened(false);
     router.push(
-      `/search/rooms?${querystring.stringify(search)}${extractCustomQuery({
+      `/search/rooms?${querystring.stringify(search)}${extractFilterQuery({
         ...query,
         page: "1",
         minPrice: minimum,
@@ -149,40 +153,49 @@ const Price = () => {
         </Title>
         {opened && (
           <div className="filter-popup">
-            <InputContainer>
-              <InputItem>
-                <Label>최저 요금</Label>
-                <InputBox>
-                  <span>
-                    <BiWon />
-                  </span>
-                  <Input
-                    type="text"
-                    onChange={handleMinimum}
-                    value={addComma(minimum)}
-                    maxLength={11}
-                  />
-                </InputBox>
-              </InputItem>
-              <span>-</span>
-              <InputItem>
-                <Label>최고 요금</Label>
-                <InputBox>
-                  <span>
-                    <BiWon />
-                  </span>
-                  <Input
-                    type="text"
-                    onChange={handleMaximum}
-                    value={addComma(maximum)}
-                    maxLength={11}
-                  />
-                </InputBox>
-              </InputItem>
-            </InputContainer>
-            <Footer handleDelete={handleDelete} handleSave={handleSave}>
-              저장
-            </Footer>
+            {search.checkIn && search.checkOut && (
+              <>
+                <InputContainer>
+                  <InputItem>
+                    <Label>최저 요금</Label>
+                    <InputBox>
+                      <span>
+                        <BiWon />
+                      </span>
+                      <Input
+                        type="text"
+                        onChange={handleMinimum}
+                        value={addComma(minimum)}
+                        maxLength={11}
+                      />
+                    </InputBox>
+                  </InputItem>
+                  <span>-</span>
+                  <InputItem>
+                    <Label>최고 요금</Label>
+                    <InputBox>
+                      <span>
+                        <BiWon />
+                      </span>
+                      <Input
+                        type="text"
+                        onChange={handleMaximum}
+                        value={addComma(maximum)}
+                        maxLength={11}
+                      />
+                    </InputBox>
+                  </InputItem>
+                </InputContainer>
+                <Footer handleDelete={handleDelete} handleSave={handleSave}>
+                  저장
+                </Footer>
+              </>
+            )}
+            {!search.checkIn && !search.checkOut && (
+              <InputContainer>
+                <p>요금을 설정하려면 여행 날짜를 입력하세요.</p>
+              </InputContainer>
+            )}
           </div>
         )}
       </OutsideClickHandler>

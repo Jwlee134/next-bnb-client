@@ -8,7 +8,7 @@ import querystring from "querystring";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
 import { useSelector } from "store";
-import { extractCustomQuery } from "utils";
+import { extractFilterQuery } from "utils";
 import Footer from "./Footer";
 
 interface Props {
@@ -49,7 +49,7 @@ const RoomType = () => {
   const handleSave = () => {
     dispatch(roomActions.setIsLoading(true));
     router.push(
-      `/search/rooms?${querystring.stringify(search)}${extractCustomQuery({
+      `/search/rooms?${querystring.stringify(search)}${extractFilterQuery({
         ...query,
         page: "1",
         roomType: options,

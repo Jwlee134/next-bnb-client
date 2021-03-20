@@ -5,7 +5,7 @@ import { useSelector } from "store";
 import querystring from "querystring";
 import { searchActions } from "store/search";
 import styled from "styled-components";
-import { extractCustomQuery } from "utils";
+import { extractFilterQuery } from "utils";
 import { isEmpty } from "lodash";
 import { roomActions } from "store/room";
 import { MdRefresh } from "react-icons/md";
@@ -151,7 +151,7 @@ const SearchMap = () => {
         latitude,
         longitude,
         value: "지도에서 선택한 지역",
-      })}${extractCustomQuery({
+      })}${extractFilterQuery({
         ...query,
         page: "1",
         zoom,

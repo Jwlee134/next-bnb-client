@@ -8,6 +8,7 @@ interface IState {
     hoveredItemIndex: number | null;
   };
   detail: {
+    room: IRoomDetail | null;
     photoIndex: number;
   };
   isLoading: boolean;
@@ -20,6 +21,7 @@ const initialState: IState = {
     hoveredItemIndex: null,
   },
   detail: {
+    room: null,
     photoIndex: 0,
   },
   isLoading: false,
@@ -39,6 +41,9 @@ const room = createSlice({
     },
     setHoveredItemIndex: (state, action: PayloadAction<number | null>) => {
       state.search.hoveredItemIndex = action.payload;
+    },
+    setRoom: (state, action: PayloadAction<IRoomDetail>) => {
+      state.detail.room = action.payload;
     },
     setPhotoIndex: (state, action: PayloadAction<number>) => {
       state.detail.photoIndex = action.payload;

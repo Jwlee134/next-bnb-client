@@ -74,6 +74,7 @@ const Location = () => {
     setLocationPopup(false);
     dispatch(commonActions.setIsGettingCoordinates(true));
     document.getElementById("dateRangePicker-start")?.focus();
+    setText("가까운 여행지 둘러보기");
     dispatch(searchActions.setValue("가까운 여행지 둘러보기"));
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
@@ -95,8 +96,8 @@ const Location = () => {
       setLocationPopup(false);
       dispatch(commonActions.setIsGettingCoordinates(true));
       document.getElementById("dateRangePicker-start")?.focus();
-      dispatch(searchActions.setValue(value));
       setText(value);
+      dispatch(searchActions.setValue(value));
       const {
         data: { lat, lng },
       } = await getCoordinatesAPI(value);

@@ -10,6 +10,7 @@ import { useSelector } from "store";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import dynamic from "next/dynamic";
+import querystring from "querystring";
 import RoomList from "./RoomList";
 import Filter from "./filter";
 
@@ -83,11 +84,32 @@ const SearchResults = () => {
     (state) => state.room.search.originalLength
   );
   const dispatch = useDispatch();
-  const { query } = useRouter();
+  const router = useRouter();
+  const { query } = router;
 
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
+    if (Number(query.page) < 1) {
+      router.push(
+        `/search/rooms?${querystring.stringify({ ...query, page: "1" })}`
+      );
+    }
+    if (Number(query.adults) < 1) {
+      router.push(
+        `/search/rooms?${querystring.stringify({ ...query, adults: "1" })}`
+      );
+    }
+    if (Number(query.children) < 0) {
+      router.push(
+        `/search/rooms?${querystring.stringify({ ...query, children: "0" })}`
+      );
+    }
+    if (Number(query.infants) < 0) {
+      router.push(
+        `/search/rooms?${querystring.stringify({ ...query, infants: "0" })}`
+      );
+    }
   }, []);
 
   const searchInfo = `${originalLength}개의 숙소 

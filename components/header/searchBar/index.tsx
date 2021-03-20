@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import { commonActions } from "store/common";
-import { searchActions } from "store/search";
 import styled from "styled-components";
 import palette from "styles/palette";
 import Date from "./Date";
@@ -77,23 +76,10 @@ const Divider = styled.div`
 
 const SearchBar = ({ scroll }: { scroll: number }) => {
   const showSearchBar = useSelector((state) => state.common.showSearchBar);
-  const value = useSelector((state) => state.search.value);
 
   const dispatch = useDispatch();
 
-  const {
-    pathname,
-    query: {
-      value: keyword,
-      latitude,
-      longitude,
-      checkIn,
-      checkOut,
-      adults,
-      children,
-      infants,
-    },
-  } = useRouter();
+  const { pathname } = useRouter();
 
   useEffect(() => {
     // 스크롤이 움직일 때 큰 검색바가 보여지고 있다면 큰 검색바 숨김
@@ -110,20 +96,6 @@ const SearchBar = ({ scroll }: { scroll: number }) => {
       }
     }
   }, [scroll]);
-
-  // 새로고침 등의 이슈로 인해 데이터가 소실되면 다시 스토어에 넣어줌
-  useEffect(() => {
-    if (!value && pathname !== "/") {
-      dispatch(searchActions.setValue(keyword as string));
-      dispatch(searchActions.setLatitude(Number(latitude as string)));
-      dispatch(searchActions.setLongitude(Number(longitude as string)));
-      dispatch(searchActions.setCheckIn(checkIn as string));
-      dispatch(searchActions.setCheckOut(checkOut as string));
-      dispatch(searchActions.setAdults(Number(adults as string)));
-      dispatch(searchActions.setChildren(Number(children as string)));
-      dispatch(searchActions.setInfants(Number(infants as string)));
-    }
-  }, []);
 
   if (!showSearchBar) return null;
   return (

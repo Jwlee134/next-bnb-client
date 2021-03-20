@@ -62,6 +62,7 @@ interface Props {
   style?: Object;
   disableValue?: number;
   subLabel?: string;
+  disabled?: boolean;
 }
 
 const Counter = ({
@@ -73,6 +74,7 @@ const Counter = ({
   style,
   disableValue = 1,
   subLabel,
+  disabled = false,
 }: Props) => {
   return (
     <>
@@ -91,7 +93,12 @@ const Counter = ({
               –
             </Button>
             <span>{value}</span>
-            <Button onClick={() => onClick(value + unitNum)}>+</Button>
+            <Button
+              disabled={disabled}
+              onClick={() => onClick(value + unitNum)}
+            >
+              +
+            </Button>
           </CounterContainer>
         </ButtonContainer>
       </Container>

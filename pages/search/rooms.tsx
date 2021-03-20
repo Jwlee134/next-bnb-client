@@ -5,6 +5,8 @@ import { searchRoomAPI } from "lib/api/room";
 import { roomActions } from "store/room";
 import Error from "pages/_error";
 import dbConnect from "utils/dbConnect";
+import { extractKeywords } from "utils";
+import { searchActions } from "store/search";
 
 interface Props {
   error?: number | null;
@@ -16,7 +18,18 @@ const rooms: NextPage<Props> = ({ error }) => {
 };
 
 rooms.getInitialProps = async ({ store, query, req }) => {
-  if (req) await dbConnect();
+  if (req) {
+    await dbConnect();
+    const keywords = extractKeywords(query);
+    store.dispatch(
+      searchActions.setSearch({
+        ...keywords,
+        adults: Number(keywords.adults) < 1 ? 1 : Number(keywords.adults),
+        children: Number(keywords.children) < 0 ? 0 : Number(keywords.children),
+        infants: Number(keywords.infants) < 0 ? 0 : Number(keywords.infants),
+      })
+    );
+  }
   try {
     const { data } = await searchRoomAPI({
       ...query,
