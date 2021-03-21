@@ -146,11 +146,11 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
-  const { isLiked, handleWishlist } = useWishlist(room._id);
+  const { handleWishlist } = useWishlist(room._id);
 
   const handleClick = () => {
     handleWishlist();
-    if (!isLiked) openModal();
+    openModal();
   };
 
   const difference = differenceInDays(
@@ -222,11 +222,11 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
         </div>
       </a>
       <WishlistButton onClick={handleClick}>
-        {isLiked ? (
+        {/*   {isLiked ? (
           <IoMdHeart style={{ color: palette.bittersweet }} size={25} />
-        ) : (
-          <IoMdHeartEmpty size={25} />
-        )}
+        ) : ( */}
+        <IoMdHeartEmpty size={25} />
+        {/* )} */}
       </WishlistButton>
       <ModalPortal>
         <WishlistModal closeModal={closeModal} />

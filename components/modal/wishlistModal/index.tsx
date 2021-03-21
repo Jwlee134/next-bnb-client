@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import AddToWishlist from "./AddToWishlist";
 import NewWishlist from "./NewWishlist";
 import { commonActions } from "store/common";
+import { getWishlistAPI } from "lib/api/wishlist";
+import { wishlistActions } from "store/wishlist";
 
 const Container = styled.div`
   width: 568px;
@@ -34,13 +36,14 @@ const WishlistModal = ({
   closeModal: () => void;
   createOnly?: boolean;
 }) => {
+  const user = useSelector((state) => state.user.user);
   const mode = useSelector((state) => state.common.wishlistMode);
-  const wishlist = useSelector((state) => state.wishlist);
 
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    if (isEmpty(wishlist) || createOnly) {
+    if (!user) return;
+    if (isEmpty(user.wishlist) || createOnly) {
       closeModal();
       return;
     }
@@ -52,7 +55,10 @@ const WishlistModal = ({
   };
 
   useEffect(() => {
-    if (isEmpty(wishlist)) dispatch(commonActions.setWishlistMode("create"));
+    if (!user) return;
+    if (isEmpty(user.wishlist)) {
+      dispatch(commonActions.setWishlistMode("create"));
+    }
   }, []);
 
   return (

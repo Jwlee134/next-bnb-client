@@ -11,7 +11,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // 첨부된 토큰을 가져와 복호화
     const userId = jwt.verify(token, process.env.JWT_SECRET_KEY!);
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate("wishlist");
 
     return res.status(200).send(user);
   }

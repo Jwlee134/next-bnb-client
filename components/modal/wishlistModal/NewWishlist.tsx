@@ -1,9 +1,10 @@
 import Button from "components/common/Button";
 import Input from "components/common/Input";
+import { createWishlistAPI } from "lib/api/wishlist";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useSelector } from "store";
 import { commonActions } from "store/common";
-import { wishlistActions } from "store/wishlist";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
 
@@ -41,20 +42,29 @@ const NewWishlist = ({
   closeModal: () => void;
   createOnly: boolean;
 }) => {
-  const [name, setName] = useState("");
+  const user = useSelector((state) => state.user.user);
+  const [title, setTitle] = useState("");
   const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setName(e.target.value);
+    setTitle(e.target.value);
 
-  const handleClick = () => {
-    if (createOnly) {
-      dispatch(wishlistActions.makeWishlist(name));
+  const handleClick = async () => {
+    if (createOnly && user) {
+      try {
+        await createWishlistAPI({ title, id: user._id });
+      } catch (error) {
+        alert(error.response.data);
+      }
       closeModal();
       return;
     }
-    if (name) {
-      dispatch(wishlistActions.makeWishlist(name));
+    if (title && user) {
+      try {
+        await createWishlistAPI({ title, id: user._id });
+      } catch (error) {
+        alert(error.response.data);
+      }
       dispatch(commonActions.setWishlistMode("add"));
     }
   };
@@ -63,14 +73,14 @@ const NewWishlist = ({
     <>
       <Container>
         <Input
-          value={name}
+          value={title}
           onChange={handleChange}
           maxLength={50}
           placeholder="이름"
         />
         <div>최대 50자</div>
       </Container>
-      <ButtonContainer noValue={!!name}>
+      <ButtonContainer noValue={!!title}>
         <Button onClick={handleClick}>새로 만들기</Button>
       </ButtonContainer>
     </>

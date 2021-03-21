@@ -11,6 +11,14 @@ export interface IUser extends Document {
   updatedAt: Date;
   rooms: IRoomDetail["_id"];
   review: IReview["_id"];
+  wishlist: IWishlist["_id"];
+}
+
+export interface IWishlist extends Document {
+  title: string;
+  list: IRoomDetail["_id"];
+  creator: IUser["_id"];
+  createdAt: Date;
 }
 
 export interface OauthLoginBody {

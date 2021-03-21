@@ -7,6 +7,8 @@ import { wishlistActions } from "store/wishlist";
 import { useSelector } from "store";
 import { isEmpty } from "lodash";
 import { commonActions } from "store/common";
+import { IUser, IWishlist } from "types/user";
+import { addWishItemAPI } from "lib/api/wishlist";
 
 const Container = styled.div`
   padding: 16px;
@@ -51,15 +53,18 @@ const Container = styled.div`
 `;
 
 const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
-  const wishlist = useSelector((state) => state.wishlist);
+  const user = useSelector((state) => state.user.user as IUser);
   const clickedRoomId = useSelector((state) => state.common.clickedRoomId);
   const dispatch = useDispatch();
 
   const handleCreate = () => dispatch(commonActions.setWishlistMode("create"));
 
-  const handleAdd = (index: number) => {
-    dispatch(wishlistActions.addItem({ index, clickedRoomId }));
-    closeModal();
+  const handleAdd = async (listId: string) => {
+    try {
+      await addWishItemAPI({ roomId: clickedRoomId, listId });
+    } catch (error) {
+      alert(error.response.data);
+    }
   };
 
   return (
@@ -70,18 +75,23 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
         </div>
         <div className="wishlist_block_content">새로운 위시리스트 만들기</div>
       </div>
-      {wishlist.map((list, i) => (
-        <div className="wishlist_block" key={i} onClick={() => handleAdd(i)}>
-          <div className="wishlist_block_photo" />
-          <div className="wishlist_block_content">
-            <div>{list.title}</div>
-            <div>
-              {isEmpty(list.idList) && "저장된 항목 없음"}
-              {!isEmpty(list.idList) && `숙소 ${list.idList.length}개`}
+      {user &&
+        user.wishlist.map((wishlist: IWishlist, i: number) => (
+          <div
+            className="wishlist_block"
+            key={i}
+            onClick={() => handleAdd(wishlist._id)}
+          >
+            <div className="wishlist_block_photo" />
+            <div className="wishlist_block_content">
+              <div>{wishlist.title}</div>
+              <div>
+                {isEmpty(wishlist.list) && "저장된 항목 없음"}
+                {!isEmpty(wishlist.list) && `숙소 ${wishlist.list.length}개`}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
     </Container>
   );
 };

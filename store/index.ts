@@ -72,7 +72,7 @@ const makeStore = () => {
 
   const persistConfig = {
     key: "nextjs",
-    whitelist: ["wishlist"],
+    whitelist: [],
     storage,
   };
 
