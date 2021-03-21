@@ -40,6 +40,7 @@ const SearchButton = () => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!search.latitude && !search.longitude) {
       e.preventDefault();
+      dispatch(commonActions.setShowLocationPopup(true));
     }
     if (pathname !== "/") {
       dispatch(commonActions.setShowSearchBar(false));

@@ -54,6 +54,10 @@ const search = createSlice({
       state = action.payload;
       return state;
     },
+    initSearch: (state) => {
+      state = initialState;
+      return state;
+    },
   },
 });
 

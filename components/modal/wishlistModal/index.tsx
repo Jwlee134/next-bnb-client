@@ -27,14 +27,20 @@ const Container = styled.div`
   }
 `;
 
-const WishlistModal = ({ closeModal }: { closeModal: () => void }) => {
+const WishlistModal = ({
+  closeModal,
+  createOnly = false,
+}: {
+  closeModal: () => void;
+  createOnly?: boolean;
+}) => {
   const mode = useSelector((state) => state.common.wishlistMode);
   const wishlist = useSelector((state) => state.wishlist);
 
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    if (isEmpty(wishlist)) {
+    if (isEmpty(wishlist) || createOnly) {
       closeModal();
       return;
     }
@@ -56,7 +62,9 @@ const WishlistModal = ({ closeModal }: { closeModal: () => void }) => {
         {mode === "add" && "위시리스트에 저장하기"}
         <IoCloseSharp size={20} onClick={handleClick} />
       </header>
-      {mode === "create" && <NewWishlist />}
+      {mode === "create" && (
+        <NewWishlist createOnly={createOnly} closeModal={closeModal} />
+      )}
       {mode === "add" && <AddToWishlist closeModal={closeModal} />}
     </Container>
   );

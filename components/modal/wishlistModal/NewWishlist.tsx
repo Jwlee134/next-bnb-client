@@ -34,7 +34,13 @@ const ButtonContainer = styled.div<{ noValue: boolean }>`
   }
 `;
 
-const NewWishlist = () => {
+const NewWishlist = ({
+  closeModal,
+  createOnly,
+}: {
+  closeModal: () => void;
+  createOnly: boolean;
+}) => {
   const [name, setName] = useState("");
   const dispatch = useDispatch();
 
@@ -42,6 +48,11 @@ const NewWishlist = () => {
     setName(e.target.value);
 
   const handleClick = () => {
+    if (createOnly) {
+      dispatch(wishlistActions.makeWishlist(name));
+      closeModal();
+      return;
+    }
     if (name) {
       dispatch(wishlistActions.makeWishlist(name));
       dispatch(commonActions.setWishlistMode("add"));

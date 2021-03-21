@@ -10,6 +10,8 @@ import { commonActions } from "store/common";
 
 const Container = styled.div`
   padding: 16px;
+  max-height: 468px;
+  overflow: auto;
   .wishlist_block {
     display: flex;
     padding: 12px;

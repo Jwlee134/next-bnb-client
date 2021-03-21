@@ -20,16 +20,16 @@ const rooms: NextPage<Props> = ({ error }) => {
 rooms.getInitialProps = async ({ store, query, req }) => {
   if (req) {
     await dbConnect();
-    const keywords = extractKeywords(query);
-    store.dispatch(
-      searchActions.setSearch({
-        ...keywords,
-        adults: Number(keywords.adults) < 1 ? 1 : Number(keywords.adults),
-        children: Number(keywords.children) < 0 ? 0 : Number(keywords.children),
-        infants: Number(keywords.infants) < 0 ? 0 : Number(keywords.infants),
-      })
-    );
   }
+  const keywords = extractKeywords(query);
+  store.dispatch(
+    searchActions.setSearch({
+      ...keywords,
+      adults: Number(keywords.adults) < 1 ? 1 : Number(keywords.adults),
+      children: Number(keywords.children) < 0 ? 0 : Number(keywords.children),
+      infants: Number(keywords.infants) < 0 ? 0 : Number(keywords.infants),
+    })
+  );
   try {
     const { data } = await searchRoomAPI({
       ...query,

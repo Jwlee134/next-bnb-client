@@ -93,7 +93,7 @@ const Background = styled.div`
   z-index: 2;
 `;
 
-const Header = () => {
+const Header = ({ useSearchBar = true }: { useSearchBar?: boolean }) => {
   const showMap = useSelector((state) => state.common.showMap);
   const showSearchBar = useSelector((state) => state.common.showSearchBar);
   const { pathname } = useRouter();
@@ -109,6 +109,7 @@ const Header = () => {
   const schedule = rafSchd(handleScroll);
 
   useEffect(() => {
+    if (!useSearchBar) return;
     window.addEventListener("scroll", () => {
       schedule(window.scrollY);
     });

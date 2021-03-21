@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import { IRoomDetail } from "types/room";
@@ -17,24 +17,20 @@ import { useSelector } from "store";
 import querystring from "querystring";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
-import { wishlistActions } from "store/wishlist";
-import { commonActions } from "store/common";
+import useWishlist from "hooks/useWishlist";
 import RoomCardSlider from "./RoomCardSlider";
 
 const Container = styled.div`
   width: 100%;
   height: 250px;
   border-top: 1px solid ${palette.gray_eb};
-  padding: 24px 0px;
   display: flex;
   cursor: pointer;
   position: relative;
   a {
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: flex;
     width: 100%;
-    height: 100%;
+    padding: 24px 0px;
   }
   .room-card_image-container {
     width: 300px;
@@ -50,6 +46,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-right: 35px;
     .room-card_info-container_top {
       display: flex;
       justify-content: space-between;
@@ -76,27 +73,6 @@ const Container = styled.div`
           height: 1px;
           background-color: ${palette.gray_eb};
           margin: 7px 0px;
-        }
-      }
-      > div:last-child {
-        width: 25px;
-        height: 25px;
-        position: relative;
-        ::after {
-          position: absolute;
-          content: "";
-          border-radius: 50%;
-          width: 37px;
-          height: 37px;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          z-index: -1;
-        }
-        &:hover {
-          ::after {
-            background-color: ${palette.gray_f7};
-          }
         }
       }
     }
@@ -145,8 +121,22 @@ const Container = styled.div`
   }
 `;
 
+const WishlistButton = styled.div`
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  top: 18px;
+  right: -6px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background-color: ${palette.gray_f7};
+  }
+`;
+
 const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
-  const wishlist = useSelector((state) => state.wishlist);
   const search = useSelector((state) => state.search);
   const {
     query: { checkIn, checkOut },
@@ -156,30 +146,12 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
-  const [isLiked, setIsLiked] = useState(false);
+  const { isLiked, handleWishlist } = useWishlist(room._id);
 
-  const handleWishlist = () => {
-    if (!isLiked) {
-      openModal();
-      dispatch(commonActions.setClickedRoomId(room._id));
-      return;
-    }
-    wishlist.forEach((list) => {
-      if (!list.idList.some((id) => id === room._id)) return;
-      const title = list.title;
-      const id = room._id;
-      dispatch(wishlistActions.deleteItem({ title, id }));
-    });
-    setIsLiked(false);
+  const handleClick = () => {
+    handleWishlist();
+    if (!isLiked) openModal();
   };
-
-  useEffect(() => {
-    wishlist.forEach((list) => {
-      if (list.idList.includes(room._id)) {
-        setIsLiked(true);
-      }
-    });
-  }, [wishlist]);
 
   const difference = differenceInDays(
     new Date(checkOut as string),
@@ -200,16 +172,15 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
   };
 
   return (
-    <>
-      <Container
-        onMouseEnter={() => dispatch(roomActions.setHoveredItemIndex(index))}
-        onMouseLeave={() => dispatch(roomActions.setHoveredItemIndex(null))}
+    <Container
+      onMouseEnter={() => dispatch(roomActions.setHoveredItemIndex(index))}
+      onMouseLeave={() => dispatch(roomActions.setHoveredItemIndex(null))}
+    >
+      <a
+        href={`/room/${room._id}?${querystring.stringify(search)}`}
+        target="_blank"
+        rel="noreferrer"
       >
-        <a
-          href={`/room/${room._id}?${querystring.stringify(search)}`}
-          target="_blank"
-          rel="noreferrer"
-        />
         <div className="room-card_image-container">
           <RoomCardSlider>
             {room.photos.map((photo, index) => (
@@ -231,13 +202,6 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
               </div>
               <div className="info-container_top_info-text">{spaces}</div>
             </div>
-            <div onClick={handleWishlist}>
-              {isLiked ? (
-                <IoMdHeart style={{ color: palette.bittersweet }} size={25} />
-              ) : (
-                <IoMdHeartEmpty size={25} />
-              )}
-            </div>
           </div>
           <div className="room-card_info-container_bottom">
             <div className="info-container_bottom_rating">
@@ -256,11 +220,18 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
             )}
           </div>
         </div>
-      </Container>
+      </a>
+      <WishlistButton onClick={handleClick}>
+        {isLiked ? (
+          <IoMdHeart style={{ color: palette.bittersweet }} size={25} />
+        ) : (
+          <IoMdHeartEmpty size={25} />
+        )}
+      </WishlistButton>
       <ModalPortal>
         <WishlistModal closeModal={closeModal} />
       </ModalPortal>
-    </>
+    </Container>
   );
 };
 

@@ -58,12 +58,14 @@ const Text = styled.span`
 
 const Location = () => {
   const value = useSelector((state) => state.search.value);
+  const showLocationPopup = useSelector(
+    (state) => state.common.showLocationPopup
+  );
   const [placeList, setPlaceList] = useState<string[]>([]);
 
   const dispatch = useDispatch();
 
   const [text, setText] = useState("");
-  const [locationPopup, setLocationPopup] = useState(false);
 
   const keyword = useDebounce(text as string, 500);
 
@@ -71,7 +73,7 @@ const Location = () => {
     setText(e.target.value);
 
   const handleNear = () => {
-    setLocationPopup(false);
+    dispatch(commonActions.setShowLocationPopup(false));
     dispatch(commonActions.setIsGettingCoordinates(true));
     document.getElementById("dateRangePicker-start")?.focus();
     setText("가까운 여행지 둘러보기");
@@ -93,7 +95,7 @@ const Location = () => {
 
   const handleClick = async (value: string) => {
     try {
-      setLocationPopup(false);
+      dispatch(commonActions.setShowLocationPopup(false));
       dispatch(commonActions.setIsGettingCoordinates(true));
       document.getElementById("dateRangePicker-start")?.focus();
       setText(value);
@@ -130,23 +132,27 @@ const Location = () => {
 
   return (
     <div className="search-container">
-      <OutsideClickHandler onOutsideClick={() => setLocationPopup(false)}>
+      <OutsideClickHandler
+        onOutsideClick={() =>
+          dispatch(commonActions.setShowLocationPopup(false))
+        }
+      >
         <label>
           <div
             className={`search-item ${
-              locationPopup && "search-item-popup-opened"
+              showLocationPopup && "search-item-popup-opened"
             }`}
           >
             <h3 className="search-text">위치</h3>
             <Input
-              onClick={() => setLocationPopup(true)}
+              onClick={() => dispatch(commonActions.setShowLocationPopup(true))}
               value={text}
               onChange={handleChange}
               placeholder="어디로 여행가세요?"
             />
           </div>
         </label>
-        {locationPopup && (
+        {showLocationPopup && (
           <ListContainer typing={!!text && isEmpty(placeList)}>
             {!text && (
               <List onClick={handleNear}>

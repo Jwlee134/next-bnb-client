@@ -20,15 +20,16 @@ const wishlist = createSlice({
     ) => {
       const { index, clickedRoomId } = action.payload;
       state[index].idList.push(clickedRoomId);
+      state.sort((a, b) => b.idList.length - a.idList.length);
     },
     deleteItem: (
       state,
-      action: PayloadAction<{ title: string; id: string }>
+      action: PayloadAction<{ index: number; id: string }>
     ) => {
-      const { title, id } = action.payload;
-      const index = state.findIndex((list) => list.title === title);
+      const { index, id } = action.payload;
       const filtered = state[index].idList.filter((roomId) => roomId !== id);
       state[index].idList = filtered;
+      state.sort((a, b) => b.idList.length - a.idList.length);
     },
   },
 });

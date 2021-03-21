@@ -48,13 +48,14 @@ const Container = styled.div`
   > button {
     background-color: ${palette.amaranth};
     border-radius: 12px;
-    margin: 24px 0px;
+    margin-top: 24px;
   }
   .booking-window_price {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid ${palette.gray_dd};
     padding-bottom: 16px;
+    margin-top: 16px;
     > div {
       display: flex;
       align-items: center;

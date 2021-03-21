@@ -10,13 +10,16 @@ import useSWR from "swr";
 import { useRouter } from "next/router";
 import Error from "pages/_error";
 import RoomDetailSkeleton from "components/common/RoomDetailSkeleton";
-import { IoIosStar, IoMdHeartEmpty } from "react-icons/io";
+import { IoIosStar, IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { IoShareOutline } from "react-icons/io5";
 import palette from "styles/palette";
 import { isEmpty } from "lodash";
 import { roomActions } from "store/room";
 import querystring from "querystring";
 import { deleteIdFromQuery } from "utils";
+import useModal from "hooks/useModal";
+import WishlistModal from "components/modal/wishlistModal";
+import useWishlist from "hooks/useWishlist";
 import Bed from "../../../public/static/svg/room/bed.svg";
 import Photos from "./Photos";
 import Amenity from "./Amenity";
@@ -206,6 +209,15 @@ const RoomDetail = () => {
   );
   const dispatch = useDispatch();
 
+  const { openModal, closeModal, ModalPortal } = useModal();
+
+  const { isLiked, handleWishlist } = useWishlist(query._id as string);
+
+  const handleClick = () => {
+    handleWishlist();
+    if (!isLiked) openModal();
+  };
+
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
@@ -303,9 +315,13 @@ const RoomDetail = () => {
                 <IoShareOutline size={18} />
                 <span>공유하기</span>
               </div>
-              <div className="detail_small-button">
-                <IoMdHeartEmpty size={18} />
-                <span>저장</span>
+              <div className="detail_small-button" onClick={handleClick}>
+                {isLiked ? (
+                  <IoMdHeart style={{ color: palette.bittersweet }} size={18} />
+                ) : (
+                  <IoMdHeartEmpty size={18} />
+                )}
+                <span>{isLiked ? "저장됨" : "저장"}</span>
               </div>
             </div>
           </div>
@@ -371,6 +387,9 @@ const RoomDetail = () => {
           </div>
         </div>
       </Container>
+      <ModalPortal>
+        <WishlistModal closeModal={closeModal} />
+      </ModalPortal>
     </>
   );
 };

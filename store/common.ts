@@ -7,6 +7,7 @@ interface IState {
   showMap: boolean;
   showSearchBar: boolean;
   showMiniSearchBar: boolean;
+  showLocationPopup: boolean;
   scaleDown: boolean;
   isGettingCoordinates: boolean;
   clickedRoomId: string;
@@ -19,6 +20,7 @@ const initialState: IState = {
   showMap: true,
   showSearchBar: true,
   showMiniSearchBar: false,
+  showLocationPopup: false,
   scaleDown: false,
   isGettingCoordinates: false,
   clickedRoomId: "",
@@ -45,6 +47,9 @@ const common = createSlice({
     },
     setShowMiniSearchBar: (state, action: PayloadAction<boolean>) => {
       state.showMiniSearchBar = action.payload;
+    },
+    setShowLocationPopup: (state, action: PayloadAction<boolean>) => {
+      state.showLocationPopup = action.payload;
     },
     setScaleDown: (state, action: PayloadAction<boolean>) => {
       state.scaleDown = action.payload;

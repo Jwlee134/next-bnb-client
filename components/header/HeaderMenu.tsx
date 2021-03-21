@@ -136,7 +136,11 @@ const HeaderMenu = () => {
               )}
               {isLoggedIn && (
                 <>
-                  <ListItem>저장 목록</ListItem>
+                  <Link href="/wishlists">
+                    <a>
+                      <ListItem>위시리스트</ListItem>
+                    </a>
+                  </Link>
                   <Link href="/become-a-host/building">
                     <a role="presentation">
                       <ListItem onClick={() => setPopupOpened(false)}>
