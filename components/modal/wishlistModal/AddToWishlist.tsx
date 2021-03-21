@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { wishlistActions } from "store/wishlist";
 import { useSelector } from "store";
 import { isEmpty } from "lodash";
+import { commonActions } from "store/common";
 
 const Container = styled.div`
   padding: 16px;
@@ -48,13 +49,14 @@ const Container = styled.div`
 `;
 
 const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
-  const wishlist = useSelector((state) => state.wishlist.wishlist);
+  const wishlist = useSelector((state) => state.wishlist);
+  const clickedRoomId = useSelector((state) => state.common.clickedRoomId);
   const dispatch = useDispatch();
 
-  const handleCreate = () => dispatch(wishlistActions.setMode("create"));
+  const handleCreate = () => dispatch(commonActions.setWishlistMode("create"));
 
   const handleAdd = (index: number) => {
-    dispatch(wishlistActions.addItem(index));
+    dispatch(wishlistActions.addItem({ index, clickedRoomId }));
     closeModal();
   };
 

@@ -82,6 +82,7 @@ const Footer = ({
         router.push(nextHref as string);
       } catch (error) {
         alert(error.response.data);
+        setLoading(false);
       }
     }
   };

@@ -8,13 +8,20 @@ import { meAPI } from "lib/api/auth";
 import { userActions } from "store/user";
 import { api } from "lib/api";
 import { extractToken } from "utils";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import { useStore } from "react-redux";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  const store = useStore();
+  const persistor = persistStore(store);
   return (
     <>
       <GlobalStyles />
-      <Component {...pageProps} />
-      <div id="modal" />
+      <PersistGate persistor={persistor}>
+        <Component {...pageProps} />
+        <div id="modal" />
+      </PersistGate>
     </>
   );
 };

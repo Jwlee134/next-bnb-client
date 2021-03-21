@@ -15,10 +15,11 @@ import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
 import { useSelector } from "store";
 import querystring from "querystring";
-import RoomCardSlider from "./RoomCardSlider";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
 import { wishlistActions } from "store/wishlist";
+import { commonActions } from "store/common";
+import RoomCardSlider from "./RoomCardSlider";
 
 const Container = styled.div`
   width: 100%;
@@ -145,7 +146,7 @@ const Container = styled.div`
 `;
 
 const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
-  const wishlist = useSelector((state) => state.wishlist.wishlist);
+  const wishlist = useSelector((state) => state.wishlist);
   const search = useSelector((state) => state.search);
   const {
     query: { checkIn, checkOut },
@@ -160,7 +161,7 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
   const handleWishlist = () => {
     if (!isLiked) {
       openModal();
-      dispatch(wishlistActions.setClickedRoomId(room._id));
+      dispatch(commonActions.setClickedRoomId(room._id));
       return;
     }
     wishlist.forEach((list) => {

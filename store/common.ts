@@ -2,22 +2,26 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface IState {
   authMode: "signUp" | "login";
+  wishlistMode: "create" | "add";
   validation: boolean;
   showMap: boolean;
   showSearchBar: boolean;
   showMiniSearchBar: boolean;
   scaleDown: boolean;
   isGettingCoordinates: boolean;
+  clickedRoomId: string;
 }
 
 const initialState: IState = {
   authMode: "signUp",
+  wishlistMode: "add",
   validation: false,
   showMap: true,
   showSearchBar: true,
   showMiniSearchBar: false,
   scaleDown: false,
   isGettingCoordinates: false,
+  clickedRoomId: "",
 };
 
 const common = createSlice({
@@ -26,6 +30,9 @@ const common = createSlice({
   reducers: {
     setAuthMode: (state, action: PayloadAction<"signUp" | "login">) => {
       state.authMode = action.payload;
+    },
+    setWishlistMode: (state, action: PayloadAction<"create" | "add">) => {
+      state.wishlistMode = action.payload;
     },
     setValidation: (state, action: PayloadAction<boolean>) => {
       state.validation = action.payload;
@@ -44,6 +51,9 @@ const common = createSlice({
     },
     setIsGettingCoordinates: (state, action: PayloadAction<boolean>) => {
       state.isGettingCoordinates = action.payload;
+    },
+    setClickedRoomId: (state, action: PayloadAction<string>) => {
+      state.clickedRoomId = action.payload;
     },
   },
 });

@@ -2,6 +2,7 @@ import Button from "components/common/Button";
 import Input from "components/common/Input";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { commonActions } from "store/common";
 import { wishlistActions } from "store/wishlist";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
@@ -43,7 +44,7 @@ const NewWishlist = () => {
   const handleClick = () => {
     if (name) {
       dispatch(wishlistActions.makeWishlist(name));
-      dispatch(wishlistActions.setMode("add"));
+      dispatch(commonActions.setWishlistMode("add"));
     }
   };
 

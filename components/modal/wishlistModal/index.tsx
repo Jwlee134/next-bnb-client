@@ -4,10 +4,10 @@ import { useSelector } from "store";
 import styled from "styled-components";
 import { IoCloseSharp } from "react-icons/io5";
 import palette from "styles/palette";
-import NewWishlist from "./NewWishlist";
 import { useDispatch } from "react-redux";
-import { wishlistActions } from "store/wishlist";
 import AddToWishlist from "./AddToWishlist";
+import NewWishlist from "./NewWishlist";
+import { commonActions } from "store/common";
 
 const Container = styled.div`
   width: 568px;
@@ -28,8 +28,8 @@ const Container = styled.div`
 `;
 
 const WishlistModal = ({ closeModal }: { closeModal: () => void }) => {
-  const mode = useSelector((state) => state.wishlist.mode);
-  const wishlist = useSelector((state) => state.wishlist.wishlist);
+  const mode = useSelector((state) => state.common.wishlistMode);
+  const wishlist = useSelector((state) => state.wishlist);
 
   const dispatch = useDispatch();
 
@@ -39,14 +39,14 @@ const WishlistModal = ({ closeModal }: { closeModal: () => void }) => {
       return;
     }
     if (mode === "create") {
-      dispatch(wishlistActions.setMode("add"));
+      dispatch(commonActions.setWishlistMode("add"));
       return;
     }
     closeModal();
   };
 
   useEffect(() => {
-    if (isEmpty(wishlist)) dispatch(wishlistActions.setMode("create"));
+    if (isEmpty(wishlist)) dispatch(commonActions.setWishlistMode("create"));
   }, []);
 
   return (
