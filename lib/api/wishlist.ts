@@ -20,4 +20,21 @@ export const addWishItemAPI = ({
   listId: string;
 }) => api.post("/api/wishlist/item", { roomId, listId });
 
-export const deleteWishItemAPI = () => api.delete(`/api/wishlist/item`);
+export const deleteWishItemAPI = ({
+  roomId,
+  listId,
+}: {
+  roomId: string;
+  listId: string;
+}) => api.delete(`/api/wishlist/item?roomId=${roomId}&listId=${listId}`);
+
+export const deleteWishlistAPI = (id: string) =>
+  api.delete(`/api/wishlist/${id}`);
+
+export const updateWishlistAPI = ({
+  title,
+  listId,
+}: {
+  title: string;
+  listId: string;
+}) => api.post(`/api/wishlist/${listId}`, { title });

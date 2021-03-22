@@ -7,8 +7,8 @@ import { wishlistActions } from "store/wishlist";
 import { useSelector } from "store";
 import { isEmpty } from "lodash";
 import { commonActions } from "store/common";
-import { IUser, IWishlist } from "types/user";
-import { addWishItemAPI } from "lib/api/wishlist";
+import { addWishItemAPI, getWishlistAPI } from "lib/api/wishlist";
+import { IUser } from "types/user";
 
 const Container = styled.div`
   padding: 16px;
@@ -28,6 +28,12 @@ const Container = styled.div`
       margin-right: 16px;
       border-radius: 6px;
       background-color: ${palette.gray_dd};
+      img {
+        width: 64px;
+        height: 64px;
+        object-fit: cover;
+        border-radius: 6px;
+      }
     }
     .wishlist_block_content {
       display: flex;
@@ -53,7 +59,8 @@ const Container = styled.div`
 `;
 
 const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
-  const user = useSelector((state) => state.user.user as IUser);
+  const user = useSelector((state) => state.user.user);
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
   const clickedRoomId = useSelector((state) => state.common.clickedRoomId);
   const dispatch = useDispatch();
 
@@ -62,6 +69,9 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
   const handleAdd = async (listId: string) => {
     try {
       await addWishItemAPI({ roomId: clickedRoomId, listId });
+      const { data } = await getWishlistAPI((user as IUser)._id);
+      dispatch(wishlistActions.setWishlist(data));
+      closeModal();
     } catch (error) {
       alert(error.response.data);
     }
@@ -75,23 +85,24 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
         </div>
         <div className="wishlist_block_content">새로운 위시리스트 만들기</div>
       </div>
-      {user &&
-        user.wishlist.map((wishlist: IWishlist, i: number) => (
-          <div
-            className="wishlist_block"
-            key={i}
-            onClick={() => handleAdd(wishlist._id)}
-          >
-            <div className="wishlist_block_photo" />
-            <div className="wishlist_block_content">
-              <div>{wishlist.title}</div>
-              <div>
-                {isEmpty(wishlist.list) && "저장된 항목 없음"}
-                {!isEmpty(wishlist.list) && `숙소 ${wishlist.list.length}개`}
-              </div>
+      {wishlist.map((list, i) => (
+        <div
+          className="wishlist_block"
+          key={i}
+          onClick={() => handleAdd(list._id)}
+        >
+          <div className="wishlist_block_photo">
+            {!isEmpty(list.list) && <img src={list.list[0].photos[0]} alt="" />}
+          </div>
+          <div className="wishlist_block_content">
+            <div>{list.title}</div>
+            <div>
+              {isEmpty(list.list) && "저장된 항목 없음"}
+              {!isEmpty(list.list) && `숙소 ${list.list.length}개`}
             </div>
           </div>
-        ))}
+        </div>
+      ))}
     </Container>
   );
 };

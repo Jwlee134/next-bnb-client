@@ -12,7 +12,7 @@ import { MdRefresh } from "react-icons/md";
 import Loader from "components/common/Loader";
 import { render } from "react-dom";
 import { IRoomDetail } from "types/room";
-import InfoWindow from "./InfoWindow";
+import InfoWindow from "../room/search/InfoWindow";
 
 const Container = styled.div`
   width: 100%;
@@ -91,8 +91,17 @@ declare global {
   }
 }
 
-const SearchMap = () => {
-  const searchResults = useSelector((state) => state.room.search.searchResults);
+interface Props {
+  roomList: IRoomDetail[];
+  useMoveToSearch?: boolean;
+  useFitBounds?: boolean;
+}
+
+const Map = ({
+  roomList,
+  useMoveToSearch = false,
+  useFitBounds = false,
+}: Props) => {
   const hoveredItemIndex = useSelector(
     (state) => state.room.search.hoveredItemIndex
   );
@@ -111,9 +120,9 @@ const SearchMap = () => {
   const [isMoved, setIsMoved] = useState(false);
 
   const mapRef = useRef<HTMLDivElement>(null);
-  const lat = Number(query.latitude);
-  const lng = Number(query.longitude);
-  const zoom = Number(query.zoom);
+  const lat = Number(query.latitude) || 0;
+  const lng = Number(query.longitude) || 0;
+  const zoom = Number(query.zoom) || 2;
 
   // 지도 로드 직후 콜백함수
   window.initMap = () => {
@@ -122,6 +131,7 @@ const SearchMap = () => {
         center: { lat, lng },
         zoom: zoom || 14,
         gestureHandling: "greedy",
+        maxZoom: 17,
       });
       setMap(map);
     }
@@ -134,6 +144,23 @@ const SearchMap = () => {
     script.async = true;
     document.head.appendChild(script);
   }, []);
+
+  useEffect(() => {
+    if (!map || !markers || !useFitBounds) return;
+    const coordinates: google.maps.LatLng[] = [];
+    if (isEmpty(markers)) return;
+    markers.forEach((marker) => {
+      const lat = marker.getPosition()?.lat();
+      const lng = marker.getPosition()?.lng();
+      if (lat && lng) {
+        const coordinate = new google.maps.LatLng(lat, lng);
+        coordinates.push(coordinate);
+      }
+    });
+    const bounds = new google.maps.LatLngBounds();
+    coordinates.forEach((coordinate) => bounds.extend(coordinate));
+    map.fitBounds(bounds, 100);
+  }, [map, markers]);
 
   const getNewResults = (map: google.maps.Map<HTMLDivElement>) => {
     const coordsBounds = (
@@ -171,6 +198,7 @@ const SearchMap = () => {
 
   useEffect(() => {
     if (!map) return;
+    if (!useMoveToSearch) return;
     const dragEnd = map.addListener("dragend", () => {
       if (searchWithMoving) {
         getNewResults(map);
@@ -223,7 +251,7 @@ const SearchMap = () => {
           }
           // 같은 마커를 한번 더 클릭해도 다시 인포윈도우를 생성하지 않음
           if (e.latLng.lat() !== infoWindow?.getPosition().lat()) {
-            createInfoWindow(e, map, searchResults[i]);
+            createInfoWindow(e, map, roomList[i]);
           }
         });
         eventArr.push(event);
@@ -250,7 +278,7 @@ const SearchMap = () => {
     setMarkers([]);
     // 새로운 마커 추가
     const arr: google.maps.Marker[] = [];
-    searchResults.forEach((room) => {
+    roomList.forEach((room) => {
       const marker = new google.maps.Marker({
         position: { lat: room.latitude, lng: room.longitude },
         map,
@@ -258,7 +286,7 @@ const SearchMap = () => {
       arr.push(marker);
     });
     setMarkers(arr);
-  }, [map, searchResults]);
+  }, [map, roomList]);
 
   // Room card hover 시 마커에 애니메이션 부여
   useEffect(() => {
@@ -281,24 +309,26 @@ const SearchMap = () => {
   return (
     <Container>
       <div ref={mapRef} />
-      <Label onClick={handleClick}>
-        {isLoading && <Loader whiteBackground />}
-        {!isLoading && (
-          <>
-            {!isMoved && (
-              <input
-                type="checkbox"
-                checked={searchWithMoving}
-                onChange={handleCheckbox}
-              />
-            )}
-            {isMoved && <MdRefresh size={20} />}
-            <div>{isMoved ? "이 지역 검색" : "지도를 움직이며 검색하기"}</div>
-          </>
-        )}
-      </Label>
+      {useMoveToSearch && (
+        <Label onClick={handleClick}>
+          {isLoading && <Loader whiteBackground />}
+          {!isLoading && (
+            <>
+              {!isMoved && (
+                <input
+                  type="checkbox"
+                  checked={searchWithMoving}
+                  onChange={handleCheckbox}
+                />
+              )}
+              {isMoved && <MdRefresh size={20} />}
+              <div>{isMoved ? "이 지역 검색" : "지도를 움직이며 검색하기"}</div>
+            </>
+          )}
+        </Label>
+      )}
     </Container>
   );
 };
 
-export default SearchMap;
+export default Map;

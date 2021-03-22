@@ -11,25 +11,10 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import Button from "components/common/Button";
 import SignUp from "./SignUp";
 import Login from "./Login";
+import ModalHeader from "../ModalHeader";
 
 const Container = styled.div`
   width: 568px;
-`;
-
-const AuthHeader = styled.header`
-  width: 100%;
-  position: relative;
-  height: 64px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid ${palette.gray_eb};
-  padding: 0px 24px;
-  svg {
-    position: absolute;
-    right: 24px;
-    cursor: pointer;
-  }
 `;
 
 const Description = styled.span`
@@ -97,10 +82,9 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
 
   return (
     <Container>
-      <AuthHeader>
+      <ModalHeader onClick={closeModal}>
         <span>{authMode === "login" ? "로그인" : "회원가입"}</span>
-        <IoCloseSharp size={24} onClick={closeModal} />
-      </AuthHeader>
+      </ModalHeader>
       <AuthContainer>
         {isLogin ? (
           <Login closeModal={closeModal} />

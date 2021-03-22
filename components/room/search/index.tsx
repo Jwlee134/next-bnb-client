@@ -11,10 +11,11 @@ import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import dynamic from "next/dynamic";
 import querystring from "querystring";
+import useGetWishlist from "hooks/useGetWishlist";
 import RoomList from "./RoomList";
 import Filter from "./filter";
 
-const SearchMap = dynamic(() => import("./SearchMap"), { ssr: false });
+const Map = dynamic(() => import("../../common/Map"), { ssr: false });
 
 const Container = styled.div`
   display: flex;
@@ -80,12 +81,15 @@ const Alert = styled.div`
 
 const SearchResults = () => {
   const showMap = useSelector((state) => state.common.showMap);
+  const searchResults = useSelector((state) => state.room.search.searchResults);
   const originalLength = useSelector(
     (state) => state.room.search.originalLength
   );
   const dispatch = useDispatch();
   const router = useRouter();
   const { query } = router;
+
+  useGetWishlist();
 
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(true));
@@ -150,7 +154,7 @@ const SearchResults = () => {
           </div>
           <RoomList />
         </ListContainer>
-        {showMap && <SearchMap />}
+        {showMap && <Map roomList={searchResults} useMoveToSearch />}
       </Container>
     </>
   );

@@ -18,6 +18,7 @@ import querystring from "querystring";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
 import useWishlist from "hooks/useWishlist";
+import AuthModal from "components/modal/authModal";
 import RoomCardSlider from "./RoomCardSlider";
 
 const Container = styled.div`
@@ -137,6 +138,7 @@ const WishlistButton = styled.div`
 `;
 
 const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const search = useSelector((state) => state.search);
   const {
     query: { checkIn, checkOut },
@@ -146,11 +148,11 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
-  const { handleWishlist } = useWishlist(room._id);
+  const { isLiked, handleWishlist } = useWishlist(room._id);
 
   const handleClick = () => {
     handleWishlist();
-    openModal();
+    if (!isLiked) openModal();
   };
 
   const difference = differenceInDays(
@@ -222,14 +224,15 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
         </div>
       </a>
       <WishlistButton onClick={handleClick}>
-        {/*   {isLiked ? (
+        {isLiked ? (
           <IoMdHeart style={{ color: palette.bittersweet }} size={25} />
-        ) : ( */}
-        <IoMdHeartEmpty size={25} />
-        {/* )} */}
+        ) : (
+          <IoMdHeartEmpty size={25} />
+        )}
       </WishlistButton>
       <ModalPortal>
-        <WishlistModal closeModal={closeModal} />
+        {!isLoggedIn && <AuthModal closeModal={closeModal} />}
+        {isLoggedIn && <WishlistModal closeModal={closeModal} />}
       </ModalPortal>
     </Container>
   );

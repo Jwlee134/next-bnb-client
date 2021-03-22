@@ -20,6 +20,8 @@ import { deleteIdFromQuery } from "utils";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
 import useWishlist from "hooks/useWishlist";
+import { useSelector } from "store";
+import AuthModal from "components/modal/authModal";
 import Bed from "../../../public/static/svg/room/bed.svg";
 import Photos from "./Photos";
 import Amenity from "./Amenity";
@@ -201,9 +203,10 @@ const Container = styled.div`
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const RoomDetail = () => {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const router = useRouter();
   const { query } = router;
-  const { data, error } = useSWR<IRoomDetail, any>(
+  const { data, error } = useSWR<IRoomDetail, Error>(
     `/api/room/detail?id=${query.id}`,
     fetcher
   );
@@ -211,7 +214,7 @@ const RoomDetail = () => {
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
-  const { isLiked, handleWishlist } = useWishlist(query._id as string);
+  const { isLiked, handleWishlist } = useWishlist(query.id as string);
 
   const handleClick = () => {
     handleWishlist();
@@ -388,7 +391,8 @@ const RoomDetail = () => {
         </div>
       </Container>
       <ModalPortal>
-        <WishlistModal closeModal={closeModal} />
+        {!isLoggedIn && <AuthModal closeModal={closeModal} />}
+        {isLoggedIn && <WishlistModal closeModal={closeModal} />}
       </ModalPortal>
     </>
   );

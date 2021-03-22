@@ -9,7 +9,8 @@ import palette from "styles/palette";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
 import { useSelector } from "store";
-import Poster from "components/common/Poster";
+import ListCard from "components/wishlists/ListCard";
+import useGetWishlist from "hooks/useGetWishlist";
 
 const Container = styled.div`
   padding: 36px 80px 24px 80px;
@@ -40,10 +41,12 @@ const Container = styled.div`
 `;
 
 const Wishlists = () => {
-  const wishlist = useSelector((state) => state.wishlist);
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
   const dispatch = useDispatch();
 
   const { openModal, closeModal, ModalPortal } = useModal();
+
+  useGetWishlist();
 
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(false));
@@ -68,7 +71,7 @@ const Wishlists = () => {
         </header>
         <main>
           {wishlist.map((list, i) => (
-            <Poster item={list} key={i} />
+            <ListCard item={list} key={i} />
           ))}
         </main>
       </Container>
