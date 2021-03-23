@@ -22,6 +22,7 @@ import WishlistModal from "components/modal/wishlistModal";
 import useWishlist from "hooks/useWishlist";
 import { useSelector } from "store";
 import AuthModal from "components/modal/authModal";
+import useGetWishlist from "hooks/useGetWishlist";
 import Bed from "../../../public/static/svg/room/bed.svg";
 import Photos from "./Photos";
 import Amenity from "./Amenity";
@@ -213,6 +214,8 @@ const RoomDetail = () => {
   const dispatch = useDispatch();
 
   const { openModal, closeModal, ModalPortal } = useModal();
+
+  useGetWishlist();
 
   const { isLiked, handleWishlist } = useWishlist(query.id as string);
 

@@ -166,7 +166,7 @@ const Hosting = () => {
   return (
     <>
       <Header>
-        <SiAirbnb size={32} onClick={() => router.push("/")} />
+        <SiAirbnb size={32} onClick={() => router.push("/management")} />
       </Header>
       <ProgressBar>
         <Progress path={path} />

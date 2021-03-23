@@ -139,9 +139,9 @@ const BookingWindow = () => {
       start: new Date(search.checkIn as string),
       end: new Date(search.checkOut as string),
     }).map((day) => format(day, "MM월 dd일"));
-    const blockedDays = (room as IRoomDetail).blockedDayList.map((day) =>
-      format(new Date(day), "MM월 dd일")
-    );
+    const blockedDays = (room as IRoomDetail).blockedDayList.map((day) => {
+      return format(new Date(day), "MM월 dd일");
+    });
     const isIncluded = blockedDays.some((blocked) => {
       return bookingDays.includes(blocked);
     });

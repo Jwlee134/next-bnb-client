@@ -86,12 +86,15 @@ const HeaderMenu = () => {
   const { openModal, closeModal, ModalPortal } = useModal();
   const dispatch = useDispatch();
   const router = useRouter();
+  const { pathname } = router;
 
   const handleLogout = async () => {
     await logoutAPI();
     dispatch(userActions.initUser());
     setPopupOpened(false);
-    router.push("/");
+    if (pathname !== "/search/rooms" && pathname !== "/room/[id]") {
+      router.push("/");
+    }
   };
 
   return (
@@ -136,15 +139,39 @@ const HeaderMenu = () => {
               )}
               {isLoggedIn && (
                 <>
-                  <Link href="/wishlists">
+                  <Link href="/trips">
                     <a>
-                      <ListItem>위시리스트</ListItem>
+                      <ListItem onClick={() => setPopupOpened(false)}>
+                        여행
+                      </ListItem>
                     </a>
                   </Link>
-                  <Link href="/become-a-host/building">
-                    <a role="presentation">
+                  <Link href="/wishlists">
+                    <a>
                       <ListItem onClick={() => setPopupOpened(false)}>
-                        숙소 등록하기
+                        위시리스트
+                      </ListItem>
+                    </a>
+                  </Link>
+                  <Divider />
+                  <Link href="/become-a-host/building">
+                    <a>
+                      <ListItem onClick={() => setPopupOpened(false)}>
+                        숙소 등록
+                      </ListItem>
+                    </a>
+                  </Link>
+                  <Link href="/management">
+                    <a>
+                      <ListItem onClick={() => setPopupOpened(false)}>
+                        숙소 관리
+                      </ListItem>
+                    </a>
+                  </Link>
+                  <Link href="/me">
+                    <a>
+                      <ListItem onClick={() => setPopupOpened(false)}>
+                        프로필
                       </ListItem>
                     </a>
                   </Link>
