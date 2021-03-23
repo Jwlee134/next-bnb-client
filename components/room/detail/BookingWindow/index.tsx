@@ -1,16 +1,18 @@
 import Button from "components/common/Button";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useSelector } from "store";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import differenceInDays from "date-fns/differenceInDays";
 import { addComma } from "utils";
+import { addDays, addMonths, eachDayOfInterval, format } from "date-fns";
+import { IRoomDetail } from "types/room";
 import CounterBox from "./CounterBox";
 import DatePicker from "./DatePicker";
+import Warning from "../../../../public/static/svg/warning.svg";
 
-const Container = styled.div`
+const Container = styled.div<{ notValid: boolean }>`
   width: 100%;
   background-color: white;
   padding: 24px;
@@ -49,6 +51,11 @@ const Container = styled.div`
     background-color: ${palette.amaranth};
     border-radius: 12px;
     margin-top: 24px;
+    ${({ notValid }) =>
+      notValid &&
+      css`
+        cursor: not-allowed;
+      `}
   }
   .booking-window_price {
     display: flex;
@@ -74,13 +81,26 @@ const Container = styled.div`
   }
 `;
 
+const NotValid = styled.div`
+  font-weight: 300;
+  font-size: 14px;
+  color: ${palette.tawny};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  svg {
+    margin-right: 5px;
+  }
+`;
+
 const BookingWindow = () => {
   const search = useSelector((state) => state.search);
   const room = useSelector((state) => state.room.detail.room);
-  const router = useRouter();
-  const { query } = router;
 
   const [opened, setOpened] = useState(false);
+  const [notValidDates, setNotValidDates] = useState(false);
+  const [notValidGuestCount, setNotValidGuestCount] = useState(false);
 
   const handleClick = () => {
     if (!search.checkIn) {
@@ -91,6 +111,7 @@ const BookingWindow = () => {
       document.getElementById("dateRangePicker-end")?.focus();
       return;
     }
+    if (notValidDates || notValidGuestCount) return;
   };
 
   const difference = () => {
@@ -102,17 +123,70 @@ const BookingWindow = () => {
     }
   };
 
+  const dateValidation = () => {
+    if (room && room.availability > 1) {
+      const maxDate = addMonths(addDays(new Date(), 1), room.availability);
+      const initializedMaxDate = new Date(maxDate.setHours(0, 0, 0, 0));
+      if (
+        new Date(search.checkIn as string) >= initializedMaxDate ||
+        new Date(search.checkOut as string) >= initializedMaxDate
+      ) {
+        setNotValidDates(true);
+        return;
+      }
+    }
+    const bookingDays = eachDayOfInterval({
+      start: new Date(search.checkIn as string),
+      end: new Date(search.checkOut as string),
+    }).map((day) => format(day, "MM월 dd일"));
+    const blockedDays = (room as IRoomDetail).blockedDayList.map((day) =>
+      format(new Date(day), "MM월 dd일")
+    );
+    const isIncluded = blockedDays.some((blocked) => {
+      return bookingDays.includes(blocked);
+    });
+    if (isIncluded) {
+      setNotValidDates(true);
+    } else {
+      setNotValidDates(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!room) return;
+    if (
+      search.checkIn &&
+      search.checkOut &&
+      new Date(search.checkIn) < new Date(search.checkOut)
+    ) {
+      dateValidation();
+    }
+  }, [room, search.checkIn, search.checkOut]);
+
+  useEffect(() => {
+    if (!room) return;
+    if (search.adults + search.children > room.maximumGuestCount) {
+      setNotValidGuestCount(true);
+    } else {
+      setNotValidGuestCount(false);
+    }
+  }, [room, search.adults, search.children]);
+
   if (!room) return null;
   return (
-    <Container>
+    <Container notValid={notValidDates || notValidGuestCount}>
       <div className="booking-window_title">
-        {!query.checkIn || !query.checkOut ? (
+        {!search.checkIn || !search.checkOut ? (
           <div>
             요금을 확인하려면 날짜를
             <br /> 입력하세요.
           </div>
         ) : (
-          <div>예약 준비가 완료되었습니다!</div>
+          <div>
+            {notValidDates || notValidGuestCount
+              ? "유효하지 않은 조건입니다."
+              : "예약 준비가 완료되었습니다!"}
+          </div>
         )}
       </div>
       <DatePicker />
@@ -123,34 +197,49 @@ const BookingWindow = () => {
         >
           <div>인원</div>
           <div>
-            게스트 {Number(query.adults) + Number(query.children)}명{" "}
-            {Number(query.infants) > 0 && `, 유아 ${Number(query.infants)}명`}
+            게스트 {Number(search.adults) + Number(search.children)}명{" "}
+            {Number(search.infants) > 0 && `, 유아 ${Number(search.infants)}명`}
           </div>
         </div>
         {opened && <CounterBox setOpened={setOpened} />}
       </OutsideClickHandler>
+      {notValidDates && (
+        <NotValid>
+          <Warning />
+          선택하신 날짜는 이용이 불가합니다.
+        </NotValid>
+      )}
+      {notValidGuestCount && (
+        <NotValid>
+          <Warning />
+          최대 인원 수는 {room.maximumGuestCount}명 입니다.
+        </NotValid>
+      )}
       <Button onClick={handleClick}>
         {!search.checkIn || !search.checkOut ? "예약 가능 여부 보기" : ""}
         {search.checkIn && search.checkOut && "예약하기"}
       </Button>
-      {search.checkIn && search.checkOut && (
-        <>
-          <div className="booking-window_price">
-            <div>
-              ￦{addComma(String(room.price))} x {difference()}박
+      {!notValidDates &&
+        !notValidGuestCount &&
+        search.checkIn &&
+        search.checkOut && (
+          <>
+            <div className="booking-window_price">
+              <div>
+                ￦{addComma(String(room.price))} x {difference()}박
+              </div>
+              <div>
+                ￦{addComma(String(room.price * (difference() as number)))}
+              </div>
             </div>
-            <div>
-              ￦{addComma(String(room.price * (difference() as number)))}
+            <div className="booking-window_total-price">
+              <div>총 합계</div>
+              <div>
+                ￦{addComma(String(room.price * (difference() as number)))}
+              </div>
             </div>
-          </div>
-          <div className="booking-window_total-price">
-            <div>총 합계</div>
-            <div>
-              ￦{addComma(String(room.price * (difference() as number)))}
-            </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
     </Container>
   );
 };
