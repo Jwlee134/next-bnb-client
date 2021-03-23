@@ -144,14 +144,14 @@ const Header = ({ useSearchBar = true }: { useSearchBar?: boolean }) => {
               airbnb
             </LeftContainer>
           </Link>
-          <MiniSearchBar scroll={scroll} />
+          {useSearchBar && <MiniSearchBar scroll={scroll} />}
           <RightContainer>
             <HeaderMenu />
           </RightContainer>
-          <SearchBar scroll={scroll} />
+          {useSearchBar && <SearchBar scroll={scroll} />}
         </div>
       </Container>
-      {showSearchBar && pathname !== "/" && (
+      {useSearchBar && showSearchBar && pathname !== "/" && (
         <Background onClick={handleClick} />
       )}
     </>

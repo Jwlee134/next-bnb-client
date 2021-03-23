@@ -272,7 +272,7 @@ const RoomDetail = () => {
   const publicBedTypeCount = () =>
     data?.publicBedType.map((bed) => `${bed.label} ${bed.count}개`).join(", ");
 
-  if (!query.id || error) return <Error statusCode={404} />;
+  if (error) return <Error />;
   if (!data) {
     return (
       <>

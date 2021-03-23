@@ -82,7 +82,12 @@ const DatePicker = () => {
     return room.blockedDayList.some((date) => day.isSame(date, "day"));
   };
 
-  const maxDate = room && moment(new Date()).add(room.availability, "M");
+  const maxDate = () => {
+    if (room && room.availability > 1) {
+      return moment(new Date()).add(room.availability, "M");
+    }
+    return undefined;
+  };
 
   const handleChange = ({
     startDate,
@@ -127,7 +132,7 @@ const DatePicker = () => {
         checkOut={toMomentObject(checkOut ? new Date(checkOut) : null)}
         onChange={handleChange}
         isBlocked={isBlocked as (day: Moment) => boolean}
-        maxDate={maxDate as Moment | undefined}
+        maxDate={maxDate()}
         focusEffect="boldBorder"
         keepOpenOnDateSelect={false}
       />

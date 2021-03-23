@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Head from "next/head";
 import Header from "components/header";
@@ -17,6 +17,7 @@ import { useSelector } from "store";
 import { isEmpty } from "lodash";
 import useGetWishlist from "hooks/useGetWishlist";
 import { wishlistActions } from "store/wishlist";
+import Error from "pages/_error";
 
 const Map = dynamic(() => import("../common/Map"), { ssr: false });
 
@@ -77,6 +78,8 @@ const Wishlist = () => {
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
+  const [error, setError] = useState(false);
+
   useGetWishlist();
 
   useEffect(() => {
@@ -91,6 +94,7 @@ const Wishlist = () => {
     if (isEmpty(wishlist)) return;
     dispatch(wishlistActions.setDetail(undefined));
     const data = wishlist.find((list) => list._id === (query.id as string));
+    if (!data) return setError(true);
     dispatch(wishlistActions.setDetail(data));
     if (data) {
       if (!user || user?._id !== data?.creator) {
@@ -99,6 +103,7 @@ const Wishlist = () => {
     }
   }, [wishlist]);
 
+  if (error) return <Error />;
   if (!detail) {
     return (
       <>
