@@ -174,6 +174,10 @@ const hosting = createSlice({
     setPrice: (state, action: PayloadAction<number>) => {
       state.price = action.payload;
     },
+    initState: (state) => {
+      state = initialState;
+      return state;
+    },
   },
 });
 

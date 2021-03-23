@@ -15,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
       currentUser.rooms.push(newRoom._id);
       currentUser.save();
-      res.status(200).end();
+      res.status(200).send(newRoom);
     } catch (error) {
       res.status(500).send("등록에 실패하였습니다. 다시 시도해 주세요.");
     }

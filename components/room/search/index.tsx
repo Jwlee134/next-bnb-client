@@ -118,12 +118,12 @@ const SearchResults = () => {
 
   const searchInfo = `${originalLength}개의 숙소 
   ${
-    query.checkIn &&
-    query.checkOut &&
-    `· ${format(new Date(query.checkIn as string), "MM월 dd일")} - ${format(
-      new Date(query.checkOut as string),
-      "MM월 dd일"
-    )}`
+    query.checkIn && query.checkOut
+      ? `· ${format(new Date(query.checkIn as string), "MM월 dd일")} - ${format(
+          new Date(query.checkOut as string),
+          "MM월 dd일"
+        )}`
+      : ""
   } · 게스트 ${Number(query.adults) + Number(query.children)}명`;
 
   return (

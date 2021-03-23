@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import aws from "aws-sdk";
-import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
+import sharp from "sharp";
 
 export const config = {
   api: {
@@ -23,15 +24,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       // https://cheese10yun.github.io/Node-AWS-S3-Upload/
       const photoArray = await new Promise<string[]>((resolve) => {
         form.parse(req, async (err, fields, files) => {
-          // 사진을 업로드 시간에 상관없이 고른 순서대로 배열에 담기 위한 로직
           const urlArr = await Promise.all(
             Object.values(files).map(async (file) => {
+              // 이미지 리사이즈 https://mygumi.tistory.com/349 https://sub0709.tistory.com/1
+              const resized = await sharp((file as any).path)
+                .resize(1200)
+                .toBuffer();
               const url = await new Promise<string>((resolve, reject) => {
                 s3.upload({
-                  Bucket: process.env.S3_BUCKET_NAME!,
+                  Bucket: `${process.env.S3_BUCKET_NAME!}/room`,
                   ACL: "public-read",
-                  Key: (file as any).name,
-                  Body: fs.createReadStream((file as any).path),
+                  Key: `${uuidv4()}-${(file as any).name}`,
+                  Body: resized,
                 })
                   .promise()
                   .then((res) => resolve(res.Location))
@@ -53,7 +57,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { key } = req.query;
     try {
       s3.deleteObject(
-        { Bucket: process.env.S3_BUCKET_NAME!, Key: key as string },
+        { Bucket: `${process.env.S3_BUCKET_NAME!}/room`, Key: key as string },
         (err) => {
           if (err) {
             res.status(500).send("다시 시도해 주세요.");

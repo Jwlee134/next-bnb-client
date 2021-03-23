@@ -25,14 +25,14 @@ const Description = () => {
           지역의 매력을 소개해주세요.
         </h3>
         <Textarea
-          isValid={!!description && description.length < 501}
+          isValid={!!description && description.length < 1500}
           onChange={handleChange}
           maxLength={1500}
           value={description || ""}
         />
       </Container>
       <Footer
-        isValid={!!description && description.length < 501}
+        isValid={!!description && description.length < 1500}
         nextHref="/become-a-host/title"
       />
     </>

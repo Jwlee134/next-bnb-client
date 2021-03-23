@@ -91,7 +91,8 @@ const Footer = ({
     if (!isValid) return;
     try {
       const { data } = await registerRoomAPI(hosting, user as IUser);
-      console.log(data);
+      router.push(`/room/${data._id}?adults=1&children=0&infants=0`);
+      dispatch(hostingActions.initState());
     } catch (error) {
       alert(error.response.data);
     }

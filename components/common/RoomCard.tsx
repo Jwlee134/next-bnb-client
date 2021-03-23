@@ -47,12 +47,11 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-right: 35px;
     .room-card_info-container_top {
       display: flex;
       justify-content: space-between;
       > div:first-child {
-        margin-right: 5px;
+        margin-right: 35px;
         flex-grow: 1;
         .info-container_top_info-text {
           font-size: 14px;
@@ -137,7 +136,15 @@ const WishlistButton = styled.div`
   }
 `;
 
-const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
+const RoomCard = ({
+  room,
+  index,
+  showPriceWIthoutDates = false,
+}: {
+  room: IRoomDetail;
+  index: number;
+  showPriceWIthoutDates?: boolean;
+}) => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const search = useSelector((state) => state.search);
   const {
@@ -218,6 +225,15 @@ const RoomCard = ({ room, index }: { room: IRoomDetail; index: number }) => {
                   {addComma(String(room.price))} <span>/ 박</span>
                 </div>
                 <div>총액 ₩{addComma(String(room.price * difference))}</div>
+              </div>
+            )}
+            {showPriceWIthoutDates && (
+              <div className="info-container_bottom_price">
+                <div>
+                  <FaWonSign />
+                  {addComma(String(room.price))} <span>/ 박</span>
+                </div>
+                <div />
               </div>
             )}
           </div>

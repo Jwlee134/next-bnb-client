@@ -133,7 +133,7 @@ const Wishlist = () => {
             {detail.title} · 숙소 {detail.list.length}개
           </div>
           {detail.list.map((item: IRoomDetail, i: number) => (
-            <RoomCard key={i} room={item} index={i} />
+            <RoomCard key={i} room={item} index={i} showPriceWIthoutDates />
           ))}
         </div>
         <div className="wishlist_map-container">
