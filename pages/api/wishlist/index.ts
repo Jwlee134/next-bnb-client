@@ -24,8 +24,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { id } = req.query;
     try {
       const data: IWishlist[] = await Wishlist.find({ creator: id })
-        .populate({ path: "list", model: Room })
-        .sort({ list: -1 });
+        .sort("-list")
+        .populate({ path: "list", model: Room });
       return res.status(200).send(data);
     } catch (error) {
       console.log(error);

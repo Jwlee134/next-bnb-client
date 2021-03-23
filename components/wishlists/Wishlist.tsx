@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Head from "next/head";
 import Header from "components/header";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import { useRouter } from "next/router";
-import { IWishlist } from "types/user";
 import RoomCard from "components/common/RoomCard";
 import { IRoomDetail } from "types/room";
 import { IoArrowBackOutline, IoSettingsSharp } from "react-icons/io5";
@@ -17,7 +16,6 @@ import Setting from "components/modal/wishlistModal/Setting";
 import { useSelector } from "store";
 import { isEmpty } from "lodash";
 import useGetWishlist from "hooks/useGetWishlist";
-import { roomActions } from "store/room";
 import { wishlistActions } from "store/wishlist";
 
 const Map = dynamic(() => import("../common/Map"), { ssr: false });
@@ -74,7 +72,7 @@ const Wishlist = () => {
 
   const user = useSelector((state) => state.user.user);
   const wishlist = useSelector((state) => state.wishlist.wishlist);
-  const list = useSelector((state) => state.wishlist.list);
+  const detail = useSelector((state) => state.wishlist.detail);
   const dispatch = useDispatch();
 
   const { openModal, closeModal, ModalPortal } = useModal();
@@ -84,13 +82,16 @@ const Wishlist = () => {
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(false));
     dispatch(commonActions.setShowSearchBar(false));
+    return () => {
+      dispatch(wishlistActions.setDetail(undefined));
+    };
   }, []);
 
   useEffect(() => {
     if (isEmpty(wishlist)) return;
-    dispatch(wishlistActions.setList(undefined));
+    dispatch(wishlistActions.setDetail(undefined));
     const data = wishlist.find((list) => list._id === (query.id as string));
-    dispatch(wishlistActions.setList(data));
+    dispatch(wishlistActions.setDetail(data));
     if (data) {
       if (!user || user?._id !== data?.creator) {
         router.replace("/");
@@ -98,19 +99,20 @@ const Wishlist = () => {
     }
   }, [wishlist]);
 
-  if (!list) {
+  if (!detail) {
     return (
       <>
         <Head>
           <title>숙소, 체험, 장소를 모두 한 곳에서 - 에어비앤비</title>
         </Head>
+        <Header useSearchBar={false} />
       </>
     );
   }
   return (
     <>
       <Head>
-        <title>{list.title} · 위시리스트 · 에어비앤비</title>
+        <title>{detail.title} · 위시리스트 · 에어비앤비</title>
       </Head>
       <Header useSearchBar={false} />
       <Container>
@@ -128,18 +130,18 @@ const Wishlist = () => {
             </div>
           </div>
           <div className="wishlist_room-card-container_title">
-            {list.title} · 숙소 {list.list.length}개
+            {detail.title} · 숙소 {detail.list.length}개
           </div>
-          {list.list.map((item: IRoomDetail, i: number) => (
+          {detail.list.map((item: IRoomDetail, i: number) => (
             <RoomCard key={i} room={item} index={i} />
           ))}
         </div>
         <div className="wishlist_map-container">
-          <Map roomList={list.list} useFitBounds />
+          <Map roomList={detail.list} useFitBounds />
         </div>
       </Container>
       <ModalPortal>
-        <Setting originTitle={list.title} closeModal={closeModal} />
+        <Setting originTitle={detail.title} closeModal={closeModal} />
       </ModalPortal>
     </>
   );

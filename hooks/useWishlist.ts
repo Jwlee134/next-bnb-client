@@ -11,7 +11,7 @@ import { IUser } from "types/user";
 const useWishlist = (id: string) => {
   const user = useSelector((state) => state.user.user);
   const wishlist = useSelector((state) => state.wishlist.wishlist);
-  const list = useSelector((state) => state.wishlist.list);
+  const detail = useSelector((state) => state.wishlist.detail);
   const dispatch = useDispatch();
   const { pathname } = useRouter();
 
@@ -39,13 +39,13 @@ const useWishlist = (id: string) => {
   };
 
   useEffect(() => {
-    if (!list && pathname === "/wishlists/[id]") return;
+    if (!detail && pathname === "/wishlists/[id]") return;
     wishlist.forEach((list) => {
       if (list.list.some((item: IRoomDetail) => item._id === id)) {
         setIsLiked(true);
       }
     });
-  }, [wishlist, list]);
+  }, [wishlist, detail]);
 
   return { isLiked, handleWishlist };
 };

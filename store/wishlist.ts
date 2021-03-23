@@ -3,12 +3,12 @@ import { IWishlist } from "types/user";
 
 interface IState {
   wishlist: IWishlist[];
-  list: IWishlist | null;
+  detail: IWishlist | undefined;
 }
 
 const initialState: IState = {
   wishlist: [],
-  list: undefined,
+  detail: undefined,
 };
 
 const wishlist = createSlice({
@@ -26,8 +26,8 @@ const wishlist = createSlice({
       const index = state.wishlist.findIndex((list) => list._id === listId);
       state.wishlist[index].title = title;
     },
-    setList: (state, action: PayloadAction<IWishlist | undefined>) => {
-      state.list = action.payload;
+    setDetail: (state, action: PayloadAction<IWishlist | undefined>) => {
+      state.detail = action.payload;
     },
   },
 });
