@@ -1,11 +1,13 @@
 import React from "react";
 import Head from "next/head";
-import Home from "components/home";
 import dbConnect from "utils/dbConnect";
 import { wrapper } from "store";
 import { GetServerSideProps } from "next";
 import { commonActions } from "store/common";
 import { searchActions } from "store/search";
+import dynamic from "next/dynamic";
+
+const Home = dynamic(() => import("components/home"));
 
 const home = () => {
   return (

@@ -128,14 +128,17 @@ const Location = () => {
 
   useEffect(() => {
     if (!text) setText(value);
+    return () => {
+      setPlaceList([]);
+    };
   }, []);
 
   return (
     <div className="search-container">
       <OutsideClickHandler
-        onOutsideClick={() =>
-          dispatch(commonActions.setShowLocationPopup(false))
-        }
+        onOutsideClick={() => {
+          dispatch(commonActions.setShowLocationPopup(false));
+        }}
       >
         <label>
           <div

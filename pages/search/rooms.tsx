@@ -1,4 +1,3 @@
-import SearchResults from "components/room/search";
 import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { searchRoomAPI } from "lib/api/room";
@@ -9,6 +8,9 @@ import { extractKeywords } from "utils";
 import { searchActions } from "store/search";
 import { wrapper } from "store";
 import { commonActions } from "store/common";
+import dynamic from "next/dynamic";
+
+const SearchResults = dynamic(() => import("components/room/search"));
 
 interface Props {
   error?: number | null;

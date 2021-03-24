@@ -10,6 +10,7 @@ import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
 import ListCard from "components/wishlists/ListCard";
 import useWishlist from "hooks/useWishlist";
+import useUser from "hooks/useUser";
 
 const Container = styled.div`
   padding: 36px 80px 24px 80px;
@@ -40,6 +41,7 @@ const Container = styled.div`
 `;
 
 const Wishlists = () => {
+  useUser("/");
   const { wishlist } = useWishlist();
   const dispatch = useDispatch();
 

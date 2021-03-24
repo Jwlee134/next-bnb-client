@@ -13,6 +13,7 @@ import { hostingActions } from "store/hosting";
 import { registerRoomAPI } from "lib/api/room";
 import { IUser } from "types/user";
 import Loader from "components/common/Loader";
+import useUser from "hooks/useUser";
 
 const Container = styled.div`
   width: 100%;
@@ -50,6 +51,7 @@ const Footer = ({
   isLocation?: boolean;
   isSubmit?: boolean;
 }) => {
+  const { user } = useUser();
   const router = useRouter();
   const { setValidation } = useValidation();
   const [loading, setLoading] = useState(false);
@@ -58,7 +60,6 @@ const Footer = ({
     (state) => state.hosting
   );
   const hosting = useSelector((state) => state.hosting);
-  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const handleClick = async (

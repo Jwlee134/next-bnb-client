@@ -69,7 +69,7 @@ const Wishlist = () => {
   const router = useRouter();
   const { query } = router;
 
-  const { wishlist } = useWishlist();
+  const { user, wishlist } = useWishlist();
 
   const dispatch = useDispatch();
 
@@ -114,9 +114,11 @@ const Wishlist = () => {
                 </a>
               </Link>
             </div>
-            <div>
-              <IoSettingsSharp onClick={openModal} size={24} />
-            </div>
+            {data.creator === user?._id && (
+              <div>
+                <IoSettingsSharp onClick={openModal} size={24} />
+              </div>
+            )}
           </div>
           <div className="wishlist_room-card-container_title">
             {data.title} · 숙소 {data.list.length}개

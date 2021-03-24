@@ -11,10 +11,8 @@ import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import dynamic from "next/dynamic";
 import querystring from "querystring";
-import useGetWishlist from "hooks/useGetWishlist";
 import RoomList from "./RoomList";
 import Filter from "./filter";
-import useWishlist from "hooks/useWishlist";
 
 const Map = dynamic(() => import("../../common/Map"), { ssr: false });
 
