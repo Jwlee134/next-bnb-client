@@ -8,7 +8,7 @@ import { commonActions } from "store/common";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import Error from "pages/_error";
-import RoomDetailSkeleton from "components/common/RoomDetailSkeleton";
+import RoomDetailSkeleton from "components/skeleton/RoomDetailSkeleton";
 import { IoIosStar, IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { IoShareOutline } from "react-icons/io5";
 import palette from "styles/palette";

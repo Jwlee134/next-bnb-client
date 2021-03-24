@@ -16,6 +16,8 @@ import Setting from "components/modal/wishlistModal/Setting";
 import { isEmpty } from "lodash";
 import useWishlist from "hooks/useWishlist";
 import { IWishlist } from "types/user";
+import RoomCardSkeleton from "components/skeleton/RoomCardSkeleton";
+import Skeleton from "react-loading-skeleton";
 
 const Map = dynamic(() => import("../common/Map"), { ssr: false });
 
@@ -88,20 +90,14 @@ const Wishlist = () => {
     setData(data);
   }, [wishlist]);
 
-  if (!data) {
-    return (
-      <>
-        <Head>
-          <title>숙소, 체험, 장소를 모두 한 곳에서 - 에어비앤비</title>
-        </Head>
-        <Header useSearchBar={false} />
-      </>
-    );
-  }
   return (
     <>
       <Head>
-        <title>{data.title} · 위시리스트 · 에어비앤비</title>
+        <title>
+          {data
+            ? `${data.title} · 위시리스트 · 에어비앤비`
+            : "숙소, 체험, 장소를 모두 한 곳에서 - 에어비앤비"}
+        </title>
       </Head>
       <Header useSearchBar={false} />
       <Container>
@@ -114,25 +110,28 @@ const Wishlist = () => {
                 </a>
               </Link>
             </div>
-            {data.creator === user?._id && (
+            {data?.creator === user?._id && (
               <div>
                 <IoSettingsSharp onClick={openModal} size={24} />
               </div>
             )}
           </div>
           <div className="wishlist_room-card-container_title">
-            {data.title} · 숙소 {data.list.length}개
+            {!data && <Skeleton width={200} height={36} />}
+            {data && `${data.title} · 숙소 ${data.list.length}개`}
           </div>
-          {data.list.map((item: IRoomDetail, i: number) => (
-            <RoomCard key={i} room={item} index={i} showPriceWIthoutDates />
-          ))}
+          {!data && <RoomCardSkeleton />}
+          {data &&
+            data.list.map((item: IRoomDetail, i: number) => (
+              <RoomCard key={i} room={item} index={i} showPriceWIthoutDates />
+            ))}
         </div>
         <div className="wishlist_map-container">
-          <Map roomList={data.list} useFitBounds />
+          {data && <Map roomList={data.list} useFitBounds />}
         </div>
       </Container>
       <ModalPortal>
-        <Setting originTitle={data.title} closeModal={closeModal} />
+        {data && <Setting originTitle={data.title} closeModal={closeModal} />}
       </ModalPortal>
     </>
   );

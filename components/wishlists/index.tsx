@@ -11,6 +11,7 @@ import WishlistModal from "components/modal/wishlistModal";
 import ListCard from "components/wishlists/ListCard";
 import useWishlist from "hooks/useWishlist";
 import useUser from "hooks/useUser";
+import WishlistSkeleton from "components/skeleton/WishlistSkeleton";
 
 const Container = styled.div`
   padding: 36px 80px 24px 80px;
@@ -69,9 +70,11 @@ const Wishlists = () => {
           <Button onClick={handleClick}>새로 만들기</Button>
         </header>
         <main>
-          {wishlist?.map((list, i) => (
-            <ListCard item={list} key={i} />
-          ))}
+          {wishlist ? (
+            wishlist.map((list, i) => <ListCard item={list} key={i} />)
+          ) : (
+            <WishlistSkeleton />
+          )}
         </main>
       </Container>
       <ModalPortal>

@@ -1,4 +1,5 @@
 import Header from "components/header";
+import ManagementSkeleton from "components/skeleton/ManagementSkeleton";
 import useUser from "hooks/useUser";
 import Head from "next/head";
 import Error from "pages/_error";
@@ -25,60 +26,46 @@ const Container = styled.div`
       table {
         width: 100%;
         white-space: nowrap;
-        thead {
-          th {
-            padding: 8px;
-            font-size: 13px;
-            text-align: left;
-            font-weight: 500;
-            min-width: 100px;
-            cursor: pointer;
-            border-bottom: 1px solid ${palette.gray_eb};
-            color: ${palette.gray_85};
-            &:hover {
-              color: ${palette.black};
-            }
-            div {
-              display: flex;
-              align-items: center;
-              svg {
-                margin-left: 5px;
-              }
-            }
-            &:first-child {
-              position: sticky;
-              left: 0;
-              background-color: white;
+        th {
+          &:first-child {
+            min-width: 250px;
+          }
+          padding: 8px;
+          font-size: 13px;
+          text-align: left;
+          font-weight: 500;
+          min-width: 100px;
+          cursor: pointer;
+          border-bottom: 1px solid ${palette.gray_eb};
+          color: ${palette.gray_85};
+          &:hover {
+            color: ${palette.black};
+          }
+          div {
+            display: flex;
+            align-items: center;
+            svg {
+              margin-left: 5px;
             }
           }
+          &:first-child {
+            position: sticky;
+            left: 0;
+            background-color: white;
+          }
         }
-        tbody {
-          tr {
-            td {
-              padding: 16px 8px;
-              border-bottom: 1px solid ${palette.gray_eb};
-              vertical-align: middle;
-              &:not(:first-child) {
-                div {
-                  font-weight: 300;
-                }
-              }
-              div {
-                display: flex;
-                align-items: center;
-              }
-              &:first-child {
-                position: sticky;
-                left: 0;
-                background-color: white;
-                cursor: pointer;
-              }
+        td {
+          padding: 16px 8px;
+          border-bottom: 1px solid ${palette.gray_eb};
+          vertical-align: middle;
+          &:not(:first-child) {
+            div {
+              font-weight: 300;
             }
-            &:hover {
-              td {
-                background-color: ${palette.gray_f7};
-              }
-            }
+          }
+          div {
+            display: flex;
+            align-items: center;
           }
         }
       }
@@ -106,6 +93,7 @@ const Management = () => {
           <div>
             <table>
               <RoomTableHead />
+              {!data && <ManagementSkeleton />}
               {data?.map((room, i) => (
                 <RoomTableBody key={i} room={room} />
               ))}

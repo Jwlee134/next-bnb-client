@@ -6,6 +6,7 @@ import koLocale from "date-fns/locale/ko";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { hostingActions } from "store/hosting";
+import palette from "styles/palette";
 
 const Container = styled.tbody`
   img {
@@ -13,6 +14,19 @@ const Container = styled.tbody`
     height: 40px;
     border-radius: 5px;
     margin-right: 12px;
+  }
+  tr {
+    td:first-child {
+      position: sticky;
+      left: 0;
+      background-color: white;
+      cursor: pointer;
+    }
+    &:hover {
+      td {
+        background-color: ${palette.gray_f7};
+      }
+    }
   }
 `;
 

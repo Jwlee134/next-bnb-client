@@ -5,7 +5,7 @@ import palette from "styles/palette";
 import { useRouter } from "next/router";
 import { useSelector } from "store";
 import querystring from "querystring";
-import RoomCardSkeleton from "components/common/RoomCardSkeleton";
+import RoomCardSkeleton from "components/skeleton/RoomCardSkeleton";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
 import RoomCard from "../../common/RoomCard";
