@@ -17,6 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       user.save();
       return res.status(200).send(newWishlist);
     } catch (error) {
+      console.log(error);
       return res.status(500).send("다시 시도해 주세요.");
     }
   }

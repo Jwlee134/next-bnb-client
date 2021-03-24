@@ -7,11 +7,9 @@ import useModal from "hooks/useModal";
 import AuthModal from "components/modal/authModal";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import { useSelector } from "store";
-import { useRouter } from "next/router";
 import { logoutAPI } from "lib/api/auth";
-import { userActions } from "store/user";
 import Link from "next/link";
+import useUser from "hooks/useUser";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -80,21 +78,18 @@ const Divider = styled.div`
 `;
 
 const HeaderMenu = () => {
-  const user = useSelector((state) => state.user.user);
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const { user, mutateUser } = useUser();
+
   const [popupOpened, setPopupOpened] = useState(false);
   const { openModal, closeModal, ModalPortal } = useModal();
   const dispatch = useDispatch();
-  const router = useRouter();
-  const { pathname } = router;
 
   const handleLogout = async () => {
-    await logoutAPI();
-    dispatch(userActions.initUser());
     setPopupOpened(false);
-    if (pathname !== "/search/rooms" && pathname !== "/room/[id]") {
-      router.push("/");
-    }
+    mutateUser(async () => {
+      const { data } = await logoutAPI();
+      return data;
+    });
   };
 
   return (
@@ -115,7 +110,7 @@ const HeaderMenu = () => {
         {popupOpened && (
           <PopupContainer>
             <List>
-              {!isLoggedIn && (
+              {!user?.isLoggedIn && (
                 <>
                   <ListItem
                     onClick={() => {
@@ -137,7 +132,7 @@ const HeaderMenu = () => {
                   </ListItem>
                 </>
               )}
-              {isLoggedIn && (
+              {user?.isLoggedIn && (
                 <>
                   <Link href="/trips">
                     <a>

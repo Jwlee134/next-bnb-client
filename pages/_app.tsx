@@ -1,13 +1,8 @@
 import React from "react";
 import { AppProps } from "next/dist/next-server/lib/router/router";
-import App, { AppContext } from "next/app";
 
 import GlobalStyles from "styles/GlobalStyles";
 import { wrapper } from "store";
-import { meAPI } from "lib/api/auth";
-import { userActions } from "store/user";
-import { api } from "lib/api";
-import { extractToken } from "utils";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { useStore } from "react-redux";
@@ -26,7 +21,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-MyApp.getInitialProps = async (context: AppContext) => {
+/* MyApp.getInitialProps = async (context: AppContext) => {
   const appProps = await App.getInitialProps(context);
   const cookie = context.ctx.req?.headers.cookie;
   const { store } = context.ctx;
@@ -50,6 +45,6 @@ MyApp.getInitialProps = async (context: AppContext) => {
   }
 
   return { ...appProps };
-};
+}; */
 
 export default wrapper.withRedux(MyApp);

@@ -5,7 +5,6 @@ import { IRoomDetail } from "types/room";
 import Header from "components/header";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import axios from "axios";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import Error from "pages/_error";
@@ -20,9 +19,8 @@ import { deleteIdFromQuery } from "utils";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
 import useWishlist from "hooks/useWishlist";
-import { useSelector } from "store";
 import AuthModal from "components/modal/authModal";
-import useGetWishlist from "hooks/useGetWishlist";
+import { searchActions } from "store/search";
 import Bed from "../../../public/static/svg/room/bed.svg";
 import Photos from "./Photos";
 import Amenity from "./Amenity";
@@ -201,30 +199,39 @@ const Container = styled.div`
   }
 `;
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 const RoomDetail = () => {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const router = useRouter();
   const { query } = router;
+
+  const { user, liked, handleItem } = useWishlist(query.id as string);
   const { data, error } = useSWR<IRoomDetail, Error>(
-    `/api/room/detail?id=${query.id}`,
-    fetcher
+    query.id ? `/api/room/detail?id=${query.id}` : null
   );
   const dispatch = useDispatch();
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
-  useGetWishlist();
-
-  const { isLiked, handleWishlist } = useWishlist(query.id as string);
-
   const handleClick = () => {
-    handleWishlist();
-    if (!isLiked) openModal();
+    handleItem();
+    if (!liked) openModal();
   };
 
   useEffect(() => {
+    if (!query) return;
+    const filteredQuery = deleteIdFromQuery(query);
+    dispatch(
+      searchActions.setSearch({
+        ...filteredQuery,
+        adults:
+          Number(filteredQuery.adults) < 1 ? 1 : Number(filteredQuery.adults),
+        children:
+          Number(filteredQuery.children) < 0
+            ? 0
+            : Number(filteredQuery.children),
+        infants:
+          Number(filteredQuery.infants) < 0 ? 0 : Number(filteredQuery.infants),
+      })
+    );
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
     if (Number(query.adults) < 1) {
@@ -248,7 +255,7 @@ const RoomDetail = () => {
         )}`
       );
     }
-  }, []);
+  }, [query]);
 
   useEffect(() => {
     if (data) dispatch(roomActions.setRoom(data));
@@ -322,12 +329,12 @@ const RoomDetail = () => {
                 <span>공유하기</span>
               </div>
               <div className="detail_small-button" onClick={handleClick}>
-                {isLiked ? (
+                {liked ? (
                   <IoMdHeart style={{ color: palette.bittersweet }} size={18} />
                 ) : (
                   <IoMdHeartEmpty size={18} />
                 )}
-                <span>{isLiked ? "저장됨" : "저장"}</span>
+                <span>{liked ? "저장됨" : "저장"}</span>
               </div>
             </div>
           </div>
@@ -394,8 +401,8 @@ const RoomDetail = () => {
         </div>
       </Container>
       <ModalPortal>
-        {!isLoggedIn && <AuthModal closeModal={closeModal} />}
-        {isLoggedIn && <WishlistModal closeModal={closeModal} />}
+        {!user?.isLoggedIn && <AuthModal closeModal={closeModal} />}
+        {user?.isLoggedIn && <WishlistModal closeModal={closeModal} />}
       </ModalPortal>
     </>
   );

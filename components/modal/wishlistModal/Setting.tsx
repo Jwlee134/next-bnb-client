@@ -1,10 +1,10 @@
 import Button from "components/common/Button";
 import Input from "components/common/Input";
+import useWishlist from "hooks/useWishlist";
 import { deleteWishlistAPI, updateWishlistAPI } from "lib/api/wishlist";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { wishlistActions } from "store/wishlist";
 import styled from "styled-components";
 import palette from "styles/palette";
 import ModalHeader from "../ModalHeader";
@@ -57,11 +57,11 @@ const Setting = ({
   closeModal: () => void;
   originTitle: string;
 }) => {
+  const { mutateWishlist } = useWishlist();
+
   const router = useRouter();
   const { query } = router;
   const [text, setText] = useState(originTitle);
-
-  const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setText(e.target.value);
@@ -78,9 +78,7 @@ const Setting = ({
   const handleSave = async () => {
     try {
       await updateWishlistAPI({ title: text, listId: query.id as string });
-      dispatch(
-        wishlistActions.setTitle({ title: text, listId: query.id as string })
-      );
+      mutateWishlist();
       closeModal();
     } catch (error) {
       alert(error.response.data);

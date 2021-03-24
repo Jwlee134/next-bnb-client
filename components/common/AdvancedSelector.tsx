@@ -153,4 +153,4 @@ const AdvancedSelector = ({
   );
 };
 
-export default React.memo(AdvancedSelector);
+export default AdvancedSelector;

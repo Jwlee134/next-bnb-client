@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { isDetailOptions } from "types/typeguards";
 
 const Container = styled.div`
   display: flex;
@@ -33,7 +34,7 @@ const Description = styled.div`
   font-size: 14px;
 `;
 
-interface DetailOptions {
+export interface DetailOptions {
   label: string;
   value?: string;
   description: string;
@@ -46,12 +47,6 @@ interface Props {
 }
 
 const Checkbox = ({ options, items, onChange }: Props) => {
-  const isDetailOptions = (
-    option: string | DetailOptions
-  ): option is DetailOptions => {
-    return (option as DetailOptions).label !== undefined;
-  };
-
   return (
     <Container>
       {options &&

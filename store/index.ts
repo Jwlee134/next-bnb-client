@@ -19,34 +19,25 @@ import {
 } from "redux-persist";
 
 import common from "./common";
-import user from "./user";
 import hosting from "./hosting";
 import search from "./search";
 import room from "./room";
-import wishlist from "./wishlist";
 
 const rootReducer = combineReducers({
   common,
-  user,
   hosting,
   search,
   room,
-  wishlist,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-let initialRootState: RootState;
-
 const reducer = (state: any, action: any) => {
   if (action.type === HYDRATE) {
-    if (state === initialRootState) {
-      return {
-        ...state,
-        ...action.payload,
-      };
-    }
-    return state;
+    return {
+      ...state,
+      ...action.payload,
+    };
   }
   return rootReducer(state, action);
 };
@@ -86,7 +77,6 @@ const makeStore = () => {
       },
     }),
   });
-  initialRootState = store.getState();
 
   return store;
 };

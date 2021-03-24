@@ -1,6 +1,8 @@
 import { Document } from "mongoose";
 import { IReview, IRoomDetail } from "./room";
 
+export type IsLoggedIn = { isLoggedIn: boolean };
+
 export interface IUser extends Document {
   name: string;
   email: string;
@@ -9,6 +11,7 @@ export interface IUser extends Document {
   avatarUrl: string;
   createdAt: Date;
   updatedAt: Date;
+  isLoggedIn: boolean;
   rooms: IRoomDetail["_id"];
   review: IReview["_id"];
   wishlist: IWishlist["_id"];

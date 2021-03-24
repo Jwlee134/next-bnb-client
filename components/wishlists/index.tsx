@@ -8,9 +8,8 @@ import Button from "components/common/Button";
 import palette from "styles/palette";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
-import { useSelector } from "store";
 import ListCard from "components/wishlists/ListCard";
-import useGetWishlist from "hooks/useGetWishlist";
+import useWishlist from "hooks/useWishlist";
 
 const Container = styled.div`
   padding: 36px 80px 24px 80px;
@@ -41,12 +40,10 @@ const Container = styled.div`
 `;
 
 const Wishlists = () => {
-  const wishlist = useSelector((state) => state.wishlist.wishlist);
+  const { wishlist } = useWishlist();
   const dispatch = useDispatch();
 
   const { openModal, closeModal, ModalPortal } = useModal();
-
-  useGetWishlist();
 
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(false));
@@ -70,7 +67,7 @@ const Wishlists = () => {
           <Button onClick={handleClick}>새로 만들기</Button>
         </header>
         <main>
-          {wishlist.map((list, i) => (
+          {wishlist?.map((list, i) => (
             <ListCard item={list} key={i} />
           ))}
         </main>

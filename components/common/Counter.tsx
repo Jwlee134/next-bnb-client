@@ -106,4 +106,4 @@ const Counter = ({
   );
 };
 
-export default React.memo(Counter);
+export default Counter;

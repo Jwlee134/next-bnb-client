@@ -1,8 +1,5 @@
 import Header from "components/header";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { commonActions } from "store/common";
-import { searchActions } from "store/search";
+import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -65,14 +62,6 @@ const Button = styled.button`
 `;
 
 const Home = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(commonActions.setShowMiniSearchBar(false));
-    dispatch(commonActions.setShowSearchBar(true));
-    dispatch(searchActions.initSearch());
-  }, []);
-
   return (
     <>
       <Header />

@@ -8,10 +8,10 @@ import { signUpAPI } from "lib/api/auth";
 import useValidation from "hooks/useValidation";
 import palette from "styles/palette";
 import { useDispatch } from "react-redux";
-import { userActions } from "store/user";
 import PasswordValidation from "./PasswordValidation";
 import RedXIcon from "../../../public/static/svg/auth/red_x_icon.svg";
 import GreenCheckIcon from "../../../public/static/svg/auth/green_check_icon.svg";
+import useUser from "hooks/useUser";
 
 const Container = styled.form``;
 
@@ -46,7 +46,7 @@ const ErrorMessage = styled.div`
 `;
 
 const SignUp = ({ closeModal }: { closeModal: () => void }) => {
-  const dispatch = useDispatch();
+  const { mutateUser } = useUser();
   const { setValidation } = useValidation();
 
   const [validatePassword, setValidatePassword] = useState(false);
@@ -60,15 +60,17 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
   const [day, setDay] = useState("");
   const [year, setYear] = useState("");
 
-  const longerThanSeven = useMemo(() => {
-    return password.length > 7;
-  }, [password]);
+  const [longerThanSeven, setLongerThanSeven] = useState(false);
+  const [hasNumberAndSymbol, setHasNumberAndSymbol] = useState(false);
 
-  const hasNumberAndSymbol = useMemo(() => {
-    return (
+  useEffect(() => {
+    if (password.length > 7) setLongerThanSeven(true);
+    if (
       /[{}[\]/?.,;:|)*~`!^\-_+<>@#$%&\\=('"]/g.test(password) &&
       /[0-9]/g.test(password)
-    );
+    ) {
+      setHasNumberAndSymbol(true);
+    }
   }, [password]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -97,8 +99,10 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
     };
     try {
       const { data } = await signUpAPI(body);
-      dispatch(userActions.setUser(data));
-      closeModal();
+      if (data) {
+        mutateUser(data, false);
+        closeModal();
+      }
     } catch (error) {
       setErrorMessage(error.response.data);
     }

@@ -4,6 +4,7 @@ import { useSelector } from "store";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
+import useWishlist from "hooks/useWishlist";
 import AddToWishlist from "./AddToWishlist";
 import NewWishlist from "./NewWishlist";
 import ModalHeader from "../ModalHeader";
@@ -19,7 +20,8 @@ const WishlistModal = ({
   closeModal: () => void;
   createOnly?: boolean;
 }) => {
-  const wishlist = useSelector((state) => state.wishlist.wishlist);
+  const { wishlist } = useWishlist();
+
   const mode = useSelector((state) => state.common.wishlistMode);
 
   const dispatch = useDispatch();

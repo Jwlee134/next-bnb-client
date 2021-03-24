@@ -3,12 +3,11 @@ import styled from "styled-components";
 import palette from "styles/palette";
 import { BsPlus } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { wishlistActions } from "store/wishlist";
 import { useSelector } from "store";
 import { isEmpty } from "lodash";
 import { commonActions } from "store/common";
 import { addWishItemAPI, getWishlistAPI } from "lib/api/wishlist";
-import { IUser } from "types/user";
+import useWishlist from "hooks/useWishlist";
 
 const Container = styled.div`
   padding: 16px;
@@ -59,8 +58,8 @@ const Container = styled.div`
 `;
 
 const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
-  const user = useSelector((state) => state.user.user);
-  const wishlist = useSelector((state) => state.wishlist.wishlist);
+  const { user, wishlist, mutateWishlist } = useWishlist();
+
   const clickedRoomId = useSelector((state) => state.common.clickedRoomId);
   const dispatch = useDispatch();
 
@@ -68,10 +67,12 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
 
   const handleAdd = async (listId: string) => {
     try {
-      await addWishItemAPI({ roomId: clickedRoomId, listId });
-      const { data } = await getWishlistAPI((user as IUser)._id);
-      dispatch(wishlistActions.setWishlist(data));
       closeModal();
+      await addWishItemAPI({ roomId: clickedRoomId, listId });
+      await mutateWishlist(async () => {
+        const { data } = await getWishlistAPI(user?._id);
+        return data;
+      });
     } catch (error) {
       alert(error.response.data);
     }
@@ -85,7 +86,7 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
         </div>
         <div className="wishlist_block_content">새로운 위시리스트 만들기</div>
       </div>
-      {wishlist.map((list, i) => (
+      {wishlist?.map((list, i) => (
         <div
           className="wishlist_block"
           key={i}

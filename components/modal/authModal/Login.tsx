@@ -6,7 +6,7 @@ import useValidation from "hooks/useValidation";
 import { loginAPI } from "lib/api/auth";
 import palette from "styles/palette";
 import { useDispatch } from "react-redux";
-import { userActions } from "store/user";
+import useUser from "hooks/useUser";
 
 const Container = styled.form``;
 
@@ -29,9 +29,8 @@ const ErrorMessage = styled.div`
 `;
 
 const Login = ({ closeModal }: { closeModal: () => void }) => {
+  const { mutateUser } = useUser();
   const { setValidation } = useValidation();
-
-  const dispatch = useDispatch();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -44,8 +43,10 @@ const Login = ({ closeModal }: { closeModal: () => void }) => {
     if (!email || !password) return;
     try {
       const { data } = await loginAPI({ email, password });
-      dispatch(userActions.setUser(data));
-      closeModal();
+      if (data) {
+        mutateUser(data, false);
+        closeModal();
+      }
     } catch (error) {
       setErrorMessage(error.response.data);
     }

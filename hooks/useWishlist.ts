@@ -1,37 +1,40 @@
 import { deleteWishItemAPI, getWishlistAPI } from "lib/api/wishlist";
-import { useRouter } from "next/router";
+import { isEmpty } from "lodash";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "store";
 import { commonActions } from "store/common";
-import { wishlistActions } from "store/wishlist";
+import useSWR from "swr";
 import { IRoomDetail } from "types/room";
-import { IUser } from "types/user";
+import { IWishlist } from "types/user";
+import useUser from "./useUser";
 
-const useWishlist = (id: string) => {
-  const user = useSelector((state) => state.user.user);
-  const wishlist = useSelector((state) => state.wishlist.wishlist);
-  const detail = useSelector((state) => state.wishlist.detail);
+const useWishlist = (roomId?: string) => {
+  const { user } = useUser();
+  const { data: wishlist, mutate: mutateWishlist } = useSWR<IWishlist[]>(
+    user && user.isLoggedIn ? `/api/wishlist?id=${user._id}` : null
+  );
   const dispatch = useDispatch();
-  const { pathname } = useRouter();
 
-  const [isLiked, setIsLiked] = useState(false);
+  const [liked, setLiked] = useState(false);
 
-  const handleWishlist = async () => {
-    dispatch(commonActions.setClickedRoomId(id));
-    if (isLiked) {
-      setIsLiked(false);
+  const handleItem = async () => {
+    if (!roomId) return;
+    dispatch(commonActions.setClickedRoomId(roomId as string));
+    if (liked) {
+      setLiked(false);
       try {
         const listId = await new Promise<string>((resolve) => {
-          wishlist.forEach((list) => {
-            if (list.list.some((item: IRoomDetail) => item._id === id)) {
+          wishlist?.forEach((list) => {
+            if (list.list.some((item: IRoomDetail) => item._id === roomId)) {
               resolve(list._id);
             }
           });
         });
-        await deleteWishItemAPI({ roomId: id, listId });
-        const { data } = await getWishlistAPI((user as IUser)._id);
-        dispatch(wishlistActions.setWishlist(data));
+        await deleteWishItemAPI({ roomId, listId });
+        await mutateWishlist(async () => {
+          const { data } = await getWishlistAPI(user?._id);
+          return data;
+        });
       } catch (error) {
         alert(error.response.data);
       }
@@ -39,15 +42,16 @@ const useWishlist = (id: string) => {
   };
 
   useEffect(() => {
-    if (!detail && pathname === "/wishlists/[id]") return;
+    if (!wishlist || isEmpty(wishlist)) return;
+    setLiked(false);
     wishlist.forEach((list) => {
-      if (list.list.some((item: IRoomDetail) => item._id === id)) {
-        setIsLiked(true);
+      if (list.list.some((item: IRoomDetail) => item._id === roomId)) {
+        setLiked(true);
       }
     });
-  }, [wishlist, detail]);
+  }, [wishlist]);
 
-  return { isLiked, handleWishlist };
+  return { user, liked, wishlist, mutateWishlist, handleItem };
 };
 
 export default useWishlist;

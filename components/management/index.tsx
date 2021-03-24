@@ -1,17 +1,15 @@
-import axios from "axios";
 import Header from "components/header";
+import useUser from "hooks/useUser";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import Error from "pages/_error";
-import React, { useEffect } from "react";
-import { useSelector } from "store";
+import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import useSWR from "swr";
 import { IRoomDetail } from "types/room";
 import RoomTableBody from "./RoomTableBody";
-import SearchInput from "./SearchInput";
 import RoomTableHead from "./RoomTableHead";
+import SearchInput from "./SearchInput";
 
 const Container = styled.div`
   main {
@@ -88,21 +86,13 @@ const Container = styled.div`
   }
 `;
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 const Management = () => {
-  const user = useSelector((state) => state.user.user);
+  const { user } = useUser("/");
   const { data, error } = useSWR<IRoomDetail[], Error>(
-    `/api/room/management?id=${user?._id}`,
-    fetcher
+    user && user.isLoggedIn ? `/api/room/management?id=${user._id}` : null
   );
-  const router = useRouter();
 
-  useEffect(() => {
-    if (!user) router.push("/");
-  }, [user]);
-
-  if (error) return <Error statusCode={500} />;
+  if (error) return <Error />;
   return (
     <>
       <Head>

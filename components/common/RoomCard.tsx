@@ -145,7 +145,8 @@ const RoomCard = ({
   index: number;
   showPriceWIthoutDates?: boolean;
 }) => {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const { user, liked, handleItem } = useWishlist(room._id);
+
   const search = useSelector((state) => state.search);
   const {
     query: { checkIn, checkOut },
@@ -155,11 +156,9 @@ const RoomCard = ({
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
-  const { isLiked, handleWishlist } = useWishlist(room._id);
-
-  const handleClick = () => {
-    handleWishlist();
-    if (!isLiked) openModal();
+  const handleClick = async () => {
+    await handleItem();
+    if (!liked) return openModal();
   };
 
   const difference = differenceInDays(
@@ -240,15 +239,15 @@ const RoomCard = ({
         </div>
       </a>
       <WishlistButton onClick={handleClick}>
-        {isLiked ? (
+        {liked ? (
           <IoMdHeart style={{ color: palette.bittersweet }} size={25} />
         ) : (
           <IoMdHeartEmpty size={25} />
         )}
       </WishlistButton>
       <ModalPortal>
-        {!isLoggedIn && <AuthModal closeModal={closeModal} />}
-        {isLoggedIn && <WishlistModal closeModal={closeModal} />}
+        {!user?.isLoggedIn && <AuthModal closeModal={closeModal} />}
+        {user?.isLoggedIn && <WishlistModal closeModal={closeModal} />}
       </ModalPortal>
     </Container>
   );

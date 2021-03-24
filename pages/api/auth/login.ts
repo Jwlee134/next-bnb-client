@@ -12,7 +12,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (!user) {
       return res.status(404).send("이메일 또는 비밀번호가 일치하지 않습니다.");
     }
+    if (!user.password) {
+      return res.status(400).send("소셜 계정으로 이미 가입된 이메일입니다.");
+    }
+
     const correctPassword = bcrypt.compareSync(password, user.password);
+
     if (!correctPassword) {
       return res.status(404).send("이메일 또는 비밀번호가 일치하지 않습니다.");
     }

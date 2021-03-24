@@ -1,11 +1,10 @@
 import Button from "components/common/Button";
 import Input from "components/common/Input";
+import useWishlist from "hooks/useWishlist";
 import { createWishlistAPI } from "lib/api/wishlist";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "store";
 import { commonActions } from "store/common";
-import { wishlistActions } from "store/wishlist";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
 
@@ -43,8 +42,8 @@ const NewWishlist = ({
   closeModal: () => void;
   createOnly: boolean;
 }) => {
-  const wishlist = useSelector((state) => state.wishlist.wishlist);
-  const user = useSelector((state) => state.user.user);
+  const { user, wishlist, mutateWishlist } = useWishlist();
+
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
 
@@ -52,10 +51,12 @@ const NewWishlist = ({
     setTitle(e.target.value);
 
   const handleClick = async () => {
-    if (!title || !user) return;
+    if (!title || !user || !wishlist) return;
     try {
-      const { data } = await createWishlistAPI({ title, id: user._id });
-      dispatch(wishlistActions.setWishlist([...wishlist, data]));
+      await mutateWishlist(async () => {
+        const { data } = await createWishlistAPI({ title, id: user._id });
+        return [...wishlist, data];
+      });
     } catch (error) {
       alert(error.response.data);
     }

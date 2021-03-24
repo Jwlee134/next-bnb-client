@@ -13,11 +13,9 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import useModal from "hooks/useModal";
 import Setting from "components/modal/wishlistModal/Setting";
-import { useSelector } from "store";
 import { isEmpty } from "lodash";
-import useGetWishlist from "hooks/useGetWishlist";
-import { wishlistActions } from "store/wishlist";
-import Error from "pages/_error";
+import useWishlist from "hooks/useWishlist";
+import { IWishlist } from "types/user";
 
 const Map = dynamic(() => import("../common/Map"), { ssr: false });
 
@@ -71,40 +69,26 @@ const Wishlist = () => {
   const router = useRouter();
   const { query } = router;
 
-  const user = useSelector((state) => state.user.user);
-  const wishlist = useSelector((state) => state.wishlist.wishlist);
-  const detail = useSelector((state) => state.wishlist.detail);
+  const { wishlist } = useWishlist();
+
   const dispatch = useDispatch();
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
-  const [error, setError] = useState(false);
-
-  useGetWishlist();
+  const [data, setData] = useState<IWishlist>();
 
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(false));
     dispatch(commonActions.setShowSearchBar(false));
-    return () => {
-      dispatch(wishlistActions.setDetail(undefined));
-    };
   }, []);
 
   useEffect(() => {
-    if (isEmpty(wishlist)) return;
-    dispatch(wishlistActions.setDetail(undefined));
+    if (!wishlist || isEmpty(wishlist)) return;
     const data = wishlist.find((list) => list._id === (query.id as string));
-    if (!data) return setError(true);
-    dispatch(wishlistActions.setDetail(data));
-    if (data) {
-      if (!user || user?._id !== data?.creator) {
-        router.replace("/");
-      }
-    }
+    setData(data);
   }, [wishlist]);
 
-  if (error) return <Error />;
-  if (!detail) {
+  if (!data) {
     return (
       <>
         <Head>
@@ -117,7 +101,7 @@ const Wishlist = () => {
   return (
     <>
       <Head>
-        <title>{detail.title} · 위시리스트 · 에어비앤비</title>
+        <title>{data.title} · 위시리스트 · 에어비앤비</title>
       </Head>
       <Header useSearchBar={false} />
       <Container>
@@ -135,18 +119,18 @@ const Wishlist = () => {
             </div>
           </div>
           <div className="wishlist_room-card-container_title">
-            {detail.title} · 숙소 {detail.list.length}개
+            {data.title} · 숙소 {data.list.length}개
           </div>
-          {detail.list.map((item: IRoomDetail, i: number) => (
+          {data.list.map((item: IRoomDetail, i: number) => (
             <RoomCard key={i} room={item} index={i} showPriceWIthoutDates />
           ))}
         </div>
         <div className="wishlist_map-container">
-          <Map roomList={detail.list} useFitBounds />
+          <Map roomList={data.list} useFitBounds />
         </div>
       </Container>
       <ModalPortal>
-        <Setting originTitle={detail.title} closeModal={closeModal} />
+        <Setting originTitle={data.title} closeModal={closeModal} />
       </ModalPortal>
     </>
   );
