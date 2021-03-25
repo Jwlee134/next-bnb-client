@@ -49,6 +49,7 @@ export interface IRoomDetail extends IHostingState, Document {
   rating: number;
   createdAt: Date;
   updatedAt: Date;
+  [key: string]: string;
   review: IReview["_id"];
   creator: IUser["_id"];
 }

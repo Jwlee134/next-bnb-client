@@ -1,13 +1,16 @@
 import Header from "components/header";
 import ManagementSkeleton from "components/skeleton/ManagementSkeleton";
 import useUser from "hooks/useUser";
+import { api } from "lib/api";
 import Head from "next/head";
-import Error from "pages/_error";
+import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import useSWR from "swr";
 import { IRoomDetail } from "types/room";
+import Error from "pages/_error";
+import { makeQueryString } from "utils";
 import RoomTableBody from "./RoomTableBody";
 import RoomTableHead from "./RoomTableHead";
 import SearchInput from "./SearchInput";
@@ -37,7 +40,7 @@ const Container = styled.div`
           min-width: 100px;
           cursor: pointer;
           border-bottom: 1px solid ${palette.gray_eb};
-          color: ${palette.gray_85};
+          color: ${palette.gray_80};
           &:hover {
             color: ${palette.black};
           }
@@ -73,13 +76,21 @@ const Container = styled.div`
   }
 `;
 
+const fetcher = (url: string) => api.get(url).then((res) => res.data);
+
 const Management = () => {
+  const { query } = useRouter();
   const { user } = useUser("/");
-  const { data, error } = useSWR<IRoomDetail[], Error>(
-    user && user.isLoggedIn ? `/api/room/management?id=${user._id}` : null
+
+  api.defaults.headers.common.user = user?._id;
+  const BASE_URL = "/api/room/management";
+
+  const { data, error } = useSWR<IRoomDetail[]>(
+    user && user.isLoggedIn ? `${BASE_URL}${makeQueryString(query)}` : null,
+    fetcher
   );
 
-  if (error) return <Error />;
+  if (error) return <Error statusCode={error.response.status} />;
   return (
     <>
       <Head>
@@ -89,7 +100,7 @@ const Management = () => {
         <Header useSearchBar={false} />
         <main>
           <div className="management_title">숙소 {data?.length}개</div>
-          <SearchInput />
+          <SearchInput data={data} />
           <div>
             <table>
               <RoomTableHead />

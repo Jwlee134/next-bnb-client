@@ -48,11 +48,6 @@ const Wishlists = () => {
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
-  useEffect(() => {
-    dispatch(commonActions.setShowMiniSearchBar(false));
-    dispatch(commonActions.setShowSearchBar(false));
-  }, []);
-
   const handleClick = () => {
     openModal();
     dispatch(commonActions.setWishlistMode("create"));

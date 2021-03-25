@@ -18,6 +18,22 @@ export const addComma = (value: string) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+export const makeQueryString = (query: {
+  [key: string]: string | string[] | undefined;
+}) => {
+  const keys = Object.keys(query);
+  const values = Object.values(query);
+
+  let queryString = "?";
+
+  keys.forEach((key, i) => {
+    if (!values[i]) return;
+    queryString += `${key}=${values[i]}&`;
+  });
+
+  return queryString.slice(0, -1);
+};
+
 export const extractFilterQuery = (query: {
   [key: string]: string | string[] | undefined;
 }) => {

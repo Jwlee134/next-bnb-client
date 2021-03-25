@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { IoSearchOutline } from "react-icons/io5";
 import useDebounce from "hooks/useDebounce";
 import { useRouter } from "next/router";
+import { IRoomDetail } from "types/room";
+import { makeQueryString } from "utils";
 
 const Container = styled.div`
   width: 100%;
@@ -35,16 +37,24 @@ const Container = styled.div`
   }
 `;
 
-const SearchInput = () => {
-  const [text, setText] = useState("");
+const SearchInput = ({ data }: { data: IRoomDetail[] | undefined }) => {
   const router = useRouter();
+  const { query } = router;
+  const [text, setText] = useState("");
 
   const keyword = useDebounce(text, 500);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setText(e.target.value);
 
-  useEffect(() => {}, [keyword]);
+  useEffect(() => {
+    if (!data) return;
+    router.push(`/management${makeQueryString({ ...query, term: keyword })}`);
+  }, [keyword]);
+
+  useEffect(() => {
+    if (query.term) setText(query.term as string);
+  }, []);
 
   return (
     <Container>

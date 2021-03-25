@@ -67,10 +67,10 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
 
   const handleAdd = async (listId: string) => {
     try {
-      closeModal();
       await addWishItemAPI({ roomId: clickedRoomId, listId });
       await mutateWishlist(async () => {
         const { data } = await getWishlistAPI(user?._id);
+        closeModal();
         return data;
       });
     } catch (error) {
