@@ -4,12 +4,11 @@ import React from "react";
 import { BiSearch } from "react-icons/bi";
 import { useSelector } from "store";
 import styled from "styled-components";
-import querystring from "querystring";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import { extractFilterQuery } from "utils";
 import Loader from "components/common/Loader";
+import { makeQueryString } from "utils";
 
 const Container = styled.div`
   button {
@@ -38,9 +37,10 @@ const SearchButton = () => {
   const dispatch = useDispatch();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!search.latitude && !search.longitude) {
+    if (!search.value || !search.latitude || !search.longitude) {
       e.preventDefault();
       dispatch(commonActions.setShowLocationPopup(true));
+      return;
     }
     if (pathname !== "/") {
       dispatch(commonActions.setShowSearchBar(false));
@@ -55,10 +55,9 @@ const SearchButton = () => {
   return (
     <Container>
       <Link
-        href={`/search/rooms?${querystring.stringify(
-          search
-        )}${extractFilterQuery({
+        href={`/search/rooms${makeQueryString({
           ...query,
+          id: "",
           zoom: "14",
           coordsBounds: "0.019114425627257958",
         })}`}

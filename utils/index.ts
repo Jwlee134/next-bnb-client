@@ -1,5 +1,3 @@
-import querystring from "querystring";
-
 export const extractToken = (cookie: string) => {
   // key=value; key=value => ["key=value", "key=value"]
   const cookieArray = cookie.split(/\s*;\s*/);
@@ -19,7 +17,7 @@ export const addComma = (value: string) => {
 };
 
 export const makeQueryString = (query: {
-  [key: string]: string | string[] | undefined;
+  [key: string]: string | string[] | number | number[] | null | undefined;
 }) => {
   const keys = Object.keys(query);
   const values = Object.values(query);
@@ -28,59 +26,25 @@ export const makeQueryString = (query: {
 
   keys.forEach((key, i) => {
     if (!values[i]) return;
-    queryString += `${key}=${values[i]}&`;
+
+    // 필수 키워드 둘 이외에 0으로 들어오면 그 키는 리턴
+    if (key !== "children" && key !== "infants" && values[i] === "0") return;
+
+    if (typeof values[i] === "string") {
+      queryString += `${key}=${encodeURIComponent(values[i] as string)}&`;
+    } else if (typeof values[i] === "number") {
+      queryString += `${key}=${encodeURIComponent(String(values[i]))}&`;
+    } else {
+      const arrayValue = values[i];
+      if (arrayValue && typeof arrayValue !== "number") {
+        for (let j = 0; j < arrayValue.length; j++) {
+          queryString += `${key}=${encodeURIComponent(String(arrayValue[j]))}&`;
+        }
+      }
+    }
   });
 
   return queryString.slice(0, -1);
-};
-
-export const extractFilterQuery = (query: {
-  [key: string]: string | string[] | undefined;
-}) => {
-  const keywords = [
-    "value",
-    "latitude",
-    "longitude",
-    "checkIn",
-    "checkOut",
-    "adults",
-    "children",
-    "infants",
-    "id",
-  ];
-  const newObj: { [key: string]: string | string[] | undefined } = {};
-  const keys = Object.keys(query);
-  const values = Object.values(query);
-
-  keys.forEach((key, i) => {
-    if (keywords.includes(key)) {
-      return;
-    }
-    if (!values[i] || values[i] === "0" || values[i]?.length === 0) {
-      return;
-    }
-    newObj[key] = values[i];
-  });
-
-  const queryString = `${
-    Object.keys(newObj).length > 0 ? "&" : ""
-  }${querystring.stringify(newObj)}`;
-
-  return queryString;
-};
-
-export const deleteIdFromQuery = (query: {
-  [key: string]: string | string[] | undefined;
-}) => {
-  const keys = Object.keys(query);
-  const values = Object.values(query);
-
-  const newObj: { [key: string]: string | string[] | undefined } = {};
-  const filtered = keys.filter((key) => key !== "id");
-  filtered.forEach((key, i) => {
-    newObj[key] = values[i];
-  });
-  return newObj;
 };
 
 export const extractKeywords = (query: {

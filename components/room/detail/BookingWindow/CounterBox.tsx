@@ -4,9 +4,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import styled from "styled-components";
-import querystring from "querystring";
 import { searchActions } from "store/search";
-import { deleteIdFromQuery } from "utils";
+import { makeQueryString } from "utils";
 
 const Container = styled.div`
   position: absolute;
@@ -43,12 +42,11 @@ const CounterBox = ({
 
   const handleAdult = (value: number) => {
     router.push(
-      `/room/${room?._id}?${querystring.stringify(
-        deleteIdFromQuery({
-          ...query,
-          adults: String(value),
-        })
-      )}`,
+      `/room/${room?._id}${makeQueryString({
+        ...query,
+        id: "",
+        adults: String(value),
+      })}`,
       undefined,
       { scroll: false }
     );
@@ -57,12 +55,11 @@ const CounterBox = ({
 
   const handleChildren = (value: number) => {
     router.push(
-      `/room/${room?._id}?${querystring.stringify(
-        deleteIdFromQuery({
-          ...query,
-          children: String(value),
-        })
-      )}`,
+      `/room/${room?._id}${makeQueryString({
+        ...query,
+        id: "",
+        children: String(value),
+      })}`,
       undefined,
       { scroll: false }
     );
@@ -71,12 +68,11 @@ const CounterBox = ({
 
   const handleInfants = (value: number) => {
     router.push(
-      `/room/${room?._id}?${querystring.stringify(
-        deleteIdFromQuery({
-          ...query,
-          infants: String(value),
-        })
-      )}`,
+      `/room/${room?._id}${makeQueryString({
+        ...query,
+        id: "",
+        infants: String(value),
+      })}`,
       undefined,
       { scroll: false }
     );

@@ -2,14 +2,20 @@ import React from "react";
 import Head from "next/head";
 import dbConnect from "utils/dbConnect";
 import { wrapper } from "store";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { commonActions } from "store/common";
 import { searchActions } from "store/search";
 import dynamic from "next/dynamic";
+import Error from "./_error";
 
 const Home = dynamic(() => import("components/home"));
 
-const home = () => {
+interface Props {
+  error?: number | null;
+}
+
+const home: NextPage<Props> = ({ error }) => {
+  if (error) return <Error statusCode={error} />;
   return (
     <>
       <Head>
@@ -22,11 +28,15 @@ const home = () => {
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   async ({ store }) => {
-    await dbConnect();
-    store.dispatch(commonActions.setShowMiniSearchBar(false));
-    store.dispatch(commonActions.setShowSearchBar(true));
-    store.dispatch(searchActions.initSearch());
-    return { props: {} };
+    try {
+      await dbConnect();
+      store.dispatch(commonActions.setShowMiniSearchBar(false));
+      store.dispatch(commonActions.setShowSearchBar(true));
+      store.dispatch(searchActions.initSearch());
+      return { props: { error: null } };
+    } catch (error) {
+      return { props: { error: error.response.status } };
+    }
   }
 );
 

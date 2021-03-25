@@ -23,19 +23,21 @@ const rooms: NextPage<Props> = ({ error }) => {
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   async ({ store, query }) => {
-    await dbConnect();
-    const keywords = extractKeywords(query);
-    store.dispatch(
-      searchActions.setSearch({
-        ...keywords,
-        adults: Number(keywords.adults) < 1 ? 1 : Number(keywords.adults),
-        children: Number(keywords.children) < 0 ? 0 : Number(keywords.children),
-        infants: Number(keywords.infants) < 0 ? 0 : Number(keywords.infants),
-      })
-    );
-    store.dispatch(commonActions.setShowSearchBar(false));
-    store.dispatch(commonActions.setShowMiniSearchBar(true));
     try {
+      await dbConnect();
+      const keywords = extractKeywords(query);
+      store.dispatch(
+        searchActions.setSearch({
+          ...keywords,
+          adults: Number(keywords.adults) < 1 ? 1 : Number(keywords.adults),
+          children:
+            Number(keywords.children) < 0 ? 0 : Number(keywords.children),
+          infants: Number(keywords.infants) < 0 ? 0 : Number(keywords.infants),
+        })
+      );
+      store.dispatch(commonActions.setShowSearchBar(false));
+      store.dispatch(commonActions.setShowMiniSearchBar(true));
+
       const { data } = await searchRoomAPI({
         ...query,
       });

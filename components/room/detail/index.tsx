@@ -14,8 +14,7 @@ import { IoShareOutline } from "react-icons/io5";
 import palette from "styles/palette";
 import { isEmpty } from "lodash";
 import { roomActions } from "store/room";
-import querystring from "querystring";
-import { deleteIdFromQuery } from "utils";
+import { makeQueryString } from "utils";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
 import useWishlist from "hooks/useWishlist";
@@ -218,41 +217,42 @@ const RoomDetail = () => {
 
   useEffect(() => {
     if (!query) return;
-    const filteredQuery = deleteIdFromQuery(query);
     dispatch(
       searchActions.setSearch({
-        ...filteredQuery,
-        adults:
-          Number(filteredQuery.adults) < 1 ? 1 : Number(filteredQuery.adults),
-        children:
-          Number(filteredQuery.children) < 0
-            ? 0
-            : Number(filteredQuery.children),
-        infants:
-          Number(filteredQuery.infants) < 0 ? 0 : Number(filteredQuery.infants),
+        ...query,
+        id: "",
+        adults: Number(query.adults) < 1 ? 1 : Number(query.adults),
+        children: Number(query.children) < 0 ? 0 : Number(query.children),
+        infants: Number(query.infants) < 0 ? 0 : Number(query.infants),
       })
     );
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
     if (Number(query.adults) < 1) {
       router.push(
-        `/room/${query.id}?${querystring.stringify(
-          deleteIdFromQuery({ ...query, adults: "1" })
-        )}`
+        `/room/${query.id}${makeQueryString({
+          ...query,
+          id: "",
+          adults: "1",
+        })}`
       );
     }
     if (Number(query.children) < 0) {
       router.push(
-        `/room/${query.id}?${querystring.stringify(
-          deleteIdFromQuery({ ...query, children: "0" })
-        )}`
+        `/room/${query.id}${makeQueryString({
+          ...query,
+          id: "",
+          children: "0",
+        })}`
       );
     }
     if (Number(query.infants) < 0) {
       router.push(
-        `/room/${query.id}?${querystring.stringify(
-          deleteIdFromQuery({ ...query, infants: "0" })
-        )}`
+        `/room/${query.id}${makeQueryString({
+          ...query,
+          id: "",
+          infants: "0",
+        })}`
       );
     }
   }, [query]);

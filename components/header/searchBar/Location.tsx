@@ -149,7 +149,7 @@ const Location = () => {
             <h3 className="search-text">위치</h3>
             <Input
               onClick={() => dispatch(commonActions.setShowLocationPopup(true))}
-              value={text}
+              value={text || ""}
               onChange={handleChange}
               placeholder="어디로 여행가세요?"
             />

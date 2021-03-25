@@ -8,13 +8,12 @@ import { FaWonSign } from "react-icons/fa";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { addComma } from "utils";
+import { addComma, makeQueryString } from "utils";
 import { useRouter } from "next/router";
 import { differenceInDays } from "date-fns";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
 import { useSelector } from "store";
-import querystring from "querystring";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
 import useWishlist from "hooks/useWishlist";
@@ -185,7 +184,14 @@ const RoomCard = ({
       onMouseLeave={() => dispatch(roomActions.setHoveredItemIndex(null))}
     >
       <a
-        href={`/room/${room._id}?${querystring.stringify(search)}`}
+        href={`/room/${room._id}${makeQueryString({
+          ...search,
+          value: "",
+          latitude: 0,
+          longitude: 0,
+          children: search.children === 0 ? "0" : search.children,
+          infants: search.infants === 0 ? "0" : search.infants,
+        })}`}
         target="_blank"
         rel="noreferrer"
       >

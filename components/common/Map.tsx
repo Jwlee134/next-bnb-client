@@ -2,10 +2,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
-import querystring from "querystring";
 import { searchActions } from "store/search";
 import styled from "styled-components";
-import { extractFilterQuery } from "utils";
+import { makeQueryString } from "utils";
 import { isEmpty } from "lodash";
 import { roomActions } from "store/room";
 import { MdRefresh } from "react-icons/md";
@@ -173,13 +172,11 @@ const Map = ({
     const zoom = map.getZoom().toString();
     dispatch(roomActions.setIsLoading(true));
     router.push(
-      `/search/rooms?${querystring.stringify({
-        ...search,
+      `/search/rooms${makeQueryString({
+        ...query,
         latitude,
         longitude,
         value: "지도에서 선택한 지역",
-      })}${extractFilterQuery({
-        ...query,
         page: "1",
         zoom,
         coordsBounds,

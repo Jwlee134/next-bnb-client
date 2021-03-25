@@ -5,9 +5,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
-import querystring from "querystring";
 import { useSelector } from "store";
-import { extractFilterQuery } from "utils";
+import { makeQueryString } from "utils";
 import { searchRoomAPI } from "lib/api/room";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
@@ -64,7 +63,6 @@ const CheckBoxContainer = styled.div<{ isBuildingType?: boolean }>`
 `;
 
 const OthersModalContents = ({ closeModal }: { closeModal: () => void }) => {
-  const search = useSelector((state) => state.search);
   const originalLength = useSelector(
     (state) => state.room.search.originalLength
   );
@@ -72,9 +70,9 @@ const OthersModalContents = ({ closeModal }: { closeModal: () => void }) => {
   const router = useRouter();
   const { query } = router;
 
-  const [bedCount, setBedCount] = useState("0");
-  const [bedroomCount, setBedroomCount] = useState("0");
-  const [bathroomCount, setBathroomCount] = useState("0");
+  const [bedCount, setBedCount] = useState("");
+  const [bedroomCount, setBedroomCount] = useState("");
+  const [bathroomCount, setBathroomCount] = useState("");
   const [amenities, setAmenities] = useState<string[]>([]);
   const [spaces, setSpaces] = useState<string[]>([]);
   const [buildingType, setBuildingType] = useState<string[]>([]);
@@ -99,9 +97,9 @@ const OthersModalContents = ({ closeModal }: { closeModal: () => void }) => {
   const handleBuildingType = (items: string[]) => setBuildingType(items);
 
   const handleDelete = () => {
-    setBedCount("0");
-    setBedroomCount("0");
-    setBathroomCount("0");
+    setBedCount("");
+    setBedroomCount("");
+    setBathroomCount("");
     setAmenities([]);
     setSpaces([]);
     setBuildingType([]);
@@ -112,7 +110,7 @@ const OthersModalContents = ({ closeModal }: { closeModal: () => void }) => {
     setTimeout(() => {
       dispatch(roomActions.setIsLoading(true));
       router.push(
-        `/search/rooms?${querystring.stringify(search)}${extractFilterQuery({
+        `/search/rooms${makeQueryString({
           ...query,
           ...filterObject,
         })}`

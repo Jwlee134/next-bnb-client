@@ -5,11 +5,10 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import styled from "styled-components";
 import palette from "styles/palette";
-import querystring from "querystring";
 import { searchActions } from "store/search";
 import { useRouter } from "next/router";
 import { toMomentObject } from "react-dates";
-import { deleteIdFromQuery } from "utils";
+import { makeQueryString } from "utils";
 
 const Container = styled.div`
   position: relative;
@@ -98,12 +97,11 @@ const DatePicker = () => {
   }) => {
     if (startDate && room) {
       router.push(
-        `/room/${room._id}?${querystring.stringify(
-          deleteIdFromQuery({
-            ...query,
-            checkIn: startDate.toISOString(),
-          })
-        )}`,
+        `/room/${room._id}${makeQueryString({
+          ...query,
+          id: "",
+          checkIn: startDate.toISOString(),
+        })}`,
         undefined,
         { scroll: false }
       );
@@ -111,12 +109,11 @@ const DatePicker = () => {
     }
     if (endDate && room) {
       router.push(
-        `/room/${room._id}?${querystring.stringify(
-          deleteIdFromQuery({
-            ...query,
-            checkOut: endDate.toISOString(),
-          })
-        )}`,
+        `/room/${room._id}${makeQueryString({
+          ...query,
+          id: "",
+          checkOut: endDate.toISOString(),
+        })}`,
         undefined,
         { scroll: false }
       );

@@ -1,13 +1,23 @@
 import useModal from "hooks/useModal";
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import { IoCloseSharp } from "react-icons/io5";
+import { useRouter } from "next/router";
 import OthersModalContents from "../../../modal/filterModal";
 
 const Container = styled.div``;
 
-const Title = styled.div``;
+const Title = styled.div<{ isFiltering: boolean }>`
+  ${({ isFiltering }) =>
+    isFiltering
+      ? css`
+          box-shadow: 0 0 0 1px black;
+        `
+      : css`
+          box-shadow: none;
+        `}
+`;
 
 const Modal = styled.div`
   width: 568px;
@@ -33,11 +43,23 @@ const Header = styled.header`
 `;
 
 const Others = () => {
+  const { query } = useRouter();
   const { openModal, closeModal, ModalPortal } = useModal();
 
   return (
     <Container>
-      <Title className="filter-title" onClick={() => openModal()}>
+      <Title
+        isFiltering={
+          !!query.bedCount ||
+          !!query.bedroomCount ||
+          !!query.bathroomCount ||
+          !!query.amenities ||
+          !!query.spaces ||
+          !!query.buildingType
+        }
+        className="filter-title"
+        onClick={() => openModal()}
+      >
         필터 추가하기
       </Title>
       <ModalPortal>

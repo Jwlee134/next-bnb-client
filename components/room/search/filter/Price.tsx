@@ -5,10 +5,9 @@ import palette from "styles/palette";
 import { BiWon } from "react-icons/bi";
 import { useSelector } from "store";
 import { useDispatch } from "react-redux";
-import querystring from "querystring";
 import { useRouter } from "next/router";
 import { roomActions } from "store/room";
-import { addComma, extractFilterQuery } from "utils";
+import { addComma, makeQueryString } from "utils";
 import Footer from "./Footer";
 
 interface Props {
@@ -107,7 +106,7 @@ const Price = () => {
     dispatch(roomActions.setIsLoading(true));
     setOpened(false);
     router.push(
-      `/search/rooms?${querystring.stringify(search)}${extractFilterQuery({
+      `/search/rooms${makeQueryString({
         ...query,
         page: "1",
         minPrice: minimum,

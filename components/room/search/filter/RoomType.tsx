@@ -4,11 +4,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import styled, { css } from "styled-components";
-import querystring from "querystring";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
-import { useSelector } from "store";
-import { extractFilterQuery } from "utils";
+import { makeQueryString } from "utils";
 import Footer from "./Footer";
 
 interface Props {
@@ -37,7 +35,6 @@ const CheckBoxContainer = styled.div`
 `;
 
 const RoomType = () => {
-  const search = useSelector((state) => state.search);
   const [opened, setOpened] = useState(false);
   const [options, setOptions] = useState<string[]>([]);
   const router = useRouter();
@@ -49,7 +46,7 @@ const RoomType = () => {
   const handleSave = () => {
     dispatch(roomActions.setIsLoading(true));
     router.push(
-      `/search/rooms?${querystring.stringify(search)}${extractFilterQuery({
+      `/search/rooms${makeQueryString({
         ...query,
         page: "1",
         roomType: options,
