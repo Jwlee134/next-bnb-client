@@ -1,17 +1,22 @@
+import { api, setAuthToken } from "lib/api";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { IUser } from "types/user";
 
+const fetcher = (url: string) => api.get(url).then((res) => res.data);
+
 const useUser = (redirectUrl?: string) => {
   const router = useRouter();
   const { data: user, error, mutate: mutateUser } = useSWR<IUser, Error>(
-    "/api/auth/me"
+    "/api/auth/me",
+    fetcher
   );
 
   useEffect(() => {
-    if (!redirectUrl || !user) return;
-    if (!user.isLoggedIn) router.push("/");
+    if (!user) return;
+    if (redirectUrl && !user.isLoggedIn) router.push("/");
+    if (user.isLoggedIn) setAuthToken(user._id);
   }, [user]);
 
   return { user, error, mutateUser };

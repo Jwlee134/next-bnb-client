@@ -3,9 +3,10 @@ import React from "react";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import { oauthLoginAPI } from "lib/api/auth";
+import Header from "components/header";
 
 const github = () => {
-  return <></>;
+  return <Header useSearchBar={false} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({

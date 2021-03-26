@@ -3,9 +3,10 @@ import React from "react";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import { oauthLoginAPI } from "lib/api/auth";
+import Header from "components/header";
 
 const google = () => {
-  return <></>;
+  return <Header useSearchBar={false} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -18,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     params: {
       client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: "http://localhost:3000/oauth/google",
+      redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/oauth/google`,
       code: query.code,
       grant_type: "authorization_code",
     },

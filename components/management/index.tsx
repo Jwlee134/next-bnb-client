@@ -18,21 +18,21 @@ import SearchInput from "./SearchInput";
 const Container = styled.div`
   main {
     padding: 32px 80px;
+    min-height: calc(100vh - 80px);
     .management_title {
       padding-bottom: 16px;
       font-size: 26px;
       font-weight: 500;
+      height: 50px;
     }
     > div:nth-child(3) {
       width: 100%;
       overflow-x: auto;
+      padding-bottom: 80px;
       table {
         width: 100%;
         white-space: nowrap;
         th {
-          &:first-child {
-            min-width: 250px;
-          }
           padding: 8px;
           font-size: 13px;
           text-align: left;
@@ -41,8 +41,23 @@ const Container = styled.div`
           cursor: pointer;
           border-bottom: 1px solid ${palette.gray_eb};
           color: ${palette.gray_80};
+          &:first-child {
+            min-width: 250px;
+            position: sticky;
+            left: 0;
+            background-color: white;
+          }
           &:hover {
             color: ${palette.black};
+          }
+          &:last-child {
+            width: 30px;
+            min-width: 30px;
+            position: relative;
+            svg {
+              position: absolute;
+              top: 7.5px;
+            }
           }
           div {
             display: flex;
@@ -50,11 +65,6 @@ const Container = styled.div`
             svg {
               margin-left: 5px;
             }
-          }
-          &:first-child {
-            position: sticky;
-            left: 0;
-            background-color: white;
           }
         }
         td {
@@ -66,9 +76,19 @@ const Container = styled.div`
               font-weight: 300;
             }
           }
-          div {
+          > div {
             display: flex;
             align-items: center;
+          }
+          &:last-child {
+            div {
+              cursor: pointer;
+              div {
+                &:first-child {
+                  display: flex;
+                }
+              }
+            }
           }
         }
       }
@@ -82,7 +102,6 @@ const Management = () => {
   const { query } = useRouter();
   const { user } = useUser("/");
 
-  api.defaults.headers.common.user = user?._id;
   const BASE_URL = "/api/room/management";
 
   const { data, error } = useSWR<IRoomDetail[]>(
@@ -106,7 +125,7 @@ const Management = () => {
               <RoomTableHead />
               {!data && <ManagementSkeleton />}
               {data?.map((room, i) => (
-                <RoomTableBody key={i} room={room} />
+                <RoomTableBody url={BASE_URL} key={i} room={room} />
               ))}
             </table>
           </div>

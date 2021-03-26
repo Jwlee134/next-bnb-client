@@ -7,7 +7,9 @@ const register: NextPage = () => {
   return (
     <>
       <Head>
-        <title>숙소 등록 준비가 완료되었습니다!</title>
+        <title>
+          남는 방이나 공간 전체를 숙소로 등록하고 에어비앤비 호스트가 되세요
+        </title>
       </Head>
       <Hosting />
     </>

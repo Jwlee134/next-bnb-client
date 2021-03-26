@@ -1,4 +1,5 @@
 import { isEmpty } from "lodash";
+import { useRouter } from "next/router";
 import React from "react";
 import { useSelector } from "store";
 import styled from "styled-components";
@@ -22,11 +23,16 @@ const Register = () => {
     title,
     price,
   } = useSelector((state) => state.hosting);
+  const hostingMode = useSelector((state) => state.common.hostingMode);
 
   return (
     <>
       <Container>
-        <h1>숙소 등록 준비가 완료되었습니다!</h1>
+        <h1>
+          {hostingMode === "update"
+            ? "숙소 수정 준비가 완료되었습니다!"
+            : "숙소 등록 준비가 완료되었습니다!"}
+        </h1>
         <Checklist
           label="숙소 및 게스트"
           isDone={

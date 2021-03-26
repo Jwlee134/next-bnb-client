@@ -91,7 +91,7 @@ const PhotoList = ({ photos }: { photos: string[] }) => {
   };
 
   const handleDelete = async (index: number) => {
-    const key = photos[index].split("/").pop();
+    const key = photos[index].split("/room/")[1];
     if (key) {
       try {
         await deletePhotoAPI(key);

@@ -44,6 +44,9 @@ const ManagementSkeleton = () => (
       <td>
         <Skeleton />
       </td>
+      <td>
+        <Skeleton />
+      </td>
     </tr>
   </Container>
 );

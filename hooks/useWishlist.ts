@@ -1,4 +1,5 @@
-import { deleteWishItemAPI, getWishlistAPI } from "lib/api/wishlist";
+import { api } from "lib/api";
+import { deleteWishItemAPI } from "lib/api/wishlist";
 import { isEmpty } from "lodash";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -8,10 +9,14 @@ import { IRoomDetail } from "types/room";
 import { IWishlist } from "types/user";
 import useUser from "./useUser";
 
+const fetcher = (url: string) => api.get(url).then((res) => res.data);
+
 const useWishlist = (roomId?: string) => {
   const { user } = useUser();
+
   const { data: wishlist, mutate: mutateWishlist } = useSWR<IWishlist[]>(
-    user && user.isLoggedIn ? `/api/wishlist?id=${user._id}` : null
+    user && user.isLoggedIn ? "/api/wishlist" : null,
+    fetcher
   );
   const dispatch = useDispatch();
 
@@ -31,10 +36,7 @@ const useWishlist = (roomId?: string) => {
           });
         });
         await deleteWishItemAPI({ roomId, listId });
-        await mutateWishlist(async () => {
-          const { data } = await getWishlistAPI(user?._id);
-          return data;
-        }, false);
+        mutateWishlist();
       } catch (error) {
         alert(error.response.data);
       }

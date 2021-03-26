@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface IState {
   authMode: "signUp" | "login";
   wishlistMode: "create" | "add";
+  hostingMode: "register" | "update";
   validation: boolean;
   showMap: boolean;
   showSearchBar: boolean;
@@ -16,6 +17,7 @@ interface IState {
 const initialState: IState = {
   authMode: "signUp",
   wishlistMode: "add",
+  hostingMode: "register",
   validation: false,
   showMap: true,
   showSearchBar: true,
@@ -35,6 +37,9 @@ const common = createSlice({
     },
     setWishlistMode: (state, action: PayloadAction<"create" | "add">) => {
       state.wishlistMode = action.payload;
+    },
+    setHostingMode: (state, action: PayloadAction<"register" | "update">) => {
+      state.hostingMode = action.payload;
     },
     setValidation: (state, action: PayloadAction<boolean>) => {
       state.validation = action.payload;

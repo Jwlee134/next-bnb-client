@@ -54,7 +54,7 @@ const NewWishlist = ({
     if (!title || !user || !wishlist) return;
     try {
       await mutateWishlist(async () => {
-        const { data } = await createWishlistAPI({ title, id: user._id });
+        const { data } = await createWishlistAPI({ title });
         if (createOnly) closeModal();
         return [...wishlist, data];
       }, false);

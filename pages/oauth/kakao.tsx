@@ -4,9 +4,10 @@ import axios from "axios";
 import jwt from "jsonwebtoken";
 import { oauthLoginAPI } from "lib/api/auth";
 import { OauthLoginBody } from "types/user";
+import Header from "components/header";
 
 const kakao = () => {
-  return <></>;
+  return <Header useSearchBar={false} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -20,20 +21,13 @@ export const getServerSideProps: GetServerSideProps = async ({
       grant_type: "authorization_code",
       client_id: process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY,
       client_secret: process.env.KAKAO_CLIENT_SECRET,
-      redirect_uri: "http://localhost:3000/oauth/kakao",
+      redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/oauth/kakao`,
       code: query.code,
     },
   });
   const { data: user } = await axios.get("https://kapi.kakao.com/v2/user/me", {
     headers: { Authorization: `Bearer ${data.access_token}` },
   });
-  /* await axios({
-    url: "https://kapi.kakao.com/v1/user/unlink",
-    method: "post",
-    headers: {
-      Authorization: `Bearer ${data.access_token}`,
-    },
-  }); */
   const {
     properties: { profile_image: avatarUrl },
     kakao_account: {

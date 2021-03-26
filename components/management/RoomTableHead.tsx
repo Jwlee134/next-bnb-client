@@ -8,6 +8,7 @@ import {
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import { makeQueryString } from "utils";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const Container = styled.th<{ clicked: boolean }>`
   svg {
@@ -24,7 +25,15 @@ const RoomTableHead = () => {
   const router = useRouter();
   const { query } = router;
 
-  const headers = ["숙소", "침실", "침대", "욕실", "위치", "최종 수정일"];
+  const headers = [
+    "숙소",
+    "침실",
+    "침대",
+    "욕실",
+    "위치",
+    "가격",
+    "최종 수정일",
+  ];
 
   const [asc, setAsc] = useState(false);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
@@ -43,6 +52,8 @@ const RoomTableHead = () => {
       case 4:
         return "country";
       case 5:
+        return "price";
+      case 6:
         return "updatedAt";
       default:
         return "";
@@ -61,8 +72,10 @@ const RoomTableHead = () => {
         return 3;
       case "country":
         return 4;
-      case "updatedAt":
+      case "price":
         return 5;
+      case "updatedAt":
+        return 6;
       default:
         return 0;
     }
@@ -116,6 +129,9 @@ const RoomTableHead = () => {
             </div>
           </Container>
         ))}
+        <th>
+          <IoSettingsOutline size={16} />
+        </th>
       </tr>
     </thead>
   );

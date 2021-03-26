@@ -47,9 +47,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           resolve(urlArr);
         });
       });
-      res.status(200).send(photoArray);
+      return res.status(200).send(photoArray);
     } catch (error) {
-      res.status(500).send("사진을 업로드하지 못했습니다.");
+      return res.status(500).send("사진을 업로드하지 못했습니다.");
     }
   }
 
@@ -60,15 +60,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         { Bucket: `${process.env.S3_BUCKET_NAME!}/room`, Key: key as string },
         (err) => {
           if (err) {
-            res.status(500).send("다시 시도해 주세요.");
+            return res.status(500).send("다시 시도해 주세요.");
           }
         }
       );
     } catch (error) {
-      res.status(500).send("다시 시도해 주세요.");
+      return res.status(500).send("다시 시도해 주세요.");
     }
-    res.status(200).end();
+    return res.status(200).end();
   }
 
-  res.status(405).end();
+  return res.status(405).end();
 };

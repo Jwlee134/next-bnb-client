@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import { isEmpty } from "lodash";
 import { commonActions } from "store/common";
-import { addWishItemAPI, getWishlistAPI } from "lib/api/wishlist";
+import { addWishItemAPI } from "lib/api/wishlist";
 import useWishlist from "hooks/useWishlist";
 
 const Container = styled.div`
@@ -58,7 +58,7 @@ const Container = styled.div`
 `;
 
 const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
-  const { user, wishlist, mutateWishlist } = useWishlist();
+  const { wishlist, mutateWishlist } = useWishlist();
 
   const clickedRoomId = useSelector((state) => state.common.clickedRoomId);
   const dispatch = useDispatch();
@@ -68,11 +68,8 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
   const handleAdd = async (listId: string) => {
     try {
       await addWishItemAPI({ roomId: clickedRoomId, listId });
-      await mutateWishlist(async () => {
-        const { data } = await getWishlistAPI(user?._id);
-        closeModal();
-        return data;
-      }, false);
+      closeModal();
+      mutateWishlist();
     } catch (error) {
       alert(error.response.data);
     }

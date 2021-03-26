@@ -45,8 +45,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
       return res.status(200).send(data.rooms);
     } catch (error) {
-      console.log(error);
-      res.status(500).send("숙소 리스트를 불러올 수 없습니다.");
+      res.status(500).end();
     }
   }
   res.status(405).end();

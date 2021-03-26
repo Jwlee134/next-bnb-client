@@ -21,7 +21,7 @@ const InputContainer = styled.div`
   }
   input {
     width: 200px;
-    padding-left: 27px;
+    padding-left: 33px;
   }
 `;
 
@@ -30,16 +30,8 @@ const Price = () => {
   const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    // value에서 , 제거
-    const withoutCommas = Number(value.replace(/,/g, ""));
-    if (!withoutCommas || withoutCommas === 0) {
-      // withoutCommas가 NaN 이거나 0이라면
-      dispatch(hostingActions.setPrice(0));
-    }
-    if (withoutCommas) {
-      dispatch(hostingActions.setPrice(withoutCommas));
-    }
+    const value = e.target.value.replace(/[^0-9]/g, "");
+    dispatch(hostingActions.setPrice(Number(value)));
   };
 
   return (
@@ -48,7 +40,7 @@ const Price = () => {
         <h1>숙소 요금 설정하기</h1>
         <h3>기본 요금(1박)</h3>
         <InputContainer>
-          <span>₩</span>
+          <span>￦</span>
           <Input
             onChange={handleChange}
             value={addComma(String(price))}

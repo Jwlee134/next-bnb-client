@@ -10,10 +10,9 @@ import { useSelector } from "store";
 import { getCoordinatesAPI } from "lib/api/location";
 import { useDispatch } from "react-redux";
 import { hostingActions } from "store/hosting";
-import { registerRoomAPI } from "lib/api/room";
-import { IUser } from "types/user";
+import { registerRoomAPI, updateRoomAPI } from "lib/api/room";
 import Loader from "components/common/Loader";
-import useUser from "hooks/useUser";
+import { commonActions } from "store/common";
 
 const Container = styled.div`
   width: 100%;
@@ -51,15 +50,13 @@ const Footer = ({
   isLocation?: boolean;
   isSubmit?: boolean;
 }) => {
-  const { user } = useUser();
   const router = useRouter();
   const { setValidation } = useValidation();
   const [loading, setLoading] = useState(false);
 
-  const { province, city, streetAddress } = useSelector(
-    (state) => state.hosting
-  );
   const hosting = useSelector((state) => state.hosting);
+  const hostingMode = useSelector((state) => state.common.hostingMode);
+  const clickedRoomId = useSelector((state) => state.common.clickedRoomId);
   const dispatch = useDispatch();
 
   const handleClick = async (
@@ -69,11 +66,16 @@ const Footer = ({
       setValidation(true);
       e.preventDefault();
     }
-    if (isLocation && province && city && streetAddress) {
+    if (
+      isLocation &&
+      hosting.province &&
+      hosting.city &&
+      hosting.streetAddress
+    ) {
       e.preventDefault();
       try {
         setLoading(true);
-        const address = province.concat(" ", city, " ", streetAddress);
+        const address = `${hosting.province} ${hosting.city} ${hosting.streetAddress}`;
         const {
           data: { lat, lng },
         } = await getCoordinatesAPI(address);
@@ -90,8 +92,19 @@ const Footer = ({
 
   const handleSubmit = async () => {
     if (!isValid) return;
+    if (hostingMode === "update") {
+      try {
+        await updateRoomAPI(hosting, clickedRoomId);
+        router.push("/management?sortBy=updatedAt&order=desc");
+        dispatch(hostingActions.initState());
+        dispatch(commonActions.setHostingMode("register"));
+      } catch (error) {
+        alert(error.response.data);
+      }
+      return;
+    }
     try {
-      const { data } = await registerRoomAPI(hosting, user as IUser);
+      const { data } = await registerRoomAPI(hosting);
       router.push(`/room/${data._id}?adults=1&children=0&infants=0`);
       dispatch(hostingActions.initState());
     } catch (error) {
@@ -136,7 +149,7 @@ const Footer = ({
             position: "relative",
           }}
         >
-          등록하기
+          {hostingMode === "update" ? "수정하기" : "등록하기"}
         </Button>
       )}
     </Container>

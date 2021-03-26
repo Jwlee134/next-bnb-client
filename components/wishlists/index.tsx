@@ -1,5 +1,5 @@
 import Header from "components/header";
-import React, { useEffect } from "react";
+import React from "react";
 import Head from "next/head";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
