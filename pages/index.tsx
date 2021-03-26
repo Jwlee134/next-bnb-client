@@ -6,9 +6,9 @@ import { GetServerSideProps, NextPage } from "next";
 import { commonActions } from "store/common";
 import { searchActions } from "store/search";
 import dynamic from "next/dynamic";
-import Error from "./_error";
 
 const Home = dynamic(() => import("components/home"));
+const Error = dynamic(() => import("./_error"));
 
 interface Props {
   error?: number | null;

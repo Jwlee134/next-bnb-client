@@ -69,6 +69,7 @@ const Setting = ({
   const handleDelete = async () => {
     try {
       await deleteWishlistAPI(query.id as string);
+      mutateWishlist();
       router.replace("/wishlists");
     } catch (error) {
       alert(error.response.data);

@@ -72,7 +72,7 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
         const { data } = await getWishlistAPI(user?._id);
         closeModal();
         return data;
-      });
+      }, false);
     } catch (error) {
       alert(error.response.data);
     }

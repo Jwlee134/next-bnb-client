@@ -55,12 +55,12 @@ const NewWishlist = ({
     try {
       await mutateWishlist(async () => {
         const { data } = await createWishlistAPI({ title, id: user._id });
+        if (createOnly) closeModal();
         return [...wishlist, data];
-      });
+      }, false);
     } catch (error) {
       alert(error.response.data);
     }
-    if (createOnly) return closeModal();
     dispatch(commonActions.setWishlistMode("add"));
   };
 

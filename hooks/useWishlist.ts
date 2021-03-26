@@ -34,7 +34,7 @@ const useWishlist = (roomId?: string) => {
         await mutateWishlist(async () => {
           const { data } = await getWishlistAPI(user?._id);
           return data;
-        });
+        }, false);
       } catch (error) {
         alert(error.response.data);
       }

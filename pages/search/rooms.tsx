@@ -2,7 +2,6 @@ import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { searchRoomAPI } from "lib/api/room";
 import { roomActions } from "store/room";
-import Error from "pages/_error";
 import dbConnect from "utils/dbConnect";
 import { extractKeywords } from "utils";
 import { searchActions } from "store/search";
@@ -11,6 +10,7 @@ import { commonActions } from "store/common";
 import dynamic from "next/dynamic";
 
 const SearchResults = dynamic(() => import("components/room/search"));
+const Error = dynamic(() => import("pages/_error"));
 
 interface Props {
   error?: number | null;
