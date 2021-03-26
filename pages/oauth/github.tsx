@@ -3,7 +3,9 @@ import React from "react";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import { oauthLoginAPI } from "lib/api/auth";
-import Header from "components/header";
+import dynamic from "next/dynamic";
+
+const Header = dynamic(() => import("components/header"));
 
 const github = () => {
   return <Header useSearchBar={false} />;

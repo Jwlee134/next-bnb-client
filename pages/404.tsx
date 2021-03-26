@@ -1,9 +1,11 @@
-import Header from "components/header";
 import { NextPage } from "next";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
+
+const Header = dynamic(() => import("components/header"));
 
 const Container = styled.div`
   width: 100vw;

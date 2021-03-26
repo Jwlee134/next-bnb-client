@@ -4,7 +4,9 @@ import axios from "axios";
 import jwt from "jsonwebtoken";
 import { oauthLoginAPI } from "lib/api/auth";
 import { OauthLoginBody } from "types/user";
-import Header from "components/header";
+import dynamic from "next/dynamic";
+
+const Header = dynamic(() => import("components/header"));
 
 const kakao = () => {
   return <Header useSearchBar={false} />;

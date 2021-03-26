@@ -17,18 +17,20 @@ import SearchInput from "./SearchInput";
 
 const Container = styled.div`
   main {
-    padding: 32px 80px;
+    padding: 32px 0px;
     min-height: calc(100vh - 80px);
-    .management_title {
-      padding-bottom: 16px;
-      font-size: 26px;
-      font-weight: 500;
-      height: 50px;
+    > div {
+      padding: 0px 80px;
+      .management_title {
+        padding-bottom: 16px;
+        font-size: 26px;
+        font-weight: 500;
+        height: 50px;
+      }
     }
-    > div:nth-child(3) {
+    > div:last-child {
       width: 100%;
       overflow-x: auto;
-      padding-bottom: 80px;
       table {
         width: 100%;
         white-space: nowrap;
@@ -118,8 +120,10 @@ const Management = () => {
       <Container>
         <Header useSearchBar={false} />
         <main>
-          <div className="management_title">숙소 {data?.length}개</div>
-          <SearchInput data={data} />
+          <div>
+            <div className="management_title">숙소 {data?.length}개</div>
+            <SearchInput data={data} />
+          </div>
           <div>
             <table>
               <RoomTableHead />
