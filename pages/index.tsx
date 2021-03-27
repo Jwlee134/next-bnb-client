@@ -1,6 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import dbConnect from "utils/dbConnect";
 import { wrapper } from "store";
 import { GetServerSideProps, NextPage } from "next";
 import { commonActions } from "store/common";
@@ -29,7 +28,6 @@ const home: NextPage<Props> = ({ error }) => {
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   async ({ store }) => {
     try {
-      await dbConnect();
       store.dispatch(commonActions.setShowMiniSearchBar(false));
       store.dispatch(commonActions.setShowSearchBar(true));
       store.dispatch(searchActions.initSearch());
