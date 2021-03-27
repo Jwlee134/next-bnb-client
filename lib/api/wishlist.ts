@@ -29,4 +29,4 @@ export const updateWishlistAPI = ({
 }: {
   title: string;
   listId: string;
-}) => api.post(`/api/wishlist/${listId}`, { title });
+}) => api.patch(`/api/wishlist/${listId}`, { title });

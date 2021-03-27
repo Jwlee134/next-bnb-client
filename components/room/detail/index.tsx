@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import Head from "next/head";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import Header from "components/header";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
@@ -20,6 +20,7 @@ import WishlistModal from "components/modal/wishlistModal";
 import useWishlist from "hooks/useWishlist";
 import AuthModal from "components/modal/authModal";
 import { searchActions } from "store/search";
+import { api } from "lib/api";
 import Bed from "../../../public/static/svg/room/bed.svg";
 import Photos from "./Photos";
 import Amenity from "./Amenity";
@@ -198,13 +199,16 @@ const Container = styled.div`
   }
 `;
 
+const fetcher = (url: string) => api.get(url).then((res) => res.data);
+
 const RoomDetail = () => {
   const router = useRouter();
   const { query } = router;
 
   const { user, liked, handleItem } = useWishlist(query.id as string);
-  const { data, error } = useSWR<IRoomDetail, Error>(
-    query.id ? `/api/room/detail?id=${query.id}` : null
+  const { data, error } = useSWR<IRoom, Error>(
+    query.id ? `/api/room/${query.id}` : null,
+    fetcher
   );
   const dispatch = useDispatch();
 

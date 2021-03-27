@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { IoCloseSharp } from "react-icons/io5";
 import palette from "styles/palette";
 import { useSelector } from "store";
 import { useDispatch } from "react-redux";

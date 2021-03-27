@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import useSWR from "swr";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import { IWishlist } from "types/user";
 import useUser from "./useUser";
 
@@ -30,7 +30,7 @@ const useWishlist = (roomId?: string) => {
       try {
         const listId = await new Promise<string>((resolve) => {
           wishlist?.forEach((list) => {
-            if (list.list.some((item: IRoomDetail) => item._id === roomId)) {
+            if (list.list.some((item: IRoom) => item._id === roomId)) {
               resolve(list._id);
             }
           });
@@ -47,7 +47,7 @@ const useWishlist = (roomId?: string) => {
     if (!wishlist || isEmpty(wishlist)) return;
     setLiked(false);
     wishlist.forEach((list) => {
-      if (list.list.some((item: IRoomDetail) => item._id === roomId)) {
+      if (list.list.some((item: IRoom) => item._id === roomId)) {
         setLiked(true);
       }
     });

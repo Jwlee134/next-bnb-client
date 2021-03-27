@@ -1,24 +1,20 @@
 import { ParsedUrlQuery } from "node:querystring";
-import { IHostingState, IRoomDetail } from "types/room";
-import querystring from "querystring";
+import { IHostingState, IRoom } from "types/room";
+import { makeQueryString } from "utils";
 import { api } from ".";
 
 interface ISearchResults {
-  data: IRoomDetail[];
+  data: IRoom[];
   originalLength: number;
 }
 
 export const registerRoomAPI = (body: IHostingState) =>
-  api.post<IRoomDetail>("/api/register/room", { body });
+  api.post<IRoom>("/api/room", { body });
 
 export const updateRoomAPI = (body: IHostingState, id: string) =>
-  api.put<IRoomDetail>(`/api/register/${id}`, { body });
+  api.put<IRoom>(`/api/room/${id}`, { body });
 
-export const deleteRoomAPI = (id: string) =>
-  api.delete<IRoomDetail>(`/api/register/${id}`);
-
-export const getRoomDetailAPI = (id: string) =>
-  api.get<IRoomDetail>(`/api/room/detail?id=${id}`);
+export const deleteRoomAPI = (id: string) => api.delete(`/api/room/${id}`);
 
 export const searchRoomAPI = (query: ParsedUrlQuery) =>
-  api.get<ISearchResults>(`/api/room/search?${querystring.stringify(query)}`);
+  api.get<ISearchResults>(`/api/room/search${makeQueryString(query)}`);

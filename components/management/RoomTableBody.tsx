@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import koLocale from "date-fns/locale/ko";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
@@ -61,7 +61,7 @@ const Container = styled.tbody`
   }
 `;
 
-const RoomTableBody = ({ room, url }: { room: IRoomDetail; url: string }) => {
+const RoomTableBody = ({ room, url }: { room: IRoom; url: string }) => {
   const search = useSelector((state) => state.search);
   const router = useRouter();
   const { query } = router;

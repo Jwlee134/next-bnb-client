@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { IoSearchOutline } from "react-icons/io5";
 import useDebounce from "hooks/useDebounce";
 import { useRouter } from "next/router";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import { makeQueryString } from "utils";
 
 const Container = styled.div`
@@ -37,7 +37,7 @@ const Container = styled.div`
   }
 `;
 
-const SearchInput = ({ data }: { data: IRoomDetail[] | undefined }) => {
+const SearchInput = ({ data }: { data: IRoom[] | undefined }) => {
   const router = useRouter();
   const { query } = router;
   const [text, setText] = useState("");

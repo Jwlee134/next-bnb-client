@@ -1,12 +1,6 @@
 import { Document } from "mongoose";
+import { IReview } from "./review";
 import { IUser } from "./user";
-
-export interface IReview extends Document {
-  text: string;
-  creator: IUser["_id"];
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 export interface IHostingState {
   largeBuildingType: {
@@ -45,11 +39,11 @@ export interface IHostingState {
   price: number;
 }
 
-export interface IRoomDetail extends IHostingState, Document {
+export interface IRoom extends IHostingState, Document {
   rating: number;
   createdAt: Date;
   updatedAt: Date;
-  [key: string]: string;
+  [key: string]: any;
   review: IReview["_id"];
   creator: IUser["_id"];
 }

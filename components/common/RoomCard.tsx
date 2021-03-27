@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import Image from "next/image";
 import { IoMdHeart, IoMdHeartEmpty, IoIosStar } from "react-icons/io";
 import { FaWonSign } from "react-icons/fa";
@@ -140,7 +140,7 @@ const RoomCard = ({
   index,
   showPriceWIthoutDates = false,
 }: {
-  room: IRoomDetail;
+  room: IRoom;
   index: number;
   showPriceWIthoutDates?: boolean;
 }) => {

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IHostingState, IRoomDetail } from "types/room";
+import { IHostingState, IRoom } from "types/room";
 
 const initialState: IHostingState = {
   largeBuildingType: {
@@ -178,7 +178,7 @@ const hosting = createSlice({
       state = initialState;
       return state;
     },
-    setState: (state, action: PayloadAction<IRoomDetail>) => {
+    setState: (state, action: PayloadAction<IRoom>) => {
       state = action.payload;
       return state;
     },

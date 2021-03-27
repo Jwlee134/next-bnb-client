@@ -2,7 +2,6 @@ import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { searchRoomAPI } from "lib/api/room";
 import { roomActions } from "store/room";
-import dbConnect from "utils/dbConnect";
 import { extractKeywords } from "utils";
 import { searchActions } from "store/search";
 import { wrapper } from "store";
@@ -24,7 +23,6 @@ const rooms: NextPage<Props> = ({ error }) => {
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
   async ({ store, query }) => {
     try {
-      await dbConnect();
       const keywords = extractKeywords(query);
       store.dispatch(
         searchActions.setSearch({
@@ -38,9 +36,7 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       store.dispatch(commonActions.setShowSearchBar(false));
       store.dispatch(commonActions.setShowMiniSearchBar(true));
 
-      const { data } = await searchRoomAPI({
-        ...query,
-      });
+      const { data } = await searchRoomAPI(query);
       store.dispatch(roomActions.setSearchResults(data));
       return { props: { error: null } };
     } catch (error) {

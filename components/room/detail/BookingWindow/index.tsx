@@ -7,7 +7,7 @@ import palette from "styles/palette";
 import differenceInDays from "date-fns/differenceInDays";
 import { addComma } from "utils";
 import { addDays, addMonths, eachDayOfInterval, format } from "date-fns";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import CounterBox from "./CounterBox";
 import DatePicker from "./DatePicker";
 import Warning from "../../../../public/static/svg/warning.svg";
@@ -139,7 +139,7 @@ const BookingWindow = () => {
       start: new Date(search.checkIn as string),
       end: new Date(search.checkOut as string),
     }).map((day) => format(day, "MM월 dd일"));
-    const blockedDays = (room as IRoomDetail).blockedDayList.map((day) => {
+    const blockedDays = (room as IRoom).blockedDayList.map((day) => {
       return format(new Date(day), "MM월 dd일");
     });
     const isIncluded = blockedDays.some((blocked) => {

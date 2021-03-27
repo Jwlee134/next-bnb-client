@@ -10,7 +10,7 @@ import { roomActions } from "store/room";
 import { MdRefresh } from "react-icons/md";
 import Loader from "components/common/Loader";
 import { render } from "react-dom";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import InfoWindow from "../room/search/InfoWindow";
 
 const Container = styled.div`
@@ -91,7 +91,7 @@ declare global {
 }
 
 interface Props {
-  roomList: IRoomDetail[];
+  roomList: IRoom[];
   useMoveToSearch?: boolean;
   useFitBounds?: boolean;
 }
@@ -219,7 +219,7 @@ const Map = ({
   const createInfoWindow = (
     e: google.maps.MapMouseEvent,
     map: google.maps.Map<HTMLDivElement>,
-    room: IRoomDetail
+    room: IRoom
   ) => {
     const info = new google.maps.InfoWindow({
       content: "<div id='infoWindow' />",

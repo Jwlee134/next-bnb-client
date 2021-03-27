@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import { useRouter } from "next/router";
 import RoomCard from "components/common/RoomCard";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import { IoArrowBackOutline, IoSettingsSharp } from "react-icons/io5";
 import palette from "styles/palette";
 import Link from "next/link";
@@ -122,7 +122,7 @@ const Wishlist = () => {
           </div>
           {!data && <RoomCardSkeleton />}
           {data &&
-            data.list.map((item: IRoomDetail, i: number) => (
+            data.list.map((item: IRoom, i: number) => (
               <RoomCard key={i} room={item} index={i} showPriceWIthoutDates />
             ))}
         </div>

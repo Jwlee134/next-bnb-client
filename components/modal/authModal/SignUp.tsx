@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "components/common/Input";
 import styled from "styled-components";
 import Selector from "components/common/Selector";
@@ -7,11 +7,10 @@ import Button from "components/common/Button";
 import { signUpAPI } from "lib/api/auth";
 import useValidation from "hooks/useValidation";
 import palette from "styles/palette";
-import { useDispatch } from "react-redux";
+import useUser from "hooks/useUser";
 import PasswordValidation from "./PasswordValidation";
 import RedXIcon from "../../../public/static/svg/auth/red_x_icon.svg";
 import GreenCheckIcon from "../../../public/static/svg/auth/green_check_icon.svg";
-import useUser from "hooks/useUser";
 
 const Container = styled.form``;
 

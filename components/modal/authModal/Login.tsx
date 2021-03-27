@@ -5,7 +5,6 @@ import Button from "components/common/Button";
 import useValidation from "hooks/useValidation";
 import { loginAPI } from "lib/api/auth";
 import palette from "styles/palette";
-import { useDispatch } from "react-redux";
 import useUser from "hooks/useUser";
 
 const Container = styled.form``;

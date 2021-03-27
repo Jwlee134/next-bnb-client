@@ -8,7 +8,7 @@ import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import useSWR from "swr";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import Error from "pages/_error";
 import { makeQueryString } from "utils";
 import RoomTableBody from "./RoomTableBody";
@@ -106,7 +106,7 @@ const Management = () => {
 
   const BASE_URL = "/api/room/management";
 
-  const { data, error } = useSWR<IRoomDetail[]>(
+  const { data, error } = useSWR<IRoom[]>(
     user && user.isLoggedIn ? `${BASE_URL}${makeQueryString(query)}` : null,
     fetcher
   );

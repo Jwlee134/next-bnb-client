@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 
 interface IState {
   search: {
-    searchResults: IRoomDetail[];
+    searchResults: IRoom[];
     originalLength: number;
     hoveredItemIndex: number | null;
   };
   detail: {
-    room: IRoomDetail | null;
+    room: IRoom | null;
     photoIndex: number;
   };
   isLoading: boolean;
@@ -42,7 +42,7 @@ const room = createSlice({
     setHoveredItemIndex: (state, action: PayloadAction<number | null>) => {
       state.search.hoveredItemIndex = action.payload;
     },
-    setRoom: (state, action: PayloadAction<IRoomDetail>) => {
+    setRoom: (state, action: PayloadAction<IRoom>) => {
       state.detail.room = action.payload;
     },
     setPhotoIndex: (state, action: PayloadAction<number>) => {

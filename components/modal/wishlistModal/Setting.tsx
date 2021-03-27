@@ -4,7 +4,6 @@ import useWishlist from "hooks/useWishlist";
 import { deleteWishlistAPI, updateWishlistAPI } from "lib/api/wishlist";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import palette from "styles/palette";
 import ModalHeader from "../ModalHeader";

@@ -1,11 +1,10 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import { IoAlbumsOutline } from "react-icons/io5";
 import useModal from "hooks/useModal";
 import PhotoModal from "components/modal/photoModal";
-import { useSelector } from "store";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
 
