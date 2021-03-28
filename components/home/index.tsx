@@ -1,5 +1,6 @@
 import Header from "components/header";
 import useSocket from "hooks/useSocket";
+import useUser from "hooks/useUser";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
@@ -63,14 +64,6 @@ const Button = styled.button`
 `;
 
 const Home = () => {
-  const socket = useSocket();
-
-  useEffect(() => {
-    if (!socket) return;
-    socket.emit("init", { name: "jaewon" });
-    socket.on("welcome", (data) => console.log(data));
-  }, [socket]);
-
   return (
     <>
       <Header />

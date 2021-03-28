@@ -11,6 +11,8 @@ import { IRoom } from "types/room";
 import CounterBox from "./CounterBox";
 import DatePicker from "./DatePicker";
 import Warning from "../../../../public/static/svg/warning.svg";
+import useSocket from "hooks/useSocket";
+import useUser from "hooks/useUser";
 
 const Container = styled.div<{ notValid: boolean }>`
   width: 100%;
@@ -98,6 +100,9 @@ const BookingWindow = () => {
   const search = useSelector((state) => state.search);
   const room = useSelector((state) => state.room.detail.room);
 
+  const { user } = useUser();
+  const socket = useSocket();
+
   const [opened, setOpened] = useState(false);
   const [notValidDates, setNotValidDates] = useState(false);
   const [notValidGuestCount, setNotValidGuestCount] = useState(false);
@@ -111,7 +116,23 @@ const BookingWindow = () => {
       document.getElementById("dateRangePicker-end")?.focus();
       return;
     }
-    if (notValidDates || notValidGuestCount) return;
+    if (
+      notValidDates ||
+      notValidGuestCount ||
+      !user?.isLoggedIn ||
+      !socket ||
+      !room
+    ) {
+      return;
+    }
+    socket.emit("sendReservationRequest", {
+      roomId: room._id,
+      hostId: room.creator._id,
+      guestId: user._id,
+      checkIn: search.checkIn,
+      checkOut: search.checkOut,
+      guestCount: search.adults + search.children,
+    });
   };
 
   const difference = () => {

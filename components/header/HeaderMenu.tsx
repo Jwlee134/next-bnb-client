@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import OutsideClickHandler from "react-outside-click-handler";
 import { IoIosMenu } from "react-icons/io";
@@ -10,6 +10,7 @@ import { commonActions } from "store/common";
 import { logoutAPI } from "lib/api/auth";
 import Link from "next/link";
 import useUser from "hooks/useUser";
+import useSocket from "hooks/useSocket";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -79,6 +80,7 @@ const Divider = styled.div`
 
 const HeaderMenu = () => {
   const { user, mutateUser } = useUser();
+  const socket = useSocket();
 
   const [popupOpened, setPopupOpened] = useState(false);
   const { openModal, closeModal, ModalPortal } = useModal();
@@ -86,11 +88,22 @@ const HeaderMenu = () => {
 
   const handleLogout = async () => {
     setPopupOpened(false);
+    socket?.emit("logout", { user: user?._id });
     mutateUser(async () => {
       const { data } = await logoutAPI();
       return data;
     });
   };
+
+  useEffect(() => {
+    if (!socket || !user) return;
+    if (user.isLoggedIn) {
+      socket.emit("login", { user: user._id });
+    }
+    socket.on("reservationRequest", (data) => {
+      console.log(data);
+    });
+  }, [socket, user]);
 
   return (
     <>

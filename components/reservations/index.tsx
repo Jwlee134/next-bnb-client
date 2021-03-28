@@ -55,6 +55,7 @@ const Button = styled.button<{ clicked: boolean }>`
 const Reservations = () => {
   const { user } = useUser("/");
   const [currentIndex, setCurrentIndex] = useState(0);
+
   return (
     <>
       <Head>
