@@ -134,10 +134,10 @@ const HeaderMenu = () => {
               )}
               {user?.isLoggedIn && (
                 <>
-                  <Link href="/trips">
+                  <Link href="/reservations">
                     <a>
                       <ListItem onClick={() => setPopupOpened(false)}>
-                        여행
+                        예약
                       </ListItem>
                     </a>
                   </Link>

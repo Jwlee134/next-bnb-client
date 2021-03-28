@@ -3,7 +3,7 @@ import React from "react";
 import { IoIosStar } from "react-icons/io";
 import styled from "styled-components";
 import palette from "styles/palette";
-import { IRoomDetail } from "types/room";
+import { IRoom } from "types/room";
 import querystring from "querystring";
 import { SearchState } from "store/search";
 import { FaWonSign } from "react-icons/fa";
@@ -75,13 +75,7 @@ const Price = styled.div`
   }
 `;
 
-const InfoWindow = ({
-  room,
-  search,
-}: {
-  room: IRoomDetail;
-  search: SearchState;
-}) => {
+const InfoWindow = ({ room, search }: { room: IRoom; search: SearchState }) => {
   const { checkIn, checkOut } = search;
 
   const getRoomTypeText = () => {
