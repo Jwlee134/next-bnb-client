@@ -6,7 +6,13 @@ import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import differenceInDays from "date-fns/differenceInDays";
 import { addComma } from "utils";
-import { addDays, addMonths, eachDayOfInterval, format } from "date-fns";
+import {
+  addDays,
+  addMonths,
+  addSeconds,
+  eachDayOfInterval,
+  format,
+} from "date-fns";
 import { IRoom } from "types/room";
 import useSocket from "hooks/useSocket";
 import useUser from "hooks/useUser";
@@ -142,7 +148,7 @@ const BookingWindow = () => {
       roomId: room._id,
       guestId: user._id,
       checkIn: search.checkIn,
-      checkOut: search.checkOut,
+      checkOut: addSeconds(new Date(), 5),
       guestCount: search.adults + search.children,
       price: room.price * (nights as number),
     };
@@ -150,6 +156,7 @@ const BookingWindow = () => {
       await makeReservationAPI(body);
       socket.emit("makeReservation", {
         hostId: room.creator._id,
+        guestId: user._id,
       });
       router.push("/reservations");
     } catch (error) {

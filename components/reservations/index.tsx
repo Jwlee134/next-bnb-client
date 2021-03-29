@@ -84,7 +84,7 @@ const Reservations = () => {
     }).length;
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.isLoggedIn) return;
     setUpcomingNotif(getNotifCount("upcoming"));
     setPastNotif(getNotifCount("past"));
     setMyRoomNotif(getNotifCount("myRoom"));

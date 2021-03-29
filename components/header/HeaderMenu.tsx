@@ -13,6 +13,7 @@ import useUser from "hooks/useUser";
 import useSocket from "hooks/useSocket";
 import { isEmpty } from "lodash";
 import Notification from "components/common/Notification";
+import { mutate } from "swr";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -117,11 +118,14 @@ const HeaderMenu = () => {
     }
     socket.on("notification", () => {
       mutateUser();
+      mutate("/api/reservation?keyword=myRoom");
+      mutate("/api/reservation?keyword=past");
+      mutate("/api/reservation");
     });
   }, [socket, user]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !user.isLoggedIn) return;
     const reservationLength = user.unreadNotifications.filter((notif) => {
       return notif.label.includes("reservation");
     }).length;
