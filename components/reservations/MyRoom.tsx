@@ -1,17 +1,18 @@
 import ReservationCard from "components/common/ReservationCard";
 import { api } from "lib/api";
-import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { IReservation } from "types/reservation";
 import { IUser } from "types/user";
 
-const Container = styled.div``;
+const Container = styled.div`
+  width: 100%;
+`;
 
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
-const Upcoming = ({
+const MyRoom = ({
   setError,
   user,
 }: {
@@ -24,7 +25,7 @@ const Upcoming = ({
   user: IUser | undefined;
 }) => {
   const { data, error } = useSWR<IReservation[]>(
-    user && user.isLoggedIn ? "/api/reservation" : null,
+    user && user.isLoggedIn ? "/api/reservation?keyword=myRoom" : null,
     fetcher
   );
 
@@ -34,15 +35,20 @@ const Upcoming = ({
     }
   }, [error]);
 
+  useEffect(() => {
+    if (data) {
+      mutate("/api/auth/me");
+    }
+  }, [data]);
+
   return (
     <Container>
       {data &&
         data.map((reservation, i) => (
-          <ReservationCard key={i} reservation={reservation} />
+          <ReservationCard isMyRoom key={i} reservation={reservation} />
         ))}
-      {isEmpty(data) && <div>예정된 예약이 아직 없어요.</div>}
     </Container>
   );
 };
 
-export default Upcoming;
+export default MyRoom;

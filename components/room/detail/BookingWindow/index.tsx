@@ -8,11 +8,13 @@ import differenceInDays from "date-fns/differenceInDays";
 import { addComma } from "utils";
 import { addDays, addMonths, eachDayOfInterval, format } from "date-fns";
 import { IRoom } from "types/room";
+import useSocket from "hooks/useSocket";
+import useUser from "hooks/useUser";
+import { makeReservationAPI } from "lib/api/reservation";
+import { useRouter } from "next/router";
 import CounterBox from "./CounterBox";
 import DatePicker from "./DatePicker";
 import Warning from "../../../../public/static/svg/warning.svg";
-import useSocket from "hooks/useSocket";
-import useUser from "hooks/useUser";
 
 const Container = styled.div<{ notValid: boolean }>`
   width: 100%;
@@ -100,6 +102,7 @@ const BookingWindow = () => {
   const search = useSelector((state) => state.search);
   const room = useSelector((state) => state.room.detail.room);
 
+  const router = useRouter();
   const { user } = useUser();
   const socket = useSocket();
 
@@ -107,7 +110,16 @@ const BookingWindow = () => {
   const [notValidDates, setNotValidDates] = useState(false);
   const [notValidGuestCount, setNotValidGuestCount] = useState(false);
 
-  const handleClick = () => {
+  const difference = () => {
+    if (search.checkIn && search.checkOut) {
+      return differenceInDays(
+        new Date(search.checkOut),
+        new Date(search.checkIn)
+      );
+    }
+  };
+
+  const handleClick = async () => {
     if (!search.checkIn) {
       document.getElementById("dateRangePicker-start")?.focus();
       return;
@@ -125,22 +137,23 @@ const BookingWindow = () => {
     ) {
       return;
     }
-    socket.emit("sendReservationRequest", {
+    const nights = difference();
+    const body = {
       roomId: room._id,
-      hostId: room.creator._id,
       guestId: user._id,
       checkIn: search.checkIn,
       checkOut: search.checkOut,
       guestCount: search.adults + search.children,
-    });
-  };
-
-  const difference = () => {
-    if (search.checkIn && search.checkOut) {
-      return differenceInDays(
-        new Date(search.checkOut),
-        new Date(search.checkIn)
-      );
+      price: room.price * (nights as number),
+    };
+    try {
+      await makeReservationAPI(body);
+      socket.emit("makeReservation", {
+        hostId: room.creator._id,
+      });
+      router.push("/reservations");
+    } catch (error) {
+      alert(error.response.data);
     }
   };
 

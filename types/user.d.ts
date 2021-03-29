@@ -14,6 +14,7 @@ export interface IUser extends Document {
   rooms: IRoom["_id"];
   review: IReview["_id"];
   wishlist: IWishlist["_id"];
+  unreadNotifications: { label: string }[];
 }
 
 export interface IWishlist extends Document {

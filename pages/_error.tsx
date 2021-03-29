@@ -15,6 +15,9 @@ const Container = styled.div`
   color: white;
   font-size: 50px;
   font-weight: 700;
+  div {
+    text-align: center;
+  }
   a {
     margin-top: 30px;
     font-size: 30px;
@@ -28,9 +31,10 @@ const Container = styled.div`
 
 interface Props {
   statusCode?: number;
+  message?: string;
 }
 
-const Error: NextPage<Props> = ({ statusCode }) => {
+const Error: NextPage<Props> = ({ statusCode, message }) => {
   return (
     <>
       <Head>
@@ -42,6 +46,7 @@ const Error: NextPage<Props> = ({ statusCode }) => {
           {statusCode
             ? `오류 발생 : ${statusCode}`
             : "존재하지 않는 페이지입니다."}
+          <div>{message}</div>
         </div>
         <Link href="/">홈으로 돌아가기</Link>
       </Container>

@@ -11,6 +11,8 @@ import { logoutAPI } from "lib/api/auth";
 import Link from "next/link";
 import useUser from "hooks/useUser";
 import useSocket from "hooks/useSocket";
+import { isEmpty } from "lodash";
+import Notification from "components/common/Notification";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -30,6 +32,11 @@ const Container = styled.div<{ popupOpened: boolean }>`
   }
   &:hover {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12);
+  }
+  div {
+    border: 2px solid white;
+    width: 18px;
+    height: 18px;
   }
   ${({ popupOpened }) =>
     popupOpened &&
@@ -60,14 +67,19 @@ const PopupContainer = styled.div`
 const List = styled.ul``;
 
 const ListItem = styled.li`
+  position: relative;
   height: 42px;
   display: flex;
   align-items: center;
-  padding-left: 16px;
+  padding: 0px 16px;
   cursor: pointer;
   font-weight: 300;
   &:hover {
     background-color: ${palette.gray_f7};
+  }
+  div {
+    top: 50%;
+    transform: translate(-100%, -50%);
   }
 `;
 
@@ -83,6 +95,9 @@ const HeaderMenu = () => {
   const socket = useSocket();
 
   const [popupOpened, setPopupOpened] = useState(false);
+  const [reservationLength, setReservationLength] = useState<number | null>(
+    null
+  );
   const { openModal, closeModal, ModalPortal } = useModal();
   const dispatch = useDispatch();
 
@@ -100,10 +115,18 @@ const HeaderMenu = () => {
     if (user.isLoggedIn) {
       socket.emit("login", { user: user._id });
     }
-    socket.on("reservationRequest", (data) => {
-      console.log(data);
+    socket.on("notification", () => {
+      mutateUser();
     });
   }, [socket, user]);
+
+  useEffect(() => {
+    if (!user) return;
+    const reservationLength = user.unreadNotifications.filter((notif) => {
+      return notif.label.includes("reservation");
+    }).length;
+    if (reservationLength !== 0) setReservationLength(reservationLength);
+  }, [user]);
 
   return (
     <>
@@ -119,6 +142,9 @@ const HeaderMenu = () => {
               "/static/image/user/default_user_profile_image.jpg"
             }
           />
+          {user?.isLoggedIn && !isEmpty(user.unreadNotifications) && (
+            <Notification>{user.unreadNotifications.length}</Notification>
+          )}
         </Container>
         {popupOpened && (
           <PopupContainer>
@@ -151,6 +177,9 @@ const HeaderMenu = () => {
                     <a>
                       <ListItem onClick={() => setPopupOpened(false)}>
                         예약
+                        {reservationLength && (
+                          <Notification>{reservationLength}</Notification>
+                        )}
                       </ListItem>
                     </a>
                   </Link>
