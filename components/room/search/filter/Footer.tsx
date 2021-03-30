@@ -10,7 +10,7 @@ const Container = styled.div`
   border-top: 1px solid ${palette.gray_eb};
   button {
     color: white;
-    background-color: ${palette.dark_cyan};
+    background-color: ${palette.black};
     outline: none;
     border: none;
     padding: 5px 15px;

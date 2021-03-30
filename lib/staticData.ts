@@ -731,3 +731,24 @@ export const availabilityList = [
       "달력 전체가 기본적으로 차단됩니다. 예약을 받으려면 날짜를 직접 차단 해제해야 합니다.",
   },
 ];
+
+export const managementHeaders = [
+  { label: "숙소", value: "title" },
+  { label: "침대", value: "bedroomCount" },
+  { label: "침실", value: "bedCount" },
+  { label: "욕실", value: "bathroomCount" },
+  { label: "위치", value: "country" },
+  { label: "가격", value: "price" },
+  { label: "최종 수정일", value: "updatedAt" },
+];
+
+export const ratingOptions = [
+  { label: "청결도", value: "cleanliness" },
+  { label: "정확성", value: "accuracy" },
+  { label: "의사소통", value: "communication" },
+  { label: "위치", value: "location" },
+  { label: "체크인", value: "checkIn" },
+  { label: "가격 대비 만족도", value: "satisfaction" },
+];
+
+export const stars = ["★", "★", "★", "★", "★"];

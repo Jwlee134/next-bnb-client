@@ -44,7 +44,7 @@ const Past = ({
     <Container>
       {data &&
         data.map((reservation, i) => (
-          <ReservationCard key={i} reservation={reservation} />
+          <ReservationCard isPast key={i} reservation={reservation} />
         ))}
       {isEmpty(data) && <div>예정된 예약이 아직 없어요.</div>}
     </Container>

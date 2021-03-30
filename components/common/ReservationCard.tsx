@@ -1,4 +1,6 @@
+import RatingModal from "components/modal/ratingModal";
 import { format } from "date-fns";
+import useModal from "hooks/useModal";
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
@@ -53,11 +55,20 @@ const Container = styled.div`
     min-width: 100px;
     max-width: 100px;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
     div:first-child {
       font-weight: 700;
     }
   }
+`;
+
+const Review = styled.div`
+  font-size: 15px;
+  opacity: 0.7;
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 const formatText = "yyyy년 MM월 dd일";
@@ -65,38 +76,56 @@ const formatText = "yyyy년 MM월 dd일";
 const ReservationCard = ({
   reservation,
   isMyRoom = false,
+  isPast = false,
 }: {
   reservation: IReservation;
   isMyRoom?: boolean;
-}) => (
-  <Container>
-    <div className="reservation-card_left">
-      <img src={reservation.room.photos[0]} alt="" />
-      <div className="reservation-card_text-container">
-        <div>{reservation.room.title}</div>
-        <div>
-          {format(new Date(reservation.checkIn), formatText)} ~{" "}
-          {format(new Date(reservation.checkOut), formatText)} ·{" "}
-          {reservation.room.city}
+  isPast?: boolean;
+}) => {
+  const { openModal, closeModal, ModalPortal } = useModal();
+  return (
+    <>
+      <Container>
+        <div className="reservation-card_left">
+          <img src={reservation.room.photos[0]} alt="" />
+          <div className="reservation-card_text-container">
+            <div>{reservation.room.title}</div>
+            <div>
+              {format(new Date(reservation.checkIn), formatText)} ~{" "}
+              {format(new Date(reservation.checkOut), formatText)} ·{" "}
+              {reservation.room.city}
+            </div>
+            <div>
+              게스트 {reservation.guestCount}명
+              {isMyRoom && (
+                <span>
+                  {" "}
+                  · 게스트:{" "}
+                  <Link href={`/user/${reservation.guest._id}`}>
+                    {reservation.guest.name}
+                  </Link>
+                </span>
+              )}
+            </div>
+          </div>
         </div>
-        <div>
-          게스트 {reservation.guestCount}명
-          {isMyRoom && (
-            <span>
-              {" "}
-              · 게스트:{" "}
-              <Link href={`/user/${reservation.guest._id}`}>
-                {reservation.guest.name}
-              </Link>
-            </span>
-          )}
+        <div className="reservation-card_right">
+          <div>￦{addComma(String(reservation.price))}</div>
+          {isPast &&
+            (!reservation.reviewed ? (
+              <Review onClick={openModal}>후기 남기기</Review>
+            ) : (
+              <div>완료</div>
+            ))}
         </div>
-      </div>
-    </div>
-    <div className="reservation-card_right">
-      <div>￦{addComma(String(reservation.price))}</div>
-    </div>
-  </Container>
-);
+      </Container>
+      {isPast && (
+        <ModalPortal>
+          <RatingModal reservation={reservation} closeModal={closeModal} />
+        </ModalPortal>
+      )}
+    </>
+  );
+};
 
 export default ReservationCard;

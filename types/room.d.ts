@@ -1,5 +1,4 @@
 import { Document } from "mongoose";
-import { IReview } from "./review";
 import { IUser } from "./user";
 
 export interface IHostingState {
@@ -40,10 +39,19 @@ export interface IHostingState {
 }
 
 export interface IRoom extends IHostingState, Document {
-  rating: number;
+  rating: {
+    cleanliness: number;
+    accuracy: number;
+    communication: number;
+    location: number;
+    checkIn: number;
+    satisfaction: number;
+    total: number;
+    [key: string]: number;
+  };
   createdAt: Date;
   updatedAt: Date;
-  [key: string]: any;
   review: IReview["_id"];
   creator: IUser["_id"];
+  [key: string]: any;
 }

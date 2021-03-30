@@ -5,8 +5,8 @@ import { createWishlistAPI } from "lib/api/wishlist";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import styled, { css } from "styled-components";
-import palette from "styles/palette";
+import styled from "styled-components";
+import ModalFooter from "../ModalFooter";
 
 const Container = styled.div`
   padding: 32px 24px;
@@ -17,21 +17,6 @@ const Container = styled.div`
     margin-top: 4px;
     font-size: 13px;
     opacity: 0.5;
-  }
-`;
-
-const ButtonContainer = styled.div<{ noValue: boolean }>`
-  padding: 16px 24px;
-  border-top: 1px solid ${palette.gray_eb};
-  button {
-    background-color: ${palette.black};
-    color: white;
-    ${({ noValue }) =>
-      !noValue &&
-      css`
-        cursor: not-allowed;
-        background-color: ${palette.gray_dd};
-      `}
   }
 `;
 
@@ -75,9 +60,13 @@ const NewWishlist = ({
         />
         <div>최대 50자</div>
       </Container>
-      <ButtonContainer noValue={!!title}>
-        <Button onClick={handleClick}>새로 만들기</Button>
-      </ButtonContainer>
+      <ModalFooter
+        onButtonClick={handleClick}
+        buttonText="새로 만들기"
+        useOnlyButton
+        useValidation
+        isValid={!!title}
+      />
     </>
   );
 };

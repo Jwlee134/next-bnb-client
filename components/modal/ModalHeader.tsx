@@ -33,15 +33,13 @@ const Container = styled.header`
   }
 `;
 
-const ModalHeader = ({ children, onClick }: Props) => {
-  return (
-    <Container>
-      {children}
-      <div>
-        <IoCloseSharp size={20} onClick={onClick} />
-      </div>
-    </Container>
-  );
-};
+const ModalHeader = ({ children, onClick }: Props) => (
+  <Container>
+    {children}
+    <div>
+      <IoCloseSharp size={20} onClick={onClick} />
+    </div>
+  </Container>
+);
 
 export default ModalHeader;

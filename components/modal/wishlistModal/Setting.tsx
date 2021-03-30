@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
+import ModalFooter from "../ModalFooter";
 import ModalHeader from "../ModalHeader";
 
 const Container = styled.div`
@@ -28,24 +29,6 @@ const Container = styled.div`
     cursor: pointer;
     font-weight: 500;
     width: fit-content;
-  }
-  .setting_footer {
-    width: 100%;
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 24px;
-    border-top: 1px solid ${palette.gray_eb};
-    > span {
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    button {
-      width: 80px;
-      background-color: ${palette.black};
-      color: white;
-    }
   }
 `;
 
@@ -95,10 +78,12 @@ const Setting = ({
           이 위시리스트 삭제
         </div>
       </div>
-      <div className="setting_footer">
-        <span onClick={closeModal}>취소</span>
-        <Button onClick={handleSave}>저장</Button>
-      </div>
+      <ModalFooter
+        onButtonClick={handleSave}
+        onAbortClick={closeModal}
+        buttonText="저장"
+        abortText="취소"
+      />
     </Container>
   );
 };

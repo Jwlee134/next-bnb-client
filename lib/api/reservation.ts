@@ -6,6 +6,7 @@ interface IReservationForm {
   checkIn: string;
   checkOut: string;
   guestCount: number;
+  price: number;
 }
 
 export const makeReservationAPI = (body: IReservationForm) =>

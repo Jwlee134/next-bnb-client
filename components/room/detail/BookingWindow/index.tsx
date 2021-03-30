@@ -145,8 +145,8 @@ const BookingWindow = () => {
     }
     const nights = difference();
     const body = {
-      roomId: room._id,
-      guestId: user._id,
+      roomId: room._id as string,
+      guestId: user._id as string,
       checkIn: search.checkIn,
       checkOut: addSeconds(new Date(), 5),
       guestCount: search.adults + search.children,

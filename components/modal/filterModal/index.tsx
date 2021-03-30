@@ -10,11 +10,11 @@ import { makeQueryString } from "utils";
 import { searchRoomAPI } from "lib/api/room";
 import { useDispatch } from "react-redux";
 import { roomActions } from "store/room";
-import Footer from "../../room/search/filter/Footer";
+import ModalFooter from "../ModalFooter";
 
 const Container = styled.div`
   padding: 20px 20px 0px 20px;
-  max-height: 60vh;
+  max-height: 70vh;
   overflow-y: auto;
   .filter-counter-container {
     > div {
@@ -222,9 +222,12 @@ const OthersModalContents = ({ closeModal }: { closeModal: () => void }) => {
           </CheckBoxContainer>
         </OptionsContainer>
       </Container>
-      <Footer handleDelete={handleDelete} handleSave={handleSave}>
-        {totalRoomCount}개의 숙소 검색
-      </Footer>
+      <ModalFooter
+        onButtonClick={handleSave}
+        onAbortClick={handleDelete}
+        buttonText={`${totalRoomCount}개의 숙소 검색`}
+        abortText="지우기"
+      />
     </>
   );
 };
