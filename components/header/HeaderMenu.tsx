@@ -129,7 +129,11 @@ const HeaderMenu = () => {
     const reservationLength = user.unreadNotifications.filter((notif) => {
       return notif.label.includes("reservation");
     }).length;
-    if (reservationLength !== 0) setReservationLength(reservationLength);
+    if (reservationLength !== 0) {
+      setReservationLength(reservationLength);
+    } else {
+      setReservationLength(null);
+    }
   }, [user]);
 
   return (

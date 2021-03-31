@@ -98,7 +98,6 @@ const Contents = () => {
     room?.publicBedType.map((bed) => `${bed.label} ${bed.count}개`).join(", ");
 
   if (!room) return null;
-
   return (
     <Container>
       <div className="main-container_left_title_avatar-url">
@@ -127,15 +126,13 @@ const Contents = () => {
               <div>{bedTypeCount(i)}</div>
             </div>
           ))}
-          {room.publicBedType.map((_, i) => (
-            <div className="bed-type_container" key={i}>
-              <div>
-                <Bed />
-              </div>
-              <div>공용 공간</div>
-              <div>{publicBedTypeCount()}</div>
+          <div className="bed-type_container">
+            <div>
+              <Bed />
             </div>
-          ))}
+            <div>공용 공간</div>
+            <div>{publicBedTypeCount()}</div>
+          </div>
         </div>
       </div>
       {!isEmpty(room.amenities) && (

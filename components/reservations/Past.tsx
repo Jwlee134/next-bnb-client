@@ -46,7 +46,7 @@ const Past = ({
         data.map((reservation, i) => (
           <ReservationCard isPast key={i} reservation={reservation} />
         ))}
-      {isEmpty(data) && <div>예정된 예약이 아직 없어요.</div>}
+      {isEmpty(data) && <div>이전 예약이 아직 없어요.</div>}
     </Container>
   );
 };

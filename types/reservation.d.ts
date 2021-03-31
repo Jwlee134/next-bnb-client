@@ -11,4 +11,5 @@ export interface IReservation extends Document {
   price: number;
   createdAt: Date;
   reviewed: boolean;
+  read: boolean;
 }
