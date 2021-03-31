@@ -2,13 +2,9 @@ import { api } from ".";
 
 interface Body {
   rating: {
-    cleanliness: number;
-    accuracy: number;
-    communication: number;
-    location: number;
-    checkIn: number;
-    satisfaction: number;
-  };
+    label: string;
+    value: number;
+  }[];
   text: string;
   reservation: string;
 }

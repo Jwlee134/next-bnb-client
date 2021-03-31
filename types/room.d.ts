@@ -39,16 +39,8 @@ export interface IHostingState {
 }
 
 export interface IRoom extends IHostingState, Document {
-  rating: {
-    cleanliness: number;
-    accuracy: number;
-    communication: number;
-    location: number;
-    checkIn: number;
-    satisfaction: number;
-    total: number;
-    [key: string]: number;
-  };
+  rating: { label: string; value: number }[];
+  avgOfRating: number;
   createdAt: Date;
   updatedAt: Date;
   review: IReview["_id"];

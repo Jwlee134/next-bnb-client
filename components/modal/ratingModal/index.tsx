@@ -49,13 +49,8 @@ const Star = styled.span<{ clicked: boolean }>`
 `;
 
 interface IState {
-  cleanliness: number;
-  accuracy: number;
-  communication: number;
-  location: number;
-  checkIn: number;
-  satisfaction: number;
-  [key: string]: number;
+  label: string;
+  value: number;
 }
 
 const RatingModal = ({
@@ -65,27 +60,26 @@ const RatingModal = ({
   closeModal: () => void;
   reservation: IReservation;
 }) => {
-  const [rating, setRating] = useState<IState>({
-    cleanliness: 0,
-    accuracy: 0,
-    communication: 0,
-    location: 0,
-    checkIn: 0,
-    satisfaction: 0,
-  });
+  const [rating, setRating] = useState<IState[]>([
+    { label: "cleanliness", value: 0 },
+    { label: "accuracy", value: 0 },
+    { label: "communication", value: 0 },
+    { label: "location", value: 0 },
+    { label: "checkIn", value: 0 },
+    { label: "satisfaction", value: 0 },
+  ]);
   const [text, setText] = useState("");
 
-  const isValid =
-    rating.cleanliness !== 0 &&
-    rating.accuracy !== 0 &&
-    rating.communication !== 0 &&
-    rating.location !== 0 &&
-    rating.checkIn !== 0 &&
-    rating.satisfaction !== 0 &&
-    !!text;
+  const isValid = () => {
+    const noZero = rating.some((ratingOp) => {
+      return ratingOp.value !== 0;
+    });
+    if (noZero && !!text) return true;
+    return false;
+  };
 
-  const handleClick = async () => {
-    if (!isValid) return;
+  const handleSave = async () => {
+    if (!isValid()) return;
     try {
       await submitReviewAPI({
         rating,
@@ -99,6 +93,13 @@ const RatingModal = ({
     }
   };
 
+  const handleClick = (value: string, index: number) => {
+    const ratingCopy = [...rating];
+    const idx = ratingCopy.findIndex((option) => option.label === value);
+    ratingCopy[idx].value = index + 1;
+    setRating(ratingCopy);
+  };
+
   return (
     <Container>
       <ModalHeader onClick={closeModal}>후기 남기기</ModalHeader>
@@ -109,11 +110,15 @@ const RatingModal = ({
             <div>
               {stars.map((star, i) => (
                 <Star
-                  clicked={rating[option.value] > i}
+                  clicked={
+                    rating[
+                      rating.findIndex(
+                        (ratingOp) => ratingOp.label === option.value
+                      )
+                    ].value > i
+                  }
                   key={i}
-                  onClick={() => {
-                    setRating({ ...rating, [option.value]: i + 1 });
-                  }}
+                  onClick={() => handleClick(option.value, i)}
                 >
                   {star}
                 </Star>
@@ -132,10 +137,10 @@ const RatingModal = ({
       <ModalFooter
         buttonText="저장"
         abortText="취소"
-        onButtonClick={handleClick}
+        onButtonClick={handleSave}
         onAbortClick={closeModal}
         useValidation
-        isValid={isValid}
+        isValid={isValid()}
       />
     </Container>
   );
