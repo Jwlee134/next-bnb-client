@@ -1,4 +1,3 @@
-import Button from "components/common/Button";
 import Input from "components/common/Input";
 import useWishlist from "hooks/useWishlist";
 import { createWishlistAPI } from "lib/api/wishlist";

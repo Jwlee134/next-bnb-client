@@ -7,7 +7,7 @@ import { useSelector } from "store";
 import querystring from "querystring";
 import RoomCardSkeleton from "components/skeleton/RoomCardSkeleton";
 import { useDispatch } from "react-redux";
-import { roomActions } from "store/room";
+import { commonActions } from "store/common";
 import RoomCard from "../../common/RoomCard";
 
 const Container = styled.div`
@@ -80,7 +80,7 @@ const RoomList = () => {
   const originalLength = useSelector(
     (state) => state.room.search.originalLength
   );
-  const isLoading = useSelector((state) => state.room.isLoading);
+  const isLoading = useSelector((state) => state.common.isLoading);
   const dispatch = useDispatch();
 
   const router = useRouter();
@@ -88,7 +88,7 @@ const RoomList = () => {
 
   const handleChange = ({ selected }: { selected: number }) => {
     // 페이지 숫자를 클릭하면 로딩 true
-    dispatch(roomActions.setIsLoading(true));
+    dispatch(commonActions.setIsLoading(true));
     window.scrollTo(0, 0);
     if (router.query.page) delete router.query.page;
     // 해당 주소로 쿼리를 보내면 getInitialProps가 실행되어 필터링된 searchResults 배열 다시 채워짐
@@ -101,7 +101,7 @@ const RoomList = () => {
 
   useEffect(() => {
     if (isLoading || !originalLength) {
-      dispatch(roomActions.setIsLoading(false));
+      dispatch(commonActions.setIsLoading(false));
     }
   }, [searchResults, originalLength]);
 

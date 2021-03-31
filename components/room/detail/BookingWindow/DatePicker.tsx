@@ -9,6 +9,7 @@ import { searchActions } from "store/search";
 import { useRouter } from "next/router";
 import { toMomentObject } from "react-dates";
 import { makeQueryString } from "utils";
+import useRoom from "hooks/useRoom";
 
 const Container = styled.div`
   position: relative;
@@ -67,7 +68,7 @@ const Container = styled.div`
 `;
 
 const DatePicker = () => {
-  const room = useSelector((state) => state.room.detail.room);
+  const { room } = useRoom();
   const checkIn = useSelector((state) => state.search.checkIn);
   const checkOut = useSelector((state) => state.search.checkOut);
 

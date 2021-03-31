@@ -8,10 +8,10 @@ import palette from "styles/palette";
 import Notification from "components/common/Notification";
 import { IUser } from "types/user";
 import Error from "pages/_error";
+import { useRouter } from "next/router";
 import Past from "./Past";
 import Upcoming from "./Upcoming";
 import MyRoom from "./MyRoom";
-import { useRouter } from "next/router";
 
 const Container = styled.div`
   header {

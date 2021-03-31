@@ -6,7 +6,7 @@ import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
 import Image from "next/image";
 import { useSelector } from "store";
 import { useDispatch } from "react-redux";
-import { roomActions } from "store/room";
+import { commonActions } from "store/common";
 
 const setVisibility = (page: number, length: number) => {
   if (page === 1) {
@@ -108,7 +108,7 @@ const PhotoModal = ({
   photos: string[];
   closeModal: () => void;
 }) => {
-  const photoIndex = useSelector((state) => state.room.detail.photoIndex);
+  const photoIndex = useSelector((state) => state.common.photoIndex);
   const dispatch = useDispatch();
 
   return (
@@ -125,7 +125,7 @@ const PhotoModal = ({
       <div className="photo-modal_photo-container">
         <div
           className="photo-container_button btn-left"
-          onClick={() => dispatch(roomActions.setPhotoIndex(photoIndex - 1))}
+          onClick={() => dispatch(commonActions.setPhotoIndex(photoIndex - 1))}
         >
           <BsChevronLeft />
         </div>
@@ -141,7 +141,7 @@ const PhotoModal = ({
         </div>
         <div
           className="photo-container_button btn-right"
-          onClick={() => dispatch(roomActions.setPhotoIndex(photoIndex + 1))}
+          onClick={() => dispatch(commonActions.setPhotoIndex(photoIndex + 1))}
         >
           <BsChevronRight />
         </div>

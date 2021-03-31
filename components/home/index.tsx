@@ -1,7 +1,5 @@
 import Header from "components/header";
-import useSocket from "hooks/useSocket";
-import useUser from "hooks/useUser";
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`

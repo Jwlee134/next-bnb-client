@@ -2,7 +2,12 @@ import React from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
 
-const Container = styled.button<{ socialAuthButton: boolean }>`
+interface ContainerProps {
+  socialAuthButton: boolean;
+  whiteBackground: boolean;
+}
+
+const Container = styled.button<ContainerProps>`
   width: 100%;
   border-radius: 8px;
   height: 48px;
@@ -30,22 +35,39 @@ const Container = styled.button<{ socialAuthButton: boolean }>`
         border-color: ${palette.gray_71};
       }
     `}
+  ${({ whiteBackground }) =>
+    whiteBackground &&
+    css`
+      background-color: white;
+      border: 1px solid ${palette.dark_cyan};
+      color: black;
+      &:hover {
+        background-color: ${palette.gray_f7};
+      }
+    `}
 `;
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   style?: Object;
   children: React.ReactNode;
   socialAuthButton?: boolean;
+  whiteBackground?: boolean;
 }
 
 const Button = ({
   style,
   children,
   socialAuthButton = false,
+  whiteBackground = false,
   ...props
 }: Props) => {
   return (
-    <Container socialAuthButton={socialAuthButton} style={style} {...props}>
+    <Container
+      socialAuthButton={socialAuthButton}
+      whiteBackground={whiteBackground}
+      style={style}
+      {...props}
+    >
       {children}
     </Container>
   );

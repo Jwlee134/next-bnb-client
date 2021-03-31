@@ -220,7 +220,7 @@ const RoomCard = ({
           <div className="room-card_info-container_bottom">
             <div className="info-container_bottom_rating">
               <IoIosStar size={18} />
-              <div>{room.rating}</div>
+              <div>{room.avgOfRating}</div>
               <div>({room.review.length})</div>
             </div>
             {checkIn && checkOut && (

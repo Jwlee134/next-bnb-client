@@ -12,6 +12,8 @@ interface IState {
   scaleDown: boolean;
   isGettingCoordinates: boolean;
   clickedRoomId: string;
+  photoIndex: number;
+  isLoading: boolean;
 }
 
 const initialState: IState = {
@@ -26,6 +28,8 @@ const initialState: IState = {
   scaleDown: false,
   isGettingCoordinates: false,
   clickedRoomId: "",
+  photoIndex: 0,
+  isLoading: false,
 };
 
 const common = createSlice({
@@ -64,6 +68,12 @@ const common = createSlice({
     },
     setClickedRoomId: (state, action: PayloadAction<string>) => {
       state.clickedRoomId = action.payload;
+    },
+    setPhotoIndex: (state, action: PayloadAction<number>) => {
+      state.photoIndex = action.payload;
+    },
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     },
   },
 });

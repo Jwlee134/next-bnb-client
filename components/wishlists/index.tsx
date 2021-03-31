@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import Button from "components/common/Button";
-import palette from "styles/palette";
 import useModal from "hooks/useModal";
 import WishlistModal from "components/modal/wishlistModal";
 import ListCard from "components/wishlists/ListCard";
@@ -27,12 +26,6 @@ const Container = styled.div`
     }
     button {
       width: 130px;
-      background-color: white;
-      border: 1px solid ${palette.dark_cyan};
-      color: black;
-      &:hover {
-        background-color: ${palette.gray_f7};
-      }
     }
   }
   main {
@@ -62,7 +55,9 @@ const Wishlists = () => {
       <Container>
         <header>
           <div>위시리스트</div>
-          <Button onClick={handleClick}>새로 만들기</Button>
+          <Button whiteBackground onClick={handleClick}>
+            새로 만들기
+          </Button>
         </header>
         <main>
           {wishlist ? (

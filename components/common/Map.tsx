@@ -6,11 +6,11 @@ import { searchActions } from "store/search";
 import styled from "styled-components";
 import { makeQueryString } from "utils";
 import { isEmpty } from "lodash";
-import { roomActions } from "store/room";
 import { MdRefresh } from "react-icons/md";
 import Loader from "components/common/Loader";
 import { render } from "react-dom";
 import { IRoom } from "types/room";
+import { commonActions } from "store/common";
 import InfoWindow from "../room/search/InfoWindow";
 
 const Container = styled.div`
@@ -91,20 +91,26 @@ declare global {
 }
 
 interface Props {
-  roomList: IRoom[];
+  roomList?: IRoom[];
+  room?: IRoom;
   useMoveToSearch?: boolean;
   useFitBounds?: boolean;
+  useInteractiveMarker?: boolean;
+  gestureHandling?: "greedy" | "auto";
 }
 
 const Map = ({
   roomList,
+  room,
   useMoveToSearch = false,
   useFitBounds = false,
+  useInteractiveMarker = true,
+  gestureHandling = "greedy",
 }: Props) => {
   const hoveredItemIndex = useSelector(
     (state) => state.room.search.hoveredItemIndex
   );
-  const isLoading = useSelector((state) => state.room.isLoading);
+  const isLoading = useSelector((state) => state.common.isLoading);
   const search = useSelector((state) => state.search);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -119,8 +125,8 @@ const Map = ({
   const [isMoved, setIsMoved] = useState(false);
 
   const mapRef = useRef<HTMLDivElement>(null);
-  const lat = Number(query.latitude) || 0;
-  const lng = Number(query.longitude) || 0;
+  const lat = Number(query.latitude) || room?.latitude || 0;
+  const lng = Number(query.longitude) || room?.longitude || 0;
   const zoom = Number(query.zoom) || 2;
 
   // 지도 로드 직후 콜백함수
@@ -129,7 +135,7 @@ const Map = ({
       const map = new google.maps.Map(mapRef.current, {
         center: { lat, lng },
         zoom: zoom || 14,
-        gestureHandling: "greedy",
+        gestureHandling,
         maxZoom: 17,
       });
       setMap(map);
@@ -170,7 +176,7 @@ const Map = ({
     const latitude = map.getCenter().lat();
     const longitude = map.getCenter().lng();
     const zoom = map.getZoom().toString();
-    dispatch(roomActions.setIsLoading(true));
+    dispatch(commonActions.setIsLoading(true));
     router.push(
       `/search/rooms${makeQueryString({
         ...query,
@@ -237,8 +243,9 @@ const Map = ({
 
   useEffect(() => {
     if (!map) return;
+    if (!useInteractiveMarker) return;
     const eventArr: google.maps.MapsEventListener[] = [];
-    if (!isEmpty(markers)) {
+    if (!isEmpty(markers) && roomList) {
       markers.forEach((marker, i) => {
         const event = marker.addListener("click", (e) => {
           // 이전 인포윈도우 삭제
@@ -275,13 +282,22 @@ const Map = ({
     setMarkers([]);
     // 새로운 마커 추가
     const arr: google.maps.Marker[] = [];
-    roomList.forEach((room) => {
+    if (roomList) {
+      roomList.forEach((room) => {
+        const marker = new google.maps.Marker({
+          position: { lat: room.latitude, lng: room.longitude },
+          map,
+        });
+        arr.push(marker);
+      });
+    }
+    if (room) {
       const marker = new google.maps.Marker({
         position: { lat: room.latitude, lng: room.longitude },
         map,
       });
       arr.push(marker);
-    });
+    }
     setMarkers(arr);
   }, [map, roomList]);
 

@@ -2,10 +2,10 @@ import Counter from "components/common/Counter";
 import { useRouter } from "next/router";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "store";
 import styled from "styled-components";
 import { searchActions } from "store/search";
 import { makeQueryString } from "utils";
+import useRoom from "hooks/useRoom";
 
 const Container = styled.div`
   position: absolute;
@@ -34,7 +34,7 @@ const CounterBox = ({
 }: {
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const room = useSelector((state) => state.room.detail.room);
+  const { room } = useRoom();
   const router = useRouter();
   const { query } = router;
 

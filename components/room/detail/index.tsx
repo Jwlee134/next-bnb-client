@@ -1,30 +1,24 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import Head from "next/head";
-import { IRoom } from "types/room";
 import Header from "components/header";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import useSWR from "swr";
 import { useRouter } from "next/router";
 import Error from "pages/_error";
 import RoomDetailSkeleton from "components/skeleton/RoomDetailSkeleton";
-import { IoIosStar, IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
-import { IoShareOutline } from "react-icons/io5";
-import palette from "styles/palette";
-import { isEmpty } from "lodash";
-import { roomActions } from "store/room";
 import { makeQueryString } from "utils";
-import useModal from "hooks/useModal";
-import WishlistModal from "components/modal/wishlistModal";
-import useWishlist from "hooks/useWishlist";
-import AuthModal from "components/modal/authModal";
 import { searchActions } from "store/search";
-import { api } from "lib/api";
-import Bed from "../../../public/static/svg/room/bed.svg";
-import Photos from "./Photos";
-import Amenity from "./Amenity";
+import useRoom from "hooks/useRoom";
+import dynamic from "next/dynamic";
+
+import Photos from "./contents/Photos";
 import BookingWindow from "./BookingWindow";
+import Contents from "./contents";
+import Title from "./title";
+import Rating from "./rating";
+
+const Map = dynamic(() => import("components/common/Map"), { ssr: false });
 
 const HeaderContainer = styled.div`
   width: 100%;
@@ -42,66 +36,6 @@ const Container = styled.div`
     padding: 24px 80px;
     max-width: 1280px;
     margin: 0 auto;
-    .detail_title {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .detail_subtitle-container {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      .detail_subtitle-container_left {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        > span {
-          margin: 0px 6px;
-        }
-        .detail_subtitle-container_rating {
-          display: flex;
-          align-items: center;
-          svg {
-            color: ${palette.bittersweet};
-            margin-right: 5px;
-            margin-bottom: 3px;
-          }
-          span {
-            font-weight: bold;
-          }
-          span:last-child {
-            margin-left: 3px;
-            font-weight: 300;
-            opacity: 0.7;
-          }
-        }
-        .detail_subtitle-container_address {
-          font-weight: 500;
-          opacity: 0.7;
-        }
-      }
-      .detail_subtitle-container_right {
-        display: flex;
-        .detail_small-button {
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-          border-radius: 5px;
-          padding: 7px 10px;
-          font-size: 15px;
-          font-weight: 500;
-          svg {
-            margin-right: 5px;
-          }
-          &:hover {
-            background-color: ${palette.gray_f7};
-          }
-          span {
-            text-decoration: underline;
-          }
-        }
-      }
-    }
     .detail_photo-container {
       img {
         position: absolute;
@@ -116,108 +50,37 @@ const Container = styled.div`
       display: flex;
       .detail_main-container_left {
         width: 64%;
-        .main-container_left_title_avatar-url {
-          display: flex;
-          justify-content: space-between;
-          border-bottom: 1px solid ${palette.gray_dd};
-          padding-bottom: 24px;
-          div {
-            div:first-child {
-              font-size: 24px;
-              font-weight: 500;
-              margin-bottom: 5px;
-            }
-            div:last-child {
-              font-weight: 300;
-            }
-          }
-          img {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            cursor: pointer;
-          }
-        }
-        .main-container_left_description {
-          padding: 24px 0px;
-          border-bottom: 1px solid ${palette.gray_dd};
-          line-height: 1.5;
-          font-weight: 300;
-          white-space: pre-wrap;
-        }
-        .main-container_left_bed-type {
-          padding: 48px 0px 24px 0px;
-          border-bottom: 1px solid ${palette.gray_dd};
-          > div:first-child {
-            font-size: 24px;
-            font-weight: 500;
-            padding-bottom: 24px;
-          }
-          > div:last-child {
-            display: flex;
-            flex-wrap: wrap;
-            .bed-type_container {
-              border: 1px solid ${palette.gray_dd};
-              border-radius: 12px;
-              padding: 24px;
-              width: calc(33% - 16px);
-              margin-right: 24px;
-              margin-bottom: 24px;
-              &:nth-child(3n) {
-                margin-right: 0;
-              }
-              svg {
-                margin-bottom: 12px;
-              }
-              div:last-child {
-                font-size: 15px;
-                margin-top: 6px;
-                font-weight: 300;
-              }
-            }
-          }
-        }
-        .main-container_left_amenities {
-          padding: 48px 0px 36px 0px;
-          border-bottom: 1px solid ${palette.gray_dd};
-          > div:first-child {
-            font-size: 24px;
-            font-weight: 500;
-            padding-bottom: 24px;
-          }
-          > div:last-child {
-            display: flex;
-            flex-wrap: wrap;
-          }
-        }
       }
       .detail_main-container_right {
         width: 36%;
         margin-left: 90px;
       }
     }
+    .detail_content-title {
+      font-size: 24px;
+      font-weight: 500;
+      padding-bottom: 24px;
+    }
+    .detail_map-container {
+      padding: 48px 0px;
+      .detail_map-container_address {
+        padding-bottom: 24px;
+        font-weight: 300;
+      }
+      > div {
+        max-height: 480px;
+      }
+    }
   }
 `;
-
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 const RoomDetail = () => {
   const router = useRouter();
   const { query } = router;
 
-  const { user, liked, handleItem } = useWishlist(query.id as string);
-  const { data, error } = useSWR<IRoom, Error>(
-    query.id ? `/api/room/${query.id}` : null,
-    fetcher
-  );
+  const { room, error } = useRoom();
+
   const dispatch = useDispatch();
-
-  const { openModal, closeModal, ModalPortal } = useModal();
-
-  const handleClick = () => {
-    handleItem();
-    if (!liked) openModal();
-  };
 
   useEffect(() => {
     if (!query) return;
@@ -261,33 +124,13 @@ const RoomDetail = () => {
     }
   }, [query]);
 
-  useEffect(() => {
-    if (data) dispatch(roomActions.setRoom(data));
-  }, [data]);
+  if (error) {
+    return (
+      <Error statusCode={error.response.status} message={error.response.data} />
+    );
+  }
 
-  const getRoomTypeText = () => {
-    switch (data?.roomType) {
-      case "entire":
-        return "전체";
-      case "private":
-        return "개인실";
-      case "public":
-        return "다인실";
-      default:
-        return "";
-    }
-  };
-
-  const bedTypeCount = (i: number) =>
-    data?.bedType[i].beds
-      .map((bed) => `${bed.label} ${bed.count}개`)
-      .join(", ");
-
-  const publicBedTypeCount = () =>
-    data?.publicBedType.map((bed) => `${bed.label} ${bed.count}개`).join(", ");
-
-  if (error) return <Error />;
-  if (!data) {
+  if (!room) {
     return (
       <>
         <Head>
@@ -306,108 +149,40 @@ const RoomDetail = () => {
   return (
     <>
       <Head>
-        <title>{data.title}</title>
+        <title>{room.title}</title>
       </Head>
       <HeaderContainer>
         <Header />
       </HeaderContainer>
       <Container>
         <div>
-          <div className="detail_title">{data.title}</div>
-          <div className="detail_subtitle-container">
-            <div className="detail_subtitle-container_left">
-              <div className="detail_subtitle-container_rating">
-                <IoIosStar size={16} />
-                <span>{data.rating}</span>
-                <span>({data.review.length})</span>
-              </div>
-              <span>·</span>
-              <div className="detail_subtitle-container_address">
-                {data.streetAddress}, {data.city}, {data.province},{" "}
-                {data.country}
-              </div>
-            </div>
-            <div className="detail_subtitle-container_right">
-              <div className="detail_small-button">
-                <IoShareOutline size={18} />
-                <span>공유하기</span>
-              </div>
-              <div className="detail_small-button" onClick={handleClick}>
-                {liked ? (
-                  <IoMdHeart style={{ color: palette.bittersweet }} size={18} />
-                ) : (
-                  <IoMdHeartEmpty size={18} />
-                )}
-                <span>{liked ? "저장됨" : "저장"}</span>
-              </div>
-            </div>
-          </div>
+          <Title />
           <div className="detail_photo-container">
-            <Photos photos={data.photos} />
+            <Photos photos={room.photos} />
           </div>
           <div className="detail_main-container">
             <div className="detail_main-container_left">
-              <div className="main-container_left_title_avatar-url">
-                <div>
-                  <div>
-                    {data.creator.name}님이 호스팅하는{" "}
-                    {data.largeBuildingType.label} {getRoomTypeText()}
-                  </div>
-                  <div>
-                    최대 인원 {data.maximumGuestCount}명 · 침실{" "}
-                    {data.bedroomCount}개 · 침대 {data.bedCount}개 · 욕실{" "}
-                    {data.bathroomCount}개
-                  </div>
-                </div>
-                <img src={data.creator.avatarUrl} alt="" />
-              </div>
-              <pre className="main-container_left_description">
-                {data.description}
-              </pre>
-              <div className="main-container_left_bed-type">
-                <div>침대/침구 유형</div>
-                <div>
-                  {data.bedType.map((bedroom, i) => (
-                    <div className="bed-type_container" key={i}>
-                      <div>
-                        <Bed />
-                      </div>
-                      <div>{bedroom.id}번 침실</div>
-                      <div>{bedTypeCount(i)}</div>
-                    </div>
-                  ))}
-                  {data.publicBedType.map((_, i) => (
-                    <div className="bed-type_container" key={i}>
-                      <div>
-                        <Bed />
-                      </div>
-                      <div>공용 공간</div>
-                      <div>{publicBedTypeCount()}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {!isEmpty(data.amenities) && (
-                <div className="main-container_left_amenities">
-                  <div>편의시설</div>
-                  <div>
-                    {data.amenities.map((amenity, i) => (
-                      <Amenity amenity={amenity} key={i} />
-                    ))}
-                  </div>
-                </div>
-              )}
+              <Contents />
             </div>
             <div className="detail_main-container_right">
               <BookingWindow />
             </div>
           </div>
+          <Rating />
+          <div className="detail_map-container">
+            <div className="detail_content-title">위치</div>
+            <div className="detail_map-container_address">
+              {room.streetAddress}, {room.city}, {room.province}, {room.country}
+            </div>
+            <Map
+              room={room}
+              useFitBounds
+              useInteractiveMarker={false}
+              gestureHandling="auto"
+            />
+          </div>
         </div>
       </Container>
-      <ModalPortal>
-        {!user?.isLoggedIn && <AuthModal closeModal={closeModal} />}
-        {user?.isLoggedIn && <WishlistModal closeModal={closeModal} />}
-      </ModalPortal>
     </>
   );
 };

@@ -9,7 +9,7 @@ import { useSelector } from "store";
 import { makeQueryString } from "utils";
 import { searchRoomAPI } from "lib/api/room";
 import { useDispatch } from "react-redux";
-import { roomActions } from "store/room";
+import { commonActions } from "store/common";
 import ModalFooter from "../ModalFooter";
 
 const Container = styled.div`
@@ -108,7 +108,7 @@ const OthersModalContents = ({ closeModal }: { closeModal: () => void }) => {
   const handleSave = () => {
     closeModal();
     setTimeout(() => {
-      dispatch(roomActions.setIsLoading(true));
+      dispatch(commonActions.setIsLoading(true));
       router.push(
         `/search/rooms${makeQueryString({
           ...query,

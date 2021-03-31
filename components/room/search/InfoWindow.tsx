@@ -119,7 +119,7 @@ const InfoWindow = ({ room, search }: { room: IRoom; search: SearchState }) => {
           <FlexContainer>
             <Rating>
               <IoIosStar size={14} />
-              <Score>{room.rating}</Score>
+              <Score>{room.avgOfRating}</Score>
               <RatingCount>({room.review.length})</RatingCount>
             </Rating>
             {checkIn && checkOut && (

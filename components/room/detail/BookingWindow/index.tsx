@@ -18,6 +18,7 @@ import useSocket from "hooks/useSocket";
 import useUser from "hooks/useUser";
 import { makeReservationAPI } from "lib/api/reservation";
 import { useRouter } from "next/router";
+import useRoom from "hooks/useRoom";
 import CounterBox from "./CounterBox";
 import DatePicker from "./DatePicker";
 import Warning from "../../../../public/static/svg/warning.svg";
@@ -31,6 +32,7 @@ const Container = styled.div<{ notValid: boolean }>`
   top: 40px;
   border-radius: 12px;
   border: 1px solid ${palette.gray_dd};
+  margin-bottom: 48px;
   > div:nth-child(3) {
     position: relative;
   }
@@ -105,8 +107,8 @@ const NotValid = styled.div`
 `;
 
 const BookingWindow = () => {
+  const { room } = useRoom();
   const search = useSelector((state) => state.search);
-  const room = useSelector((state) => state.room.detail.room);
 
   const router = useRouter();
   const { user } = useUser();
@@ -160,7 +162,7 @@ const BookingWindow = () => {
       });
       router.push("/reservations");
     } catch (error) {
-      alert(error.response.data);
+      alert(error.response.room);
     }
   };
 

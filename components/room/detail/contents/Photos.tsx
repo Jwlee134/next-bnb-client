@@ -6,7 +6,7 @@ import { IoAlbumsOutline } from "react-icons/io5";
 import useModal from "hooks/useModal";
 import PhotoModal from "components/modal/photoModal";
 import { useDispatch } from "react-redux";
-import { roomActions } from "store/room";
+import { commonActions } from "store/common";
 
 const Background = styled.div`
   position: absolute;
@@ -136,12 +136,12 @@ const Photos = ({ photos }: { photos: string[] }) => {
   const dispatch = useDispatch();
 
   const handleIndex = (i: number) => {
-    dispatch(roomActions.setPhotoIndex(i));
+    dispatch(commonActions.setPhotoIndex(i));
     openModal();
   };
 
   const handleGallery = () => {
-    dispatch(roomActions.setPhotoIndex(0));
+    dispatch(commonActions.setPhotoIndex(0));
     openModal();
   };
 

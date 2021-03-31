@@ -6,8 +6,8 @@ import { BiWon } from "react-icons/bi";
 import { useSelector } from "store";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { roomActions } from "store/room";
 import { addComma, makeQueryString } from "utils";
+import { commonActions } from "store/common";
 import Footer from "./Footer";
 
 interface Props {
@@ -103,7 +103,7 @@ const Price = () => {
   const [maximum, setMaximum] = useState("");
 
   const handleSave = () => {
-    dispatch(roomActions.setIsLoading(true));
+    dispatch(commonActions.setIsLoading(true));
     setOpened(false);
     router.push(
       `/search/rooms${makeQueryString({
