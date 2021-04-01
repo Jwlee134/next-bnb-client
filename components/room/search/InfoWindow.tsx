@@ -7,13 +7,18 @@ import { IRoom } from "types/room";
 import querystring from "querystring";
 import { SearchState } from "store/search";
 import { FaWonSign } from "react-icons/fa";
-import { addComma } from "utils";
+import { addComma, getRoomTypeText } from "utils";
 import RoomCardSlider from "../../common/RoomCardSlider";
 
 const Container = styled.div`
   width: 250px;
   overflow: hidden;
   font-family: Noto Sans KR;
+  &:hover {
+    .slick-arrow {
+      display: block !important;
+    }
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -78,19 +83,6 @@ const Price = styled.div`
 const InfoWindow = ({ room, search }: { room: IRoom; search: SearchState }) => {
   const { checkIn, checkOut } = search;
 
-  const getRoomTypeText = () => {
-    switch (room.roomType) {
-      case "entire":
-        return "집 전체";
-      case "private":
-        return "개인실";
-      case "public":
-        return "다인실";
-      default:
-        return "";
-    }
-  };
-
   return (
     <a
       href={`/room/${room._id}?${querystring.stringify(search)}`}
@@ -114,7 +106,7 @@ const InfoWindow = ({ room, search }: { room: IRoom; search: SearchState }) => {
         <TextContainer>
           <Title>{room.title}</Title>
           <div>
-            {room.buildingType.label} {getRoomTypeText()}
+            {room.buildingType.label} {getRoomTypeText(room)}
           </div>
           <FlexContainer>
             <Rating>

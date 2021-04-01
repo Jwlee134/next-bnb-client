@@ -1,3 +1,5 @@
+import { IRoom } from "types/room";
+
 export const addComma = (value: string) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
@@ -55,4 +57,17 @@ export const extractKeywords = (query: {
     newObj[key] = values[i];
   });
   return newObj;
+};
+
+export const getRoomTypeText = (room: IRoom) => {
+  switch (room.roomType) {
+    case "entire":
+      return "집 전체";
+    case "private":
+      return "개인실";
+    case "public":
+      return "다인실";
+    default:
+      return "";
+  }
 };

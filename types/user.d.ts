@@ -13,6 +13,8 @@ export interface IUser extends Document {
   isLoggedIn: boolean;
   rooms: IRoom["_id"];
   review: IReview["_id"];
+  reviewFromGuest: IReview["_id"];
+  reviewFromHost: IReview["_id"];
   wishlist: IWishlist["_id"];
   unreadNotifications: { label: string }[];
 }

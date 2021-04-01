@@ -7,6 +7,7 @@ interface Body {
   }[];
   text: string;
   reservation: string;
+  isToGuest: boolean;
 }
 
 export const submitReviewAPI = (body: Body) =>

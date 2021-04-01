@@ -6,9 +6,7 @@ import Image from "next/image";
 import { IoMdHeart, IoMdHeartEmpty, IoIosStar } from "react-icons/io";
 import { FaWonSign } from "react-icons/fa";
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { addComma, makeQueryString } from "utils";
+import { addComma, getRoomTypeText, makeQueryString } from "utils";
 import { useRouter } from "next/router";
 import { differenceInDays } from "date-fns";
 import { useDispatch } from "react-redux";
@@ -21,6 +19,11 @@ import AuthModal from "components/modal/authModal";
 import RoomCardSlider from "./RoomCardSlider";
 
 const Container = styled.div`
+  &:hover {
+    .slick-arrow {
+      display: block !important;
+    }
+  }
   width: 100%;
   height: 250px;
   border-top: 1px solid ${palette.gray_eb};
@@ -165,19 +168,6 @@ const RoomCard = ({
     new Date(checkIn as string)
   );
 
-  const getRoomTypeText = () => {
-    switch (room.roomType) {
-      case "entire":
-        return "집 전체";
-      case "private":
-        return "개인실";
-      case "public":
-        return "다인실";
-      default:
-        return "";
-    }
-  };
-
   return (
     <Container
       onMouseEnter={() => dispatch(roomActions.setHoveredItemIndex(index))}
@@ -206,7 +196,7 @@ const RoomCard = ({
           <div className="room-card_info-container_top">
             <div>
               <div className="info-container_top_info-text">
-                {room.city}의 {room.buildingType.label} {getRoomTypeText()}
+                {room.city}의 {room.buildingType.label} {getRoomTypeText(room)}
               </div>
               <div className="info-container_top_title">{room.title}</div>
               <div className="room-card_divider" />

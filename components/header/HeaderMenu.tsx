@@ -14,6 +14,7 @@ import useSocket from "hooks/useSocket";
 import { isEmpty } from "lodash";
 import Notification from "components/common/Notification";
 import { mutate } from "swr";
+import { useRouter } from "next/router";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -92,6 +93,7 @@ const Divider = styled.div`
 `;
 
 const HeaderMenu = () => {
+  const { pathname } = useRouter();
   const { user, mutateUser } = useUser();
   const socket = useSocket();
 
@@ -118,9 +120,11 @@ const HeaderMenu = () => {
     }
     socket.on("notification", () => {
       mutateUser();
-      mutate("/api/reservation?keyword=myRoom");
-      mutate("/api/reservation?keyword=past");
-      mutate("/api/reservation");
+      if (pathname.includes("reservation")) {
+        mutate("/api/reservation?keyword=myRoom");
+        mutate("/api/reservation?keyword=past");
+        mutate("/api/reservation");
+      }
     });
   }, [socket, user]);
 
@@ -213,7 +217,7 @@ const HeaderMenu = () => {
                       </ListItem>
                     </a>
                   </Link>
-                  <Link href="/me">
+                  <Link href={`/user/${user._id}`}>
                     <a>
                       <ListItem onClick={() => setPopupOpened(false)}>
                         프로필

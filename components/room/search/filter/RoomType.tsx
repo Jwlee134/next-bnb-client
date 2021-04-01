@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import styled, { css } from "styled-components";
 import { useDispatch } from "react-redux";
-import { roomActions } from "store/room";
 import { makeQueryString } from "utils";
+import { commonActions } from "store/common";
 import Footer from "./Footer";
 
 interface Props {
@@ -44,7 +44,7 @@ const RoomType = () => {
   const handleChange = (value: string[]) => setOptions(value);
 
   const handleSave = () => {
-    dispatch(roomActions.setIsLoading(true));
+    dispatch(commonActions.setIsLoading(true));
     router.push(
       `/search/rooms${makeQueryString({
         ...query,

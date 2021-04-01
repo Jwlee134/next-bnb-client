@@ -8,8 +8,8 @@ import differenceInDays from "date-fns/differenceInDays";
 import { addComma } from "utils";
 import {
   addDays,
-  addHours,
   addMonths,
+  addSeconds,
   eachDayOfInterval,
   format,
 } from "date-fns";
@@ -150,7 +150,7 @@ const BookingWindow = () => {
       roomId: room._id as string,
       guestId: user._id as string,
       checkIn: search.checkIn,
-      checkOut: addHours(new Date(search.checkOut), 9).toISOString(),
+      checkOut: addSeconds(new Date(), 10),
       guestCount: search.adults + search.children,
       price: room.price * (nights as number),
     };
@@ -158,7 +158,6 @@ const BookingWindow = () => {
       await makeReservationAPI(body);
       socket.emit("makeReservation", {
         hostId: room.creator._id,
-        guestId: user._id,
       });
       router.push("/reservations");
     } catch (error) {

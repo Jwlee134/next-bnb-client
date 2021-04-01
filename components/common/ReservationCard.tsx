@@ -27,39 +27,48 @@ const Container = styled.div`
     box-shadow: 0 3px 18px 0 rgb(0 0 0 / 12%), 0 3px 5px -1px rgb(0 0 0 / 20%);
   }
   .reservation-card_left {
-    display: flex;
-    flex-grow: 1;
-    .reservation-card_text-container {
-      width: 100%;
-      div:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        margin-bottom: 5px;
-      }
-      div:not(:first-child) {
-        font-size: 14px;
-        opacity: 0.7;
-        font-weight: 300;
-        margin-bottom: 5px;
-        a {
-          text-decoration: underline;
-          cursor: pointer;
+    > a {
+      display: flex;
+      flex-grow: 1;
+      .reservation-card_text-container {
+        width: 100%;
+        div:first-child {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          margin-bottom: 5px;
+        }
+        div:not(:first-child) {
+          font-size: 14px;
+          opacity: 0.7;
+          font-weight: 300;
+          margin-bottom: 5px;
+          a {
+            text-decoration: underline;
+            cursor: pointer;
+          }
         }
       }
     }
   }
   .reservation-card_right {
-    min-width: 100px;
-    max-width: 100px;
+    min-width: 120px;
+    max-width: 120px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-end;
     div:first-child {
       font-weight: 700;
+    }
+    span {
+      font-weight: 300;
+      font-size: 15px;
+      a {
+        text-decoration: underline;
+      }
     }
   }
 `;
@@ -87,43 +96,54 @@ const ReservationCard = ({
     <>
       <Container>
         <div className="reservation-card_left">
-          <img src={reservation.room.photos[0]} alt="" />
-          <div className="reservation-card_text-container">
-            <div>{reservation.room.title}</div>
-            <div>
-              {format(new Date(reservation.checkIn), formatText)} ~{" "}
-              {format(new Date(reservation.checkOut), formatText)} ·{" "}
-              {reservation.room.city}
+          <a
+            href={`/room/${reservation.room._id}?adults=1&children=0&infants=0`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={reservation.room.photos[0]} alt="" />
+            <div className="reservation-card_text-container">
+              <div>{reservation.room.title}</div>
+              <div>
+                {format(new Date(reservation.checkIn), formatText)} ~{" "}
+                {format(new Date(reservation.checkOut), formatText)} ·{" "}
+                {reservation.room.city}
+              </div>
+              <div>게스트 {reservation.guestCount}명</div>
             </div>
-            <div>
-              게스트 {reservation.guestCount}명
-              {isMyRoom && (
-                <span>
-                  {" "}
-                  · 게스트:{" "}
-                  <Link href={`/user/${reservation.guest._id}`}>
-                    {reservation.guest.name}
-                  </Link>
-                </span>
-              )}
-            </div>
-          </div>
+          </a>
         </div>
         <div className="reservation-card_right">
-          <div>￦{addComma(String(reservation.price))}</div>
+          <div>￦{addComma(String(reservation.price))}</div>{" "}
+          {isMyRoom && (
+            <span>
+              게스트:{" "}
+              <Link href={`/user/${reservation.guest._id}`}>
+                <a>{reservation.guest.name}</a>
+              </Link>
+            </span>
+          )}
           {isPast &&
-            (!reservation.reviewed ? (
+            (!reservation.guestReviewed ? (
               <Review onClick={openModal}>후기 남기기</Review>
+            ) : (
+              <div>완료</div>
+            ))}
+          {isMyRoom &&
+            (!reservation.hostReviewed ? (
+              <Review onClick={openModal}>게스트 후기 남기기</Review>
             ) : (
               <div>완료</div>
             ))}
         </div>
       </Container>
-      {isPast && (
-        <ModalPortal>
-          <RatingModal reservation={reservation} closeModal={closeModal} />
-        </ModalPortal>
-      )}
+      <ModalPortal>
+        <RatingModal
+          isToGuest={isMyRoom}
+          reservation={reservation}
+          closeModal={closeModal}
+        />
+      </ModalPortal>
     </>
   );
 };

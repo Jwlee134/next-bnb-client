@@ -56,9 +56,11 @@ interface IState {
 const RatingModal = ({
   closeModal,
   reservation,
+  isToGuest,
 }: {
   closeModal: () => void;
   reservation: IReservation;
+  isToGuest: boolean;
 }) => {
   const [rating, setRating] = useState<IState[]>([
     { label: "cleanliness", value: 0 },
@@ -71,6 +73,7 @@ const RatingModal = ({
   const [text, setText] = useState("");
 
   const isValid = () => {
+    if (isToGuest && !!text) return true;
     const noZero = rating.some((ratingOp) => {
       return ratingOp.value !== 0;
     });
@@ -85,8 +88,9 @@ const RatingModal = ({
         rating,
         text,
         reservation: reservation._id,
+        isToGuest,
       });
-      mutate("/api/reservation?keyword=past");
+      mutate(`/api/reservation?keyword=${!isToGuest ? "past" : "myRoom"}`);
       closeModal();
     } catch (error) {
       alert(error.response.data);
@@ -102,30 +106,33 @@ const RatingModal = ({
 
   return (
     <Container>
-      <ModalHeader onClick={closeModal}>후기 남기기</ModalHeader>
+      <ModalHeader onClick={closeModal}>
+        {isToGuest ? "게스트 후기 남기기" : "후기 남기기"}
+      </ModalHeader>
       <div className="rating-modal_main">
-        {ratingOptions.map((option, i) => (
-          <div className="rating-modal_options" key={i}>
-            <div>{option.label}</div>
-            <div>
-              {stars.map((star, i) => (
-                <Star
-                  clicked={
-                    rating[
-                      rating.findIndex(
-                        (ratingOp) => ratingOp.label === option.value
-                      )
-                    ].value > i
-                  }
-                  key={i}
-                  onClick={() => handleClick(option.value, i)}
-                >
-                  {star}
-                </Star>
-              ))}
+        {!isToGuest &&
+          ratingOptions.map((option, i) => (
+            <div className="rating-modal_options" key={i}>
+              <div>{option.label}</div>
+              <div>
+                {stars.map((star, i) => (
+                  <Star
+                    clicked={
+                      rating[
+                        rating.findIndex(
+                          (ratingOp) => ratingOp.label === option.value
+                        )
+                      ].value > i
+                    }
+                    key={i}
+                    onClick={() => handleClick(option.value, i)}
+                  >
+                    {star}
+                  </Star>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         <div className="rating-modal_text">
           <Textarea
             value={text}

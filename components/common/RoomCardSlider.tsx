@@ -3,7 +3,13 @@ import Slider from "react-slick";
 import styled from "styled-components";
 import palette from "styles/palette";
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 const Container = styled.div`
+  .slick-disabled {
+    visibility: hidden !important;
+  }
   .slick-prev {
     left: 10px;
     ::before {
@@ -41,17 +47,26 @@ const Container = styled.div`
       top: -3.5px;
     }
   }
-  &:hover {
-    .slick-arrow {
-      display: block !important;
-    }
-  }
 `;
 
-const RoomCardSlider = ({ children }: { children: React.ReactNode }) => {
+const RoomCardSlider = ({
+  children,
+  slideToScroll = 1,
+  slidesToShow = 1,
+  infinite = true,
+}: {
+  children: React.ReactNode;
+  slideToScroll?: number;
+  slidesToShow?: number;
+  infinite?: boolean;
+}) => {
   return (
     <Container>
-      <Slider slidesToScroll={1} slidesToShow={1} infinite={true}>
+      <Slider
+        slidesToScroll={slideToScroll}
+        slidesToShow={slidesToShow}
+        infinite={infinite}
+      >
         {children}
       </Slider>
     </Container>

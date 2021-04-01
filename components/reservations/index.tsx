@@ -60,7 +60,7 @@ const Button = styled.button<{ clicked: boolean }>`
         width: 100%;
         height: 1px;
         left: 0;
-        bottom: 0;
+        bottom: -1px;
       }
     `}
 `;

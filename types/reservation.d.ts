@@ -10,6 +10,6 @@ export interface IReservation extends Document {
   guestCount: number;
   price: number;
   createdAt: Date;
-  reviewed: boolean;
-  read: boolean;
+  guestReviewed: boolean;
+  hostReviewed: boolean;
 }

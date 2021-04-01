@@ -1,8 +1,10 @@
 import useRoom from "hooks/useRoom";
 import { isEmpty } from "lodash";
+import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
+import { getRoomTypeText } from "utils";
 import Bed from "../../../../public/static/svg/room/bed.svg";
 import Amenity from "./Amenity";
 
@@ -17,11 +19,16 @@ const Container = styled.div`
         font-weight: 300;
       }
     }
-    img {
+    a {
       width: 56px;
       height: 56px;
       border-radius: 50%;
+      overflow: hidden;
       cursor: pointer;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
   .main-container_left_description {
@@ -76,19 +83,6 @@ const Container = styled.div`
 const Contents = () => {
   const { room } = useRoom();
 
-  const getRoomTypeText = () => {
-    switch (room?.roomType) {
-      case "entire":
-        return "전체";
-      case "private":
-        return "개인실";
-      case "public":
-        return "다인실";
-      default:
-        return "";
-    }
-  };
-
   const bedTypeCount = (i: number) =>
     room?.bedType[i].beds
       .map((bed) => `${bed.label} ${bed.count}개`)
@@ -104,14 +98,18 @@ const Contents = () => {
         <div>
           <div className="detail_content-title" style={{ paddingBottom: 5 }}>
             {room.creator.name}님이 호스팅하는 {room.largeBuildingType.label}{" "}
-            {getRoomTypeText()}
+            {getRoomTypeText(room)}
           </div>
           <div>
             최대 인원 {room.maximumGuestCount}명 · 침실 {room.bedroomCount}개 ·
             침대 {room.bedCount}개 · 욕실 {room.bathroomCount}개
           </div>
         </div>
-        <img src={room.creator.avatarUrl} alt="" />
+        <Link href={`/user/${room.creator._id}`}>
+          <a>
+            <img src={room.creator.avatarUrl} alt="" />
+          </a>
+        </Link>
       </div>
       <pre className="main-container_left_description">{room.description}</pre>
       <div className="main-container_left_bed-type">
