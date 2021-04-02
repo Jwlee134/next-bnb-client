@@ -67,7 +67,10 @@ const Photos = () => {
         formData.append(`${i}`, files[i]);
       }
       try {
-        const { data } = await uploadPhotoAPI(formData);
+        const { data } = await uploadPhotoAPI({
+          data: formData,
+          location: "room",
+        });
         dispatch(hostingActions.setPhotos(data));
       } catch (error) {
         alert(error.response.data);
@@ -93,7 +96,7 @@ const Photos = () => {
                 multiple
                 onChange={handleChange}
               />
-              <Button>사진 업로드</Button>
+              <Button backgroundColor="bittersweet">사진 업로드</Button>
               <span>또는 이곳으로 사진을 드래그하세요.</span>
             </AddBox>
           </PhotoContainer>

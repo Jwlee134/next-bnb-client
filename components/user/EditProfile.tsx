@@ -1,5 +1,11 @@
-import React from "react";
+import Button from "components/common/Button";
+import Textarea from "components/common/Textarea";
+import { deletePhotoAPI } from "lib/api/file";
+import { updateUserAPI } from "lib/api/user";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { mutate } from "swr";
+import { IUser } from "types/user";
 
 const Container = styled.div`
   width: fit-content;
@@ -11,8 +17,89 @@ const Container = styled.div`
   text-decoration: underline;
 `;
 
-const EditProfile = () => {
-  return <Container>프로필 수정하기</Container>;
+const TextContainer = styled.div`
+  margin-top: 16px;
+  > div:first-child {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  > div:last-child {
+    display: flex;
+    justify-content: space-between;
+    > div {
+      display: flex;
+      align-items: center;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+  button {
+    width: 80px;
+  }
+`;
+
+const EditProfile = ({
+  modifyMode,
+  setModifyMode,
+  newAvatarUrl,
+  setNewAvatarUrl,
+  user,
+}: {
+  modifyMode: boolean;
+  setModifyMode: React.Dispatch<React.SetStateAction<boolean>>;
+  newAvatarUrl: string | null;
+  setNewAvatarUrl: React.Dispatch<React.SetStateAction<string | null>>;
+  user: IUser;
+}) => {
+  const [text, setText] = useState("");
+
+  const handleChange = (value: string) => setText(value);
+
+  const handleCancel = async () => {
+    setModifyMode(false);
+    if (newAvatarUrl) {
+      const key = newAvatarUrl.split("/avatar/")[1];
+      await deletePhotoAPI(key, "avatar");
+      setNewAvatarUrl(null);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      await updateUserAPI({ avatarUrl: newAvatarUrl, text, user: user._id });
+      setModifyMode(false);
+      mutate(`/api/user?id=${user._id}`);
+    } catch (error) {
+      alert(error.response.data);
+    }
+  };
+
+  return (
+    <>
+      {!modifyMode && (
+        <Container onClick={() => setModifyMode(true)}>
+          프로필 수정하기
+        </Container>
+      )}
+      {modifyMode && (
+        <TextContainer>
+          <div>소개</div>
+          <Textarea value={text} onChange={handleChange} />
+          <div>
+            <div onClick={handleCancel}>취소</div>
+            <Button
+              useValidation
+              isValid={newAvatarUrl !== null || !!text}
+              onClick={handleSave}
+              backgroundColor="black"
+            >
+              저장
+            </Button>
+          </div>
+        </TextContainer>
+      )}
+    </>
+  );
 };
 
 export default EditProfile;

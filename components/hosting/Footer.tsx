@@ -128,10 +128,10 @@ const Footer = ({
         <Link href={nextHref}>
           <a>
             <Button
+              backgroundColor="darkcyan"
               onClick={handleClick}
               style={{
                 width: 62,
-                backgroundColor: palette.dark_cyan,
                 position: "relative",
               }}
             >
@@ -142,10 +142,10 @@ const Footer = ({
       )}
       {isSubmit && (
         <Button
+          backgroundColor="darkcyan"
           onClick={handleSubmit}
           style={{
             width: 100,
-            backgroundColor: palette.dark_cyan,
             position: "relative",
           }}
         >

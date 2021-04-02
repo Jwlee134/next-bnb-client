@@ -55,7 +55,7 @@ const Wishlists = () => {
       <Container>
         <header>
           <div>위시리스트</div>
-          <Button whiteBackground onClick={handleClick}>
+          <Button backgroundColor="white" onClick={handleClick}>
             새로 만들기
           </Button>
         </header>

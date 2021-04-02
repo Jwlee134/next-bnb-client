@@ -52,15 +52,13 @@ const Length = styled.span`
 
 interface Props {
   isValid?: boolean;
-  maxLength: number;
+  maxLength?: number;
   onChange: (value: string) => void;
   value: string;
 }
 
 const Textarea = ({ isValid = true, maxLength, onChange, value }: Props) => {
   const { validation } = useValidation();
-
-  const calculateLength = maxLength - value.length;
 
   return (
     <Container isValid={isValid} validation={validation}>
@@ -71,10 +69,12 @@ const Textarea = ({ isValid = true, maxLength, onChange, value }: Props) => {
           onChange(e.currentTarget.value);
         }}
       />
-      <Text>
-        <span />
-        <Length>{calculateLength}</Length>
-      </Text>
+      {maxLength && (
+        <Text>
+          <span />
+          <Length>{maxLength - value.length}</Length>
+        </Text>
+      )}
     </Container>
   );
 };

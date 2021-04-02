@@ -1,4 +1,3 @@
-import Button from "components/common/Button";
 import ReviewCard from "components/common/ReviewCard";
 import { isEmpty } from "lodash";
 import React, { useState } from "react";
@@ -6,8 +5,7 @@ import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import { IReview } from "types/review";
 import { IUser } from "types/user";
-import ReviewFromGuest from "./ReviewFromGuest";
-import ReviewFromHost from "./ReviewFromHost";
+import ReviewList from "./ReviewList";
 
 const Container = styled.div`
   button {
@@ -63,29 +61,26 @@ const Reviews = ({ user }: { user: IUser }) => {
 
   return (
     <Container>
-      {isEmpty(user.rooms) && (
+      {isEmpty(user.rooms) &&
+        user.reviewFromHost.map((review: IReview, i: number) => (
+          <ReviewCard key={i} review={review} />
+        ))}
+      {!isEmpty(user.rooms) && (
         <>
-          {user.reviewFromHost.map((review: IReview, i: number) => (
-            <ReviewCard key={i} review={review} />
-          ))}
-          <Button whiteBackground>후기 더 보기</Button>
+          <div className="reviews_tab-container">
+            {tabs.map((tab, i) => (
+              <Tab
+                onClick={() => setCurrentTab(i)}
+                clicked={currentTab === i}
+                key={i}
+              >
+                {tab}
+              </Tab>
+            ))}
+          </div>
+          <ReviewList user={user} tab={currentTab} />
         </>
       )}
-      {!isEmpty(user.rooms) && (
-        <div className="reviews_tab-container">
-          {tabs.map((tab, i) => (
-            <Tab
-              onClick={() => setCurrentTab(i)}
-              clicked={currentTab === i}
-              key={i}
-            >
-              {tab}
-            </Tab>
-          ))}
-        </div>
-      )}
-      {currentTab === 0 && <ReviewFromGuest user={user} />}
-      {currentTab === 1 && <ReviewFromHost user={user} />}
     </Container>
   );
 };

@@ -1,10 +1,8 @@
-import { api, setAuthToken } from "lib/api";
+import { fetcher, setAuthToken } from "lib/api";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { IUser } from "types/user";
-
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 const useUser = (redirectUrl?: string) => {
   const router = useRouter();

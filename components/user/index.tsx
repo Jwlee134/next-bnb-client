@@ -1,8 +1,7 @@
 import RoomCardSlider from "components/common/RoomCardSlider";
 import SmallRoomCard from "components/common/SmallRoomCard";
 import Header from "components/header";
-import useUser from "hooks/useUser";
-import { api } from "lib/api";
+import { fetcher } from "lib/api";
 import { isEmpty } from "lodash";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -14,8 +13,8 @@ import palette from "styles/palette";
 import useSWR from "swr";
 import { IRoom } from "types/room";
 import { IUser } from "types/user";
-import EditProfile from "./EditProfile";
 import Reviews from "./reviews";
+import UserIntro from "./UserIntro";
 
 const Container = styled.div`
   header {
@@ -30,6 +29,13 @@ const Container = styled.div`
     max-width: 848px;
     padding: 48px 24px;
     margin: 0 auto;
+    .user_main-container_introduction {
+      margin-top: 24px;
+      pre {
+        font-weight: 300;
+        line-height: 1.5;
+      }
+    }
     .user_main-container_section-title {
       border-top: 1px solid ${palette.gray_eb};
       padding: 24px 0px;
@@ -40,32 +46,6 @@ const Container = styled.div`
       svg {
         margin-right: 5px;
         margin-bottom: 2px;
-      }
-    }
-    .user_main-container_profile {
-      display: flex;
-      img {
-        min-width: 128px;
-        width: 128px;
-        height: 128px;
-        border-radius: 50%;
-        margin-right: 24px;
-      }
-      > div {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        position: relative;
-        div:first-child {
-          font-size: 34px;
-          font-weight: 500;
-        }
-        div:nth-child(2) {
-          opacity: 0.7;
-          font-weight: 300;
-          margin-top: 5px;
-        }
       }
     }
     .user_main-container_rooms {
@@ -89,11 +69,9 @@ const Container = styled.div`
   }
 `;
 
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
-
 const User = () => {
   const { query } = useRouter();
-  const { user } = useUser();
+
   const { data, error } = useSWR<IUser>(`/api/user?id=${query.id}`, fetcher);
 
   if (error) {
@@ -110,14 +88,13 @@ const User = () => {
       <Container>
         <Header useSearchBar={false} />
         <div className="user_main-container">
-          <div className="user_main-container_profile">
-            <img src={data.avatarUrl} alt="" />
-            <div>
-              <div>안녕하세요. 저는 {data.name}입니다.</div>
-              <div>회원가입: {new Date(data.createdAt).getFullYear()}</div>
-              {user?._id === data._id && <EditProfile />}
+          <UserIntro data={data} />
+          {data.introduction && (
+            <div className="user_main-container_introduction">
+              <div className="user_main-container_section-title">소개</div>
+              <pre>{data.introduction}</pre>
             </div>
-          </div>
+          )}
           {!isEmpty(data.rooms) && (
             <div className="user_main-container_rooms">
               <div className="user_main-container_section-title">

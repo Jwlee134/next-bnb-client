@@ -209,7 +209,9 @@ const SignUp = ({ closeModal }: { closeModal: () => void }) => {
         />
       </SelectorContainer>
       <ButtonContainer>
-        <Button type="submit">가입하기</Button>
+        <Button backgroundColor="bittersweet" type="submit">
+          가입하기
+        </Button>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </ButtonContainer>
     </Container>

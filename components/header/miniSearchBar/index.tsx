@@ -161,7 +161,7 @@ const MiniSearchBar = ({ scroll }: Props) => {
       onClick={handleClick}
     >
       <span>검색 시작하기</span>
-      <Button>
+      <Button backgroundColor="bittersweet">
         <BiSearch size={18} />
       </Button>
     </Container>

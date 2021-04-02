@@ -51,6 +51,7 @@ const Image = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 21px;
+  object-fit: cover;
 `;
 
 const PopupContainer = styled.div`

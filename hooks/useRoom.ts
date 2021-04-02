@@ -1,9 +1,7 @@
-import { api } from "lib/api";
+import { fetcher } from "lib/api";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { IRoom } from "types/room";
-
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 const useRoom = () => {
   const { query } = useRouter();

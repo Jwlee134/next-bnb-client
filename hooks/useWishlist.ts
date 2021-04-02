@@ -1,4 +1,4 @@
-import { api } from "lib/api";
+import { fetcher } from "lib/api";
 import { deleteWishItemAPI } from "lib/api/wishlist";
 import { isEmpty } from "lodash";
 import { useEffect, useState } from "react";
@@ -8,8 +8,6 @@ import useSWR from "swr";
 import { IRoom } from "types/room";
 import { IWishlist } from "types/user";
 import useUser from "./useUser";
-
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 const useWishlist = (roomId?: string) => {
   const { user } = useUser();

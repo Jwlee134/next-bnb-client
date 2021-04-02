@@ -71,7 +71,7 @@ const SearchButton = () => {
         })}`}
       >
         <a>
-          <Button onClick={handleClick}>
+          <Button backgroundColor="bittersweet" onClick={handleClick}>
             {!isGettingCoordinates && <BiSearch size={24} />}
             {isGettingCoordinates && <Loader />}
           </Button>

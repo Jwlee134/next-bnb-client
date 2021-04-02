@@ -85,7 +85,9 @@ const Login = ({ closeModal }: { closeModal: () => void }) => {
         />
       </InputContainer>
       <ButtonContainer>
-        <Button type="submit">로그인</Button>
+        <Button backgroundColor="bittersweet" type="submit">
+          로그인
+        </Button>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </ButtonContainer>
     </Container>

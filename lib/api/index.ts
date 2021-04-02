@@ -5,6 +5,8 @@ export const api = axios.create({
   withCredentials: true,
 });
 
+export const fetcher = (url: string) => api.get(url).then((res) => res.data);
+
 export const setAuthToken = (token: string) => {
   api.defaults.headers.common.user = "";
 

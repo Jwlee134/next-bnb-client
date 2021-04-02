@@ -1,7 +1,7 @@
 import Header from "components/header";
 import ManagementSkeleton from "components/skeleton/ManagementSkeleton";
 import useUser from "hooks/useUser";
-import { api } from "lib/api";
+import { fetcher } from "lib/api";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
@@ -97,8 +97,6 @@ const Container = styled.div`
     }
   }
 `;
-
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 const Management = () => {
   const { query } = useRouter();

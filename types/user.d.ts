@@ -11,6 +11,7 @@ export interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   isLoggedIn: boolean;
+  introduction: string;
   rooms: IRoom["_id"];
   review: IReview["_id"];
   reviewFromGuest: IReview["_id"];

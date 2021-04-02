@@ -5,8 +5,6 @@ import palette from "styles/palette";
 
 interface ContainerProps {
   useOnlyButton: boolean;
-  useValidation: boolean;
-  isValid: boolean;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -19,24 +17,13 @@ const Container = styled.div<ContainerProps>`
   align-items: center;
   button {
     width: fit-content;
-    padding: 0px 16px;
-    background-color: ${palette.black};
-    color: white;
+    padding: 0px 24px;
   }
   ${({ useOnlyButton }) =>
     useOnlyButton &&
     css`
       button {
         width: 100%;
-      }
-    `}
-  ${({ useValidation, isValid }) =>
-    useValidation &&
-    !isValid &&
-    css`
-      button {
-        cursor: not-allowed;
-        background-color: ${palette.gray_dd};
       }
     `}
 `;
@@ -66,13 +53,16 @@ const ModalFooter = ({
   isValid = false,
 }: Props) => {
   return (
-    <Container
-      useOnlyButton={useOnlyButton}
-      useValidation={useValidation}
-      isValid={isValid}
-    >
+    <Container useOnlyButton={useOnlyButton}>
       {!useOnlyButton && <Abort onClick={onAbortClick}>{abortText}</Abort>}
-      <Button onClick={onButtonClick}>{buttonText}</Button>
+      <Button
+        useValidation={useValidation}
+        isValid={isValid}
+        backgroundColor="black"
+        onClick={onButtonClick}
+      >
+        {buttonText}
+      </Button>
     </Container>
   );
 };

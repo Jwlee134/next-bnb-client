@@ -6,13 +6,7 @@ import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import differenceInDays from "date-fns/differenceInDays";
 import { addComma } from "utils";
-import {
-  addDays,
-  addMonths,
-  addSeconds,
-  eachDayOfInterval,
-  format,
-} from "date-fns";
+import { addDays, addMonths, eachDayOfInterval, format } from "date-fns";
 import { IRoom } from "types/room";
 import useSocket from "hooks/useSocket";
 import useUser from "hooks/useUser";
@@ -150,7 +144,7 @@ const BookingWindow = () => {
       roomId: room._id as string,
       guestId: user._id as string,
       checkIn: search.checkIn,
-      checkOut: addSeconds(new Date(), 10),
+      checkOut: search.checkOut,
       guestCount: search.adults + search.children,
       price: room.price * (nights as number),
     };
@@ -257,7 +251,7 @@ const BookingWindow = () => {
           최대 인원 수는 {room.maximumGuestCount}명 입니다.
         </NotValid>
       )}
-      <Button onClick={handleClick}>
+      <Button backgroundColor="bittersweet" onClick={handleClick}>
         {!search.checkIn || !search.checkOut ? "예약 가능 여부 보기" : ""}
         {search.checkIn && search.checkOut && "예약하기"}
       </Button>

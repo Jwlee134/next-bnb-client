@@ -94,7 +94,7 @@ const PhotoList = ({ photos }: { photos: string[] }) => {
     const key = photos[index].split("/room/")[1];
     if (key) {
       try {
-        await deletePhotoAPI(key);
+        await deletePhotoAPI(key, "room");
         const newPhotos = [...photos];
         newPhotos.splice(index, 1);
         dispatch(hostingActions.setPhotos(newPhotos));
