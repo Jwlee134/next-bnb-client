@@ -6,6 +6,8 @@ import { wrapper } from "store";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { useStore } from "react-redux";
+import { ThemeProvider } from "styled-components";
+import theme from "styles/theme";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const store = useStore();
@@ -14,8 +16,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <>
       <GlobalStyles />
       <PersistGate persistor={persistor}>
-        <Component {...pageProps} />
-        <div id="modal" />
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+          <div id="modal" />
+        </ThemeProvider>
       </PersistGate>
     </>
   );

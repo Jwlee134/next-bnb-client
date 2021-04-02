@@ -1,3 +1,13 @@
+export const quickSearchKeywords = {
+  latitude: "36.1",
+  longitude: "128",
+  adults: "1",
+  children: "0",
+  infants: "0",
+  zoom: "7",
+  coordsBounds: "2.4",
+};
+
 export const months = Array.from({ length: 12 }, (_, i) => i + 1).map(
   (month) => `${month}월`
 );
