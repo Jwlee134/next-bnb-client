@@ -74,8 +74,9 @@ const Container = styled.div<ContainerProps>`
   }
   .DateInput_fang,
   .DayPickerKeyboardShortcuts_buttonReset,
-  .DateRangePickerInput_arrow_svg {
-    display: none;
+  .DateRangePickerInput_arrow_svg,
+  .DateInput_screenReaderMessage {
+    display: none !important;
   }
   .DateRangePicker_picker {
     top: 80px !important;
@@ -164,6 +165,9 @@ const Container = styled.div<ContainerProps>`
     background-color: ${palette.gray_eb};
     height: 28px;
     margin: auto 0;
+  }
+  .CalendarDay__default:hover {
+    border: 0 !important;
   }
 `;
 

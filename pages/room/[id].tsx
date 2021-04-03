@@ -1,9 +1,18 @@
 import React from "react";
 import { NextPage } from "next";
-import dynamic from "next/dynamic";
+import RoomDetail from "components/room/detail";
+import Head from "next/head";
+import Header from "components/header";
+import { commonTitle } from "lib/staticData";
 
-const RoomDetail = dynamic(() => import("components/room/detail"));
-
-const roomDetail: NextPage = () => <RoomDetail />;
+const roomDetail: NextPage = () => (
+  <>
+    <Head>
+      <title>{commonTitle}</title>
+    </Head>
+    <Header />
+    <RoomDetail />
+  </>
+);
 
 export default roomDetail;

@@ -1,3 +1,5 @@
+export const commonTitle = "숙소, 체험, 장소를 모두 한 곳에서 - 에어비앤비";
+
 export const quickSearchKeywords = {
   latitude: "36.1",
   longitude: "128",

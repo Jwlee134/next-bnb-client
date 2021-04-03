@@ -102,7 +102,9 @@ const Rules = () => {
             onChange={handleChange}
             placeholder="조용히 해야 하는 시간, 실내 신발 착용 여부 등"
           />
-          <Button onClick={handleAdd}>추가</Button>
+          <Button backgroundColor="white" onClick={handleAdd}>
+            추가
+          </Button>
         </InputContainer>
       </Container>
       <Footer nextHref="/become-a-host/availability" />

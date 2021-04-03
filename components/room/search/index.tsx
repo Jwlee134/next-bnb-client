@@ -1,8 +1,6 @@
-import Header from "components/header";
 import { format } from "date-fns";
-import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import { ImMap2 } from "react-icons/im";
@@ -10,7 +8,6 @@ import { useSelector } from "store";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import dynamic from "next/dynamic";
-import querystring from "querystring";
 import RoomList from "./RoomList";
 import Filter from "./filter";
 
@@ -88,29 +85,6 @@ const SearchResults = () => {
   const router = useRouter();
   const { query } = router;
 
-  useEffect(() => {
-    if (Number(query.page) < 1) {
-      router.push(
-        `/search/rooms?${querystring.stringify({ ...query, page: "1" })}`
-      );
-    }
-    if (Number(query.adults) < 1) {
-      router.push(
-        `/search/rooms?${querystring.stringify({ ...query, adults: "1" })}`
-      );
-    }
-    if (Number(query.children) < 0) {
-      router.push(
-        `/search/rooms?${querystring.stringify({ ...query, children: "0" })}`
-      );
-    }
-    if (Number(query.infants) < 0) {
-      router.push(
-        `/search/rooms?${querystring.stringify({ ...query, infants: "0" })}`
-      );
-    }
-  }, []);
-
   const searchInfo = `${originalLength}개의 숙소 
   ${
     query.checkIn && query.checkOut
@@ -123,10 +97,6 @@ const SearchResults = () => {
 
   return (
     <>
-      <Head>
-        <title>{query.value} · 숙소 · Airbnb</title>
-      </Head>
-      <Header />
       <Container>
         <ListContainer showMap={showMap}>
           <div>

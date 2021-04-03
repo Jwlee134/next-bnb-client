@@ -50,13 +50,13 @@ const BedType = ({ bedroom }: Props) => {
     (bed) => !addedBedTypeList.includes(bed)
   );
 
-  const totalBedCount = useMemo(() => {
+  const totalBedCount = () => {
     let total = 0;
     bedroom.beds.forEach((bed) => {
       total += bed.count;
     });
     return total;
-  }, [bedroom]);
+  };
 
   const handleClick = (value: number, label: string, id: number) => {
     dispatch(hostingActions.setBedTypeCount({ value, label, id }));
@@ -78,7 +78,7 @@ const BedType = ({ bedroom }: Props) => {
     <BedTypeContainer>
       <LeftContainer>
         <Label>{bedroom.id}번 침실</Label>
-        <Bed>침대 {totalBedCount}개</Bed>
+        <Bed>침대 {totalBedCount()}개</Bed>
         {!add && <Bed>{beds}</Bed>}
         {add &&
           bedroom.beds.map((bed, index) => (
@@ -103,12 +103,10 @@ const BedType = ({ bedroom }: Props) => {
       </LeftContainer>
       <RightContainer>
         <Button
+          backgroundColor="white"
           onClick={() => setAdd(!add)}
           style={{
             width: 160,
-            backgroundColor: "white",
-            color: "black",
-            border: `1px solid ${palette.dark_cyan} `,
           }}
         >
           {add ? "완료" : "침대 추가하기"}
@@ -118,4 +116,4 @@ const BedType = ({ bedroom }: Props) => {
   );
 };
 
-export default BedType;
+export default React.memo(BedType);

@@ -1,6 +1,5 @@
 import Header from "components/header";
 import React from "react";
-import Head from "next/head";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
@@ -10,7 +9,6 @@ import WishlistModal from "components/modal/wishlistModal";
 import ListCard from "components/wishlists/ListCard";
 import useWishlist from "hooks/useWishlist";
 import useUser from "hooks/useUser";
-import WishlistSkeleton from "components/skeleton/WishlistSkeleton";
 
 const Container = styled.div`
   padding: 36px 80px 24px 80px;
@@ -48,10 +46,6 @@ const Wishlists = () => {
 
   return (
     <>
-      <Head>
-        <title>위시리스트 · 에어비앤비</title>
-      </Head>
-      <Header useSearchBar={false} />
       <Container>
         <header>
           <div>위시리스트</div>
@@ -60,11 +54,9 @@ const Wishlists = () => {
           </Button>
         </header>
         <main>
-          {wishlist ? (
-            wishlist.map((list, i) => <ListCard item={list} key={i} />)
-          ) : (
-            <WishlistSkeleton />
-          )}
+          {wishlist?.map((list, i) => (
+            <ListCard item={list} key={i} />
+          ))}
         </main>
       </Container>
       <ModalPortal>

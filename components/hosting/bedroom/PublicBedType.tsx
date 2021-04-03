@@ -96,12 +96,10 @@ const PublicBedType = () => {
       </LeftContainer>
       <RightContainer>
         <Button
+          backgroundColor="white"
           onClick={() => setAdd(!add)}
           style={{
             width: 160,
-            backgroundColor: "white",
-            color: "black",
-            border: `1px solid ${palette.dark_cyan} `,
           }}
         >
           {add ? "완료" : "침대 추가하기"}
@@ -111,4 +109,4 @@ const PublicBedType = () => {
   );
 };
 
-export default PublicBedType;
+export default React.memo(PublicBedType);

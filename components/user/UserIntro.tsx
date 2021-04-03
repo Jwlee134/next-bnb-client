@@ -1,11 +1,13 @@
 import useUser from "hooks/useUser";
 import { uploadPhotoAPI } from "lib/api/file";
+import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { HiPencil } from "react-icons/hi";
 import styled from "styled-components";
 import palette from "styles/palette";
 import { IUser } from "types/user";
-import EditProfile from "./EditProfile";
+
+const EditProfile = dynamic(() => import("./EditProfile"));
 
 const Container = styled.div`
   display: flex;

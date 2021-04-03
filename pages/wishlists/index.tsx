@@ -1,9 +1,17 @@
+import Header from "components/header";
+import Wishlists from "components/wishlists";
 import { NextPage } from "next";
-import dynamic from "next/dynamic";
+import Head from "next/head";
 import React from "react";
 
-const Wishlists = dynamic(() => import("components/wishlists"));
-
-const wishlists: NextPage = () => <Wishlists />;
+const wishlists: NextPage = () => (
+  <>
+    <Head>
+      <title>위시리스트 - 에어비앤비</title>
+    </Head>
+    <Header useSearchBar={false} />
+    <Wishlists />
+  </>
+);
 
 export default wishlists;

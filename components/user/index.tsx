@@ -1,6 +1,4 @@
-import RoomCardSlider from "components/common/RoomCardSlider";
 import SmallRoomCard from "components/common/SmallRoomCard";
-import Header from "components/header";
 import { fetcher } from "lib/api";
 import { isEmpty } from "lodash";
 import Head from "next/head";
@@ -13,15 +11,15 @@ import palette from "styles/palette";
 import useSWR from "swr";
 import { IRoom } from "types/room";
 import { IUser } from "types/user";
+import dynamic from "next/dynamic";
 import Reviews from "./reviews";
 import UserIntro from "./UserIntro";
 
+const RoomCardSlider = dynamic(
+  () => import("components/common/RoomCardSlider")
+);
+
 const Container = styled.div`
-  header {
-    > div {
-      padding: 0px 120px;
-    }
-  }
   .slick-arrow {
     display: block !important;
   }
@@ -72,21 +70,23 @@ const Container = styled.div`
 const User = () => {
   const { query } = useRouter();
 
-  const { data, error } = useSWR<IUser>(`/api/user?id=${query.id}`, fetcher);
+  const { data, error } = useSWR<IUser>(
+    query.id ? `/api/user?id=${query.id}` : null,
+    fetcher
+  );
 
+  if (!data) return null;
   if (error) {
     return (
       <Error statusCode={error.response.status} message={error.response.data} />
     );
   }
-  if (!data) return null;
   return (
     <>
       <Head>
         <title>{data.name}님의 프로필 · 에어비앤비</title>
       </Head>
       <Container>
-        <Header useSearchBar={false} />
         <div className="user_main-container">
           <UserIntro data={data} />
           {data.introduction && (

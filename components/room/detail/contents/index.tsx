@@ -1,12 +1,14 @@
 import useRoom from "hooks/useRoom";
 import { isEmpty } from "lodash";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import { getRoomTypeText } from "utils";
 import Bed from "../../../../public/static/svg/room/bed.svg";
-import Amenity from "./Amenity";
+
+const Amenity = dynamic(() => import("./Amenity"));
 
 const Container = styled.div`
   .main-container_left_title_avatar-url {

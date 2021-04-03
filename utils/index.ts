@@ -51,10 +51,14 @@ export const extractKeywords = (query: {
   const keys = Object.keys(query);
   const values = Object.values(query);
 
-  const newObj: { [key: string]: string | string[] | undefined } = {};
+  const newObj: { [key: string]: string | string[] | number | undefined } = {};
   keys.forEach((key, i) => {
     if (!keywords.includes(key)) return;
-    newObj[key] = values[i];
+    if (key === "value" || key === "checkIn" || key === "checkOut") {
+      newObj[key] = values[i];
+    } else {
+      newObj[key] = Number(values[i]);
+    }
   });
   return newObj;
 };

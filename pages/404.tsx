@@ -1,3 +1,4 @@
+import Header from "components/header";
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -30,6 +31,7 @@ const NotFound: NextPage = () => (
     <Head>
       <title>웹페이지를 표시할 수 없습니다.</title>
     </Head>
+    <Header useSearchBar={false} />
     <Container>
       <div>존재하지 않는 페이지입니다.</div>
       <Link href="/">홈으로 돌아가기</Link>

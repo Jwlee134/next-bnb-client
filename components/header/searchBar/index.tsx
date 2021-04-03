@@ -13,14 +13,14 @@ import SearchButton from "./SearchButton";
 const SearchBarContainer = styled.div`
   position: absolute;
   top: 100px;
-  width: 100%;
-  padding: 0px 30px;
+  width: fit-content;
+  margin: 0px 30px;
   left: 50%;
   transform: translate(-50%);
 `;
 
 const Container = styled.div`
-  width: 100%;
+  width: 850px;
   max-width: 850px;
   height: 64px;
   color: black;

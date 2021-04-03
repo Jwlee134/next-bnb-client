@@ -1,5 +1,5 @@
 import ReservationCard from "components/common/ReservationCard";
-import { api } from "lib/api";
+import { fetcher } from "lib/api";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import useSWR, { mutate } from "swr";
@@ -9,8 +9,6 @@ import { IUser } from "types/user";
 const Container = styled.div`
   width: 100%;
 `;
-
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 const MyRoom = ({
   setError,

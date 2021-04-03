@@ -1,8 +1,6 @@
-import Header from "components/header";
 import ManagementSkeleton from "components/skeleton/ManagementSkeleton";
 import useUser from "hooks/useUser";
 import { fetcher } from "lib/api";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
@@ -112,11 +110,7 @@ const Management = () => {
   if (error) return <Error statusCode={error.response.status} />;
   return (
     <>
-      <Head>
-        <title>숙소 관리 · 에어비앤비</title>
-      </Head>
       <Container>
-        <Header useSearchBar={false} />
         <main>
           <div>
             <div className="management_title">숙소 {data?.length}개</div>

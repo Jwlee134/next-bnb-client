@@ -92,6 +92,7 @@ const ReservationCard = ({
   isPast?: boolean;
 }) => {
   const { openModal, closeModal, ModalPortal } = useModal();
+  console.log(new Date(), new Date(reservation.checkOut));
   return (
     <>
       <Container>
@@ -130,6 +131,7 @@ const ReservationCard = ({
               <div>완료</div>
             ))}
           {isMyRoom &&
+            new Date() > new Date(reservation.checkOut) &&
             (!reservation.hostReviewed ? (
               <Review onClick={openModal}>게스트 후기 남기기</Review>
             ) : (

@@ -1,7 +1,5 @@
-import Header from "components/header";
 import useUser from "hooks/useUser";
 import { isEmpty } from "lodash";
-import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
@@ -14,11 +12,6 @@ import Upcoming from "./Upcoming";
 import MyRoom from "./MyRoom";
 
 const Container = styled.div`
-  header {
-    > div {
-      max-width: 1280px;
-    }
-  }
   .reservations_main {
     padding: 36px 80px;
     width: 100%;
@@ -96,10 +89,6 @@ const Reservations = () => {
 
   return (
     <Container>
-      <Head>
-        <title>예약 목록 · 에어비앤비</title>
-      </Head>
-      <Header useSearchBar={false} />
       <div className="reservations_main">
         <div>예약 목록</div>
         <div className="reservations_button-container">

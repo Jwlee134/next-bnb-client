@@ -1,4 +1,3 @@
-import Header from "components/header";
 import React from "react";
 import styled from "styled-components";
 import MainScreen from "./MainScreen";
@@ -25,7 +24,6 @@ const Container = styled.div`
 
 const Home = () => (
   <Container>
-    <Header />
     <div className="home_background-img" />
     <div className="home_contents">
       <MainScreen />

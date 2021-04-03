@@ -4,13 +4,13 @@ import palette from "styles/palette";
 
 interface ContainerProps {
   socialAuthButton: boolean;
-  backgroundColor: "bittersweet" | "black" | "white" | "darkcyan";
+  backgroundColor: "bittersweet" | "black" | "white" | "darkcyan" | undefined;
   useValidation: boolean;
   isValid: boolean;
 }
 
 const getBackgroundColor = (
-  color: "bittersweet" | "black" | "white" | "darkcyan"
+  color: "bittersweet" | "black" | "white" | "darkcyan" | undefined
 ) => {
   switch (color) {
     case "bittersweet":
@@ -82,7 +82,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   style?: Object;
   children: React.ReactNode;
   socialAuthButton?: boolean;
-  backgroundColor: "bittersweet" | "black" | "white" | "darkcyan";
+  backgroundColor?: "bittersweet" | "black" | "white" | "darkcyan";
   useValidation?: boolean;
   isValid?: boolean;
 }
@@ -110,4 +110,4 @@ const Button = ({
   );
 };
 
-export default Button;
+export default React.memo(Button);

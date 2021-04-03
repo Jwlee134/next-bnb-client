@@ -82,7 +82,10 @@ const PhotoList = ({ photos }: { photos: string[] }) => {
         formData.append(`${i}`, files[i]);
       }
       try {
-        const { data } = await uploadPhotoAPI(formData);
+        const { data } = await uploadPhotoAPI({
+          data: formData,
+          location: "room",
+        });
         dispatch(hostingActions.setPhotos([...photos, ...data]));
       } catch (error) {
         alert(error.response.data);

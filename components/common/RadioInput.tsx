@@ -150,4 +150,4 @@ const RadioInput = ({
   );
 };
 
-export default RadioInput;
+export default React.memo(RadioInput);

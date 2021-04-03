@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Head from "next/head";
-import Header from "components/header";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import { useRouter } from "next/router";
@@ -99,7 +98,6 @@ const Wishlist = () => {
             : "숙소, 체험, 장소를 모두 한 곳에서 - 에어비앤비"}
         </title>
       </Head>
-      <Header useSearchBar={false} />
       <Container>
         <div className="wishlist_room-card-container">
           <div className="wishlist_room-card-container_buttons">

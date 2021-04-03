@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import Head from "next/head";
-import Header from "components/header";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import { useRouter } from "next/router";
@@ -11,20 +9,15 @@ import { makeQueryString } from "utils";
 import { searchActions } from "store/search";
 import useRoom from "hooks/useRoom";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 
 import Photos from "./contents/Photos";
 import BookingWindow from "./BookingWindow";
 import Contents from "./contents";
 import Title from "./title";
-import Rating from "./rating";
 
+const Rating = dynamic(() => import("./rating"));
 const Map = dynamic(() => import("components/common/Map"), { ssr: false });
-
-const HeaderContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
 
 const Container = styled.div`
   @media screen and (max-width: 1023px) {
@@ -82,6 +75,18 @@ const RoomDetail = () => {
 
   const dispatch = useDispatch();
 
+  const redirectTo = (keyword: string, num: number) => {
+    if (Number(query[keyword]) < num) {
+      router.push(
+        `/room/${query.id}${makeQueryString({
+          ...query,
+          id: "",
+          [keyword]: String(num),
+        })}`
+      );
+    }
+  };
+
   useEffect(() => {
     if (!query) return;
     dispatch(
@@ -95,33 +100,9 @@ const RoomDetail = () => {
     );
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
-    if (Number(query.adults) < 1) {
-      router.push(
-        `/room/${query.id}${makeQueryString({
-          ...query,
-          id: "",
-          adults: "1",
-        })}`
-      );
-    }
-    if (Number(query.children) < 0) {
-      router.push(
-        `/room/${query.id}${makeQueryString({
-          ...query,
-          id: "",
-          children: "0",
-        })}`
-      );
-    }
-    if (Number(query.infants) < 0) {
-      router.push(
-        `/room/${query.id}${makeQueryString({
-          ...query,
-          id: "",
-          infants: "0",
-        })}`
-      );
-    }
+    redirectTo("adults", 1);
+    redirectTo("children", 0);
+    redirectTo("infants", 0);
   }, [query]);
 
   if (error) {
@@ -132,29 +113,18 @@ const RoomDetail = () => {
 
   if (!room) {
     return (
-      <>
-        <Head>
-          <title>숙소, 체험, 장소를 모두 한 곳에서 - 에어비앤비</title>
-        </Head>
-        <HeaderContainer>
-          <Header />
-        </HeaderContainer>
-        <Container>
-          <RoomDetailSkeleton />
-        </Container>
-      </>
+      <Container>
+        <RoomDetailSkeleton />
+      </Container>
     );
   }
 
   return (
     <>
-      <Head>
-        <title>{room.title}</title>
-      </Head>
-      <HeaderContainer>
-        <Header />
-      </HeaderContainer>
       <Container>
+        <Head>
+          <title>{room.title}</title>
+        </Head>
         <div>
           <Title />
           <div className="detail_photo-container">

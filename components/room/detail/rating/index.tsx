@@ -90,7 +90,7 @@ const Rating = () => {
                 ))}
               </div>
               {room.review.length > 6 && (
-                <Button whiteBackground onClick={openModal}>
+                <Button backgroundColor="white" onClick={openModal}>
                   후기 {room.review.length}개 모두 보기
                 </Button>
               )}

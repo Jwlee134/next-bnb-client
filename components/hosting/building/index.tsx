@@ -43,7 +43,7 @@ const Building = () => {
     );
   };
 
-  const detailBuildingTypeList = useMemo(() => {
+  const detailBuildingTypeList = () => {
     switch (largeBuildingType.label) {
       case "아파트":
         return apartmentBuildingTypeList;
@@ -60,7 +60,7 @@ const Building = () => {
       default:
         return [];
     }
-  }, [largeBuildingType]);
+  };
 
   const handleDetailBuildingType = ({
     label,
@@ -91,7 +91,7 @@ const Building = () => {
             <SelectorContainer>
               <AdvancedSelector
                 title="이제 더 구체적인 유형을 선택해주세요."
-                options={detailBuildingTypeList}
+                options={detailBuildingTypeList()}
                 value={buildingType.label}
                 description={buildingType.description}
                 onClick={handleDetailBuildingType}
