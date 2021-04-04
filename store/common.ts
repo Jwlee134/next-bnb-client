@@ -5,7 +5,6 @@ interface IState {
   wishlistMode: "create" | "add";
   hostingMode: "register" | "update";
   validation: boolean;
-  showMap: boolean;
   showSearchBar: boolean;
   showMiniSearchBar: boolean;
   showLocationPopup: boolean;
@@ -14,6 +13,7 @@ interface IState {
   clickedRoomId: string;
   photoIndex: number;
   isLoading: boolean;
+  innerWidth: number;
 }
 
 const initialState: IState = {
@@ -21,7 +21,6 @@ const initialState: IState = {
   wishlistMode: "add",
   hostingMode: "register",
   validation: false,
-  showMap: true,
   showSearchBar: true,
   showMiniSearchBar: false,
   showLocationPopup: false,
@@ -30,6 +29,7 @@ const initialState: IState = {
   clickedRoomId: "",
   photoIndex: 0,
   isLoading: false,
+  innerWidth: 0,
 };
 
 const common = createSlice({
@@ -47,9 +47,6 @@ const common = createSlice({
     },
     setValidation: (state, action: PayloadAction<boolean>) => {
       state.validation = action.payload;
-    },
-    setShowMap: (state, action: PayloadAction<boolean>) => {
-      state.showMap = action.payload;
     },
     setShowSearchBar: (state, action: PayloadAction<boolean>) => {
       state.showSearchBar = action.payload;
@@ -74,6 +71,9 @@ const common = createSlice({
     },
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
+    },
+    setInnerWidth: (state, action: PayloadAction<number>) => {
+      state.innerWidth = action.payload;
     },
   },
 });

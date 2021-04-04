@@ -33,52 +33,66 @@ const RightContainer = styled.div`
   position: relative;
 `;
 
-const Container = styled.header<ContainerProps>`
-  @media screen and (max-width: 1023px) {
-    > div {
-      padding: 0px 24px !important;
-    }
+const getEffects = (pathname: string, isTop: boolean, showMap: boolean) => {
+  if (pathname === "/" && isTop) {
+    return css`
+      color: white;
+      box-shadow: none;
+      background-color: transparent;
+    `;
   }
+  if (pathname.includes("search")) {
+    if (!showMap) {
+      return css`
+        > div {
+          max-width: ${({ theme }) => theme.maxWidth.normal};
+        }
+      `;
+    }
+    return css`
+      > div {
+        padding: ${({ theme }) => theme.padding.tablet};
+        max-width: initial;
+      }
+    `;
+  }
+  if (pathname === "/room/[id]") {
+    return css`
+      position: relative;
+      > div {
+        max-width: ${({ theme }) => theme.maxWidth.normal};
+      }
+    `;
+  }
+};
+
+const Container = styled.header<ContainerProps>`
   width: 100%;
   height: 80px;
   position: sticky;
   top: 0;
   z-index: 10;
-  color: white;
+  color: #ff395b;
+  box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
+  background-color: white;
   transition: color 0.15s linear;
   transition: box-shadow 0.15s linear;
   transition: background-color 0.15s linear;
-  ${({ pathname, isTop }) =>
-    pathname !== "/" || !isTop
-      ? css`
-          color: #ff395b;
-          box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
-          background-color: white;
-        `
-      : css``}
-  ${({ pathname }) =>
-    pathname === "/room/[id]" &&
-    css`
-      position: relative;
-      > div {
-        max-width: 1280px !important;
-      }
-    `}
   > div {
     width: 100%;
-    max-width: 1760px;
-    padding: 0px 80px;
     margin: 0 auto;
+    padding: 0px 80px;
+    max-width: ${({ theme }) => theme.maxWidth.wide};
     height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    ${({ pathname, showMap }) =>
-      pathname.includes("search") &&
-      css`
-        padding: ${showMap ? "0px 24px" : "0px 80px"};
-        max-width: ${showMap && "inherit"};
-      `}
+  }
+  ${({ pathname, isTop, showMap }) => getEffects(pathname, isTop, showMap)}
+  @media ${({ theme }) => theme.device.tablet} {
+    > div {
+      padding: ${({ theme }) => theme.padding.tablet};
+    }
   }
 `;
 
@@ -94,7 +108,7 @@ const Background = styled.div`
 `;
 
 const Header = ({ useSearchBar = true }: { useSearchBar?: boolean }) => {
-  const showMap = useSelector((state) => state.common.showMap);
+  const showMap = useSelector((state) => state.map.showMap);
   const showSearchBar = useSelector((state) => state.common.showSearchBar);
   const { pathname } = useRouter();
 

@@ -8,7 +8,7 @@ import querystring from "querystring";
 import RoomCardSkeleton from "components/skeleton/RoomCardSkeleton";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import RoomCard from "../../common/RoomCard";
+import RoomCard from "../../../common/RoomCard";
 
 const Container = styled.div`
   .paginate-container {

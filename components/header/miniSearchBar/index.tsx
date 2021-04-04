@@ -16,7 +16,7 @@ interface MiniSearchBarProps {
 
 const sizeDown = keyframes`
   0% {
-    transform: translateY(85px) scale(2, 1);
+    transform: translateY(85px) scale(1.8, 1);
     display: none;
   }
   100% {
@@ -29,7 +29,7 @@ const sizeUp = keyframes`
     transform: translateY(0px) scale(1, 1);
   }
   100% {
-    transform: translateY(85px) scale(2, 1);
+    transform: translateY(85px) scale(1.8, 1);
     display: none;
   }
 `;

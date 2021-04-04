@@ -11,14 +11,18 @@ import Loader from "components/common/Loader";
 import { render } from "react-dom";
 import { IRoom } from "types/room";
 import { commonActions } from "store/common";
-import InfoWindow from "../room/search/InfoWindow";
+import { IoCloseSharp, IoFilter } from "react-icons/io5";
+import useModal from "hooks/useModal";
+import FilterModal from "components/modal/filterModal";
+import InfoWindow from "../room/search/map/InfoWindow";
+import { mapActions } from "store/map";
 
 const Container = styled.div`
   width: 100%;
   height: calc(100vh - 80px);
   position: sticky;
   top: 80px;
-  > div {
+  > div:first-child {
     width: 100%;
     height: 100%;
     .gm-fullscreen-control,
@@ -49,38 +53,65 @@ const Container = styled.div`
       }
     }
   }
-`;
-
-const Label = styled.label`
-  min-width: 133px;
-  position: absolute;
-  top: 0;
-  width: fit-content;
-  height: 40px;
-  background-color: white;
-  margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px -1px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 16px;
-  font-family: Noto Sans KR;
-  padding: 0px 12px;
-  cursor: pointer;
-  left: 50% !important;
-  transform: translate(-50%) !important;
-  input {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    margin-right: 10px;
+  .map_button {
+    height: 40px;
+    position: absolute;
+    background-color: white;
+    top: 0;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px -1px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-family: Noto Sans KR;
   }
-  svg {
-    margin-right: 6px;
+  .map_fullscreen-button {
+    display: none;
+    width: 40px;
+    svg {
+      color: #595959;
+    }
   }
-  div {
-    margin-bottom: 2px;
+  .map_filter-button {
+    right: 20px;
+  }
+  .map_close-button {
+    left: 20px;
+  }
+  .map_move-to-search_toggle {
+    min-width: 133px;
+    width: fit-content;
+    padding: 0px 12px;
+    left: 50% !important;
+    transform: translate(-50%) !important;
+    input {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      margin-right: 10px;
+    }
+    svg {
+      margin-right: 6px;
+    }
+    div {
+      margin-bottom: 2px;
+    }
+  }
+  @media ${({ theme }) => theme.device.pcSmall} {
+    .map_close-button,
+    .map_filter-button {
+      display: flex;
+    }
+    > div:first-child {
+      .gm-bundled-control {
+        .gmnoprint {
+          top: 70px !important;
+        }
+      }
+    }
   }
 `;
 
@@ -116,6 +147,8 @@ const Map = ({
   const router = useRouter();
   const { query } = router;
 
+  const { openModal, closeModal, ModalPortal } = useModal();
+
   const [map, setMap] = useState<google.maps.Map<HTMLDivElement> | null>(null);
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(
     null
@@ -150,6 +183,7 @@ const Map = ({
     document.head.appendChild(script);
   }, []);
 
+  // FitBounds 이벤트 함수
   useEffect(() => {
     if (!map || !markers || !useFitBounds) return;
     const coordinates: google.maps.LatLng[] = [];
@@ -167,6 +201,7 @@ const Map = ({
     map.fitBounds(bounds, 100);
   }, [map, markers]);
 
+  // 지도 움직임 이벤트 후 데이터 가져오는 함수
   const getNewResults = (map: google.maps.Map<HTMLDivElement>) => {
     const coordsBounds = (
       ((map.getBounds() as google.maps.LatLngBounds).getNorthEast().lat() -
@@ -199,6 +234,7 @@ const Map = ({
     map.setZoom(zoom);
   }, [map, lat, lng, zoom]);
 
+  // 지도를 움직이며 검색 이벤트 함수
   useEffect(() => {
     if (!map) return;
     if (!useMoveToSearch) return;
@@ -222,6 +258,7 @@ const Map = ({
     };
   }, [map, searchWithMoving, query]);
 
+  // 인포윈도우 생성 함수
   const createInfoWindow = (
     e: google.maps.MapMouseEvent,
     map: google.maps.Map<HTMLDivElement>,
@@ -310,6 +347,7 @@ const Map = ({
     };
   }, [hoveredItemIndex]);
 
+  // 이 지역 검색 버튼 클릭 이벤트
   const handleClick = () => {
     if (!isMoved) return;
     getNewResults(map as google.maps.Map<HTMLDivElement>);
@@ -320,28 +358,50 @@ const Map = ({
     setSearchWithMoving(e.target.checked);
 
   return (
-    <Container>
-      <div ref={mapRef} />
-      {useMoveToSearch && (
-        <Label onClick={handleClick}>
-          {isLoading && <Loader whiteBackground />}
-          {!isLoading && (
-            <>
-              {!isMoved && (
-                <input
-                  type="checkbox"
-                  checked={searchWithMoving}
-                  onChange={handleCheckbox}
-                />
-              )}
-              {isMoved && <MdRefresh size={20} />}
-              <div>{isMoved ? "이 지역 검색" : "지도를 움직이며 검색하기"}</div>
-            </>
-          )}
-        </Label>
-      )}
-    </Container>
+    <>
+      <Container className="map">
+        <div ref={mapRef} />
+        <div
+          className="map_close-button map_button map_fullscreen-button"
+          onClick={() => dispatch(mapActions.setShowMap(false))}
+        >
+          <IoCloseSharp size={30} />
+        </div>
+        <div
+          className="map_filter-button map_button map_fullscreen-button"
+          onClick={openModal}
+        >
+          <IoFilter size={26} />
+        </div>
+        {useMoveToSearch && (
+          <label
+            className="map_move-to-search_toggle map_button"
+            onClick={handleClick}
+          >
+            {isLoading && <Loader whiteBackground />}
+            {!isLoading && (
+              <>
+                {!isMoved && (
+                  <input
+                    type="checkbox"
+                    checked={searchWithMoving}
+                    onChange={handleCheckbox}
+                  />
+                )}
+                {isMoved && <MdRefresh size={20} />}
+                <div>
+                  {isMoved ? "이 지역 검색" : "지도를 움직이며 검색하기"}
+                </div>
+              </>
+            )}
+          </label>
+        )}
+      </Container>
+      <ModalPortal>
+        <FilterModal closeModal={closeModal} />
+      </ModalPortal>
+    </>
   );
 };
 
-export default Map;
+export default React.memo(Map);

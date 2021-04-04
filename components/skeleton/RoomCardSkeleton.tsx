@@ -35,9 +35,9 @@ const RoomCardSkeleton = () => (
     <InfoContainer>
       <TopContainer>
         <Skeleton width={200} height={16.8} />
-        <Skeleton width={300} height={24} />
+        <Skeleton width={150} height={24} />
         <Skeleton width={250} height={16.8} style={{ marginTop: 22 }} />
-        <Skeleton width={300} height={16.8} />
+        <Skeleton width={150} height={16.8} />
       </TopContainer>
       <BottomContainer>
         <Skeleton width={60} height={16.8} />

@@ -92,7 +92,6 @@ const ReservationCard = ({
   isPast?: boolean;
 }) => {
   const { openModal, closeModal, ModalPortal } = useModal();
-  console.log(new Date(), new Date(reservation.checkOut));
   return (
     <>
       <Container>

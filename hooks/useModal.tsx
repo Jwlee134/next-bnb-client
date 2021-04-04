@@ -1,44 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import styled, { css, keyframes } from "styled-components";
-
-const fadeIn = keyframes`
-    0%{
-        background-color: transparent;
-    }
-    100%{
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-`;
-
-const fadeOut = keyframes`
-    0%{
-        background-color: rgba(0, 0, 0, 0.5);
-    }
-    100%{
-        background-color: transparent;
-    }
-`;
-
-const show = keyframes`
-    0%{
-        opacity: 0;
-        transform: scale(0.5);
-    }
-    100%{
-        opacity: 1;
-    }
-`;
-
-const hide = keyframes`
-    0%{
-        opacity: 1;
-    }
-    100%{
-        opacity: 0;
-        transform: scale(0.5);
-    }
-`;
+import styled, { css } from "styled-components";
+import {
+  fadeIn,
+  fadeOut,
+  hide,
+  show,
+  slideUp,
+  slideDown,
+} from "styles/animation";
 
 const Container = styled.div`
   display: flex;
@@ -71,7 +41,6 @@ const Children = styled.div<{ modalOpened: boolean }>`
   z-index: 12;
   background-color: white;
   border-radius: 12px;
-  opacity: 0;
   ${({ modalOpened }) =>
     modalOpened
       ? css`
@@ -80,6 +49,24 @@ const Children = styled.div<{ modalOpened: boolean }>`
       : css`
           animation: ${hide} 0.25s ease-in-out;
         `}
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    width: 100vw;
+    > div{
+      width:100%;
+    }
+    position: absolute;
+    bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    ${({ modalOpened }) =>
+      modalOpened
+        ? css`
+            animation: ${slideUp} 0.4s ease-in-out forwards;
+          `
+        : css`
+            animation: ${slideDown} 0.4s ease-in-out;
+          `}}
+  }
 `;
 
 const useModal = () => {

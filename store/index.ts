@@ -22,22 +22,32 @@ import common from "./common";
 import hosting from "./hosting";
 import search from "./search";
 import room from "./room";
+import map from "./map";
 
 const rootReducer = combineReducers({
   common,
   hosting,
   search,
   room,
+  map,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
 
 const reducer = (state: any, action: any) => {
   if (action.type === HYDRATE) {
-    return {
-      ...state,
-      ...action.payload,
+    const nextState = {
+      ...state, // use previous state
+      ...action.payload, // apply delta from hydration
     };
+    if (state.common.innerWidth) {
+      // preserve innerWidth value on client side navigation
+      nextState.common.innerWidth = state.common.innerWidth;
+    }
+    if (!state.map.showMap) {
+      nextState.map.showMap = state.map.showMap;
+    }
+    return nextState;
   }
   return rootReducer(state, action);
 };
@@ -63,7 +73,7 @@ const makeStore = () => {
 
   const persistConfig = {
     key: "nextjs",
-    whitelist: [],
+    whitelist: ["map"],
     storage,
   };
 

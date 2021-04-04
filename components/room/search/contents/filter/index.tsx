@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
+import { useSelector } from "store";
+import { pcSmallBreakpoint } from "styles/theme";
 import RoomType from "./RoomType";
-import Price from "./Price";
+import Price from "./price";
 import Others from "./Others";
 
 const Container = styled.div`
@@ -32,10 +34,15 @@ const Container = styled.div`
 `;
 
 const SearchFilter = () => {
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   return (
     <Container>
-      <RoomType />
-      <Price />
+      {innerWidth >= pcSmallBreakpoint && (
+        <>
+          <RoomType />
+          <Price />
+        </>
+      )}
       <Others />
     </Container>
   );

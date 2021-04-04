@@ -16,9 +16,14 @@ const Container = styled.div`
     z-index: -1;
   }
   .home_contents {
-    max-width: 1760px;
+    max-width: ${({ theme }) => theme.maxWidth.wide};
     margin: 0 auto;
     padding: 0px 80px;
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    .home_contents {
+      padding: ${({ theme }) => theme.padding.tablet};
+    }
   }
 `;
 

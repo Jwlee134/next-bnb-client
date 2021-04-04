@@ -125,7 +125,10 @@ const Building = () => {
       </Container>
       <Footer
         isValid={
-          !!largeBuildingType && !!buildingType && !!roomType && !!isForGuest
+          !!largeBuildingType.label &&
+          !!buildingType.label &&
+          !!roomType &&
+          !!isForGuest
         }
         nextHref="/become-a-host/bedroom"
       />

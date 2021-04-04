@@ -52,7 +52,6 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
         },
       };
     }
-
     try {
       const keywords = extractKeywords(query);
       store.dispatch(searchActions.setSearch({ ...keywords }));

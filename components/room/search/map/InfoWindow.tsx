@@ -8,7 +8,7 @@ import querystring from "querystring";
 import { SearchState } from "store/search";
 import { FaWonSign } from "react-icons/fa";
 import { addComma, getRoomTypeText } from "utils";
-import RoomCardSlider from "../../common/RoomCardSlider";
+import RoomCardSlider from "../../../common/RoomCardSlider";
 
 const Container = styled.div`
   width: 250px;
