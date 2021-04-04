@@ -3,7 +3,6 @@ import styled, { css } from "styled-components";
 
 import { useSelector } from "store";
 import dynamic from "next/dynamic";
-import useResize from "hooks/useResize";
 import Contents from "./contents";
 
 const Map = dynamic(() => import("../../common/Map"), { ssr: false });
@@ -36,8 +35,6 @@ const SearchResults = () => {
   const showMap = useSelector((state) => state.map.showMap);
   const innerWidth = useSelector((state) => state.common.innerWidth);
   const searchResults = useSelector((state) => state.room.search.searchResults);
-
-  useResize();
 
   return (
     <>

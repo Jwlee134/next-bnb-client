@@ -1,7 +1,9 @@
 import { quickSearchKeywords } from "lib/staticData";
 import Link from "next/link";
 import React from "react";
+import { useSelector } from "store";
 import styled from "styled-components";
+import { mobileBreakpoint } from "styles/theme";
 import { makeQueryString } from "utils";
 
 const Container = styled.div`
@@ -39,12 +41,34 @@ const Container = styled.div`
       }
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    .search-card_title {
+      font-size: 24px;
+    }
+    .search-card_container {
+      overflow-x: auto;
+      overflow-y: hidden;
+      a {
+        min-width: 250px;
+        &:not(:last-child) {
+          margin-right: 12px;
+        }
+        span {
+          font-size: 16px;
+        }
+      }
+    }
+  }
 `;
 
 const SearchCard = () => {
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   return (
     <Container>
-      <div className="search-card_title">어디에서나, 여행은 살아보는 거야!</div>
+      <div className="search-card_title">
+        어디에서나,{innerWidth < mobileBreakpoint && <br />} 여행은 살아보는
+        거야!
+      </div>
       <div className="search-card_container">
         <Link
           href={`/search/rooms${makeQueryString({

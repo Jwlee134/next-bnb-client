@@ -13,6 +13,7 @@ const Container = styled.header`
   position: relative;
   padding: 0px 24px;
   height: 64px;
+  min-height: 64px;
   display: flex;
   justify-content: center;
   align-items: center;

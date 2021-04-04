@@ -14,6 +14,8 @@ import ModalHeader from "../ModalHeader";
 
 const Container = styled.div`
   width: 568px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Description = styled.span`
@@ -33,8 +35,8 @@ const ButtonContainer = styled.div`
 
 const AuthContainer = styled.div`
   padding: 24px;
-  max-height: 568px;
   overflow-y: auto;
+  max-height: 568px;
 `;
 
 const Divider = styled.div`

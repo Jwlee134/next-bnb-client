@@ -1,6 +1,8 @@
 import { DefaultTheme } from "styled-components";
 
 export const pcSmallBreakpoint = 1200;
+export const tabletSmallBreakpoint = 768;
+export const mobileBreakpoint = 480;
 
 const theme: DefaultTheme = {
   device: {

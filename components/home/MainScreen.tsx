@@ -22,6 +22,7 @@ const Container = styled.div`
       font-weight: 500;
       color: white;
       text-shadow: 0px 0px 3px #000000;
+      margin-bottom: 12px;
     }
     a {
       width: 170px;
@@ -35,11 +36,24 @@ const Container = styled.div`
         font-weight: 500;
         padding: 4px 8px;
         border-radius: 10px;
-        margin-top: 12px;
         cursor: pointer;
         font-size: 16px;
         &:hover {
           background-color: #ececec;
+        }
+        box-shadow: 0px 0px 2px 0px black;
+      }
+    }
+  }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    .home_main_label-container {
+      .home_main_label {
+        font-size: 40px;
+      }
+      a {
+        width: 150px;
+        .home_main_button {
+          font-size: 14px;
         }
       }
     }

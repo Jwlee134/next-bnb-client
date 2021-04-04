@@ -25,6 +25,11 @@ const Container = styled.div`
       padding: ${({ theme }) => theme.padding.tablet};
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    .home_contents {
+      margin: 80px 0px;
+    }
+  }
 `;
 
 const Home = () => (

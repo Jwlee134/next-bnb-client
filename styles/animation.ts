@@ -40,7 +40,7 @@ export const hide = keyframes`
 
 export const slideUp = keyframes`
     0%{
-        opacity: 0;
+        opacity: 0.5;
         transform: translateY(1000px);
     }
     100%{
@@ -55,7 +55,7 @@ export const slideDown = keyframes`
         transform: translateY(0px)
     }
     100%{
-        opacity: 0;
+        opacity: 0.5;
         transform: translateY(1000px);
     }
 `;

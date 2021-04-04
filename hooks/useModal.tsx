@@ -38,7 +38,7 @@ const Background = styled.div<{ modalOpened: boolean }>`
 `;
 
 const Children = styled.div<{ modalOpened: boolean }>`
-  z-index: 12;
+  z-index: 13;
   background-color: white;
   border-radius: 12px;
   ${({ modalOpened }) =>
@@ -51,13 +51,14 @@ const Children = styled.div<{ modalOpened: boolean }>`
         `}
   @media ${({ theme }) => theme.device.tabletSmall} {
     width: 100vw;
-    > div{
-      width:100%;
-    }
-    position: absolute;
-    bottom: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    position: absolute;
+    bottom: 64px;
+    > div {
+      width: 100%;
+      max-height: calc(100vh - 64px);
+    }
     ${({ modalOpened }) =>
       modalOpened
         ? css`
@@ -65,7 +66,7 @@ const Children = styled.div<{ modalOpened: boolean }>`
           `
         : css`
             animation: ${slideDown} 0.4s ease-in-out;
-          `}}
+          `}
   }
 `;
 
