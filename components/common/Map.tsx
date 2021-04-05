@@ -14,8 +14,8 @@ import { commonActions } from "store/common";
 import { IoCloseSharp, IoFilter } from "react-icons/io5";
 import useModal from "hooks/useModal";
 import FilterModal from "components/modal/filterModal";
-import InfoWindow from "../room/search/map/InfoWindow";
 import { mapActions } from "store/map";
+import InfoWindow from "../room/search/map/InfoWindow";
 
 const Container = styled.div`
   width: 100%;
@@ -112,6 +112,9 @@ const Container = styled.div`
         }
       }
     }
+  }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    height: calc(100vh - 64px);
   }
 `;
 

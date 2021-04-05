@@ -1,6 +1,6 @@
 import DateRangePicker from "components/common/DateRangePicker";
 import moment, { Moment } from "moment";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import styled from "styled-components";
@@ -75,8 +75,6 @@ const DatePicker = () => {
   const router = useRouter();
   const { query } = router;
 
-  const dispatch = useDispatch();
-
   const isBlocked = (day: Moment) => {
     if (!room) return;
     return room.blockedDayList.some((date) => day.isSame(date, "day"));
@@ -89,46 +87,38 @@ const DatePicker = () => {
     return undefined;
   };
 
-  const handleChange = ({
-    startDate,
-    endDate,
-  }: {
-    startDate: moment.Moment | null;
-    endDate: moment.Moment | null;
-  }) => {
-    if (startDate && room) {
+  useEffect(() => {
+    if (checkIn && room) {
       router.push(
         `/room/${room._id}${makeQueryString({
           ...query,
           id: "",
-          checkIn: startDate.toISOString(),
+          checkIn,
         })}`,
         undefined,
         { scroll: false }
       );
-      dispatch(searchActions.setCheckIn(startDate.toISOString()));
     }
-    if (endDate && room) {
+  }, [checkIn]);
+
+  useEffect(() => {
+    if (checkOut && room) {
       router.push(
         `/room/${room._id}${makeQueryString({
           ...query,
           id: "",
-          checkOut: endDate.toISOString(),
+          checkOut,
         })}`,
         undefined,
         { scroll: false }
       );
-      dispatch(searchActions.setCheckOut(endDate.toISOString()));
     }
-  };
+  }, [checkOut]);
 
   if (!room) return null;
   return (
     <Container>
       <DateRangePicker
-        checkIn={toMomentObject(checkIn ? new Date(checkIn) : null)}
-        checkOut={toMomentObject(checkOut ? new Date(checkOut) : null)}
-        onChange={handleChange}
         isBlocked={isBlocked as (day: Moment) => boolean}
         maxDate={maxDate()}
         focusEffect="boldBorder"

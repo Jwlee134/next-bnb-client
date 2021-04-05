@@ -6,11 +6,9 @@ import styled from "styled-components";
 import { ImMap2 } from "react-icons/im";
 import palette from "styles/palette";
 import { useDispatch } from "react-redux";
-import { commonActions } from "store/common";
+import { mapActions } from "store/map";
 import RoomList from "./RoomList";
 import Filter from "./filter";
-import { makeQueryString } from "utils";
-import { mapActions } from "store/map";
 
 const Container = styled.div`
   padding: ${({ theme }) => theme.padding.pc};

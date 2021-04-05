@@ -4,6 +4,7 @@ interface IState {
   authMode: "signUp" | "login";
   wishlistMode: "create" | "add";
   hostingMode: "register" | "update";
+  searchMode: "location" | "date" | "guest";
   validation: boolean;
   showSearchBar: boolean;
   showMiniSearchBar: boolean;
@@ -20,6 +21,7 @@ const initialState: IState = {
   authMode: "signUp",
   wishlistMode: "add",
   hostingMode: "register",
+  searchMode: "location",
   validation: false,
   showSearchBar: true,
   showMiniSearchBar: false,
@@ -44,6 +46,12 @@ const common = createSlice({
     },
     setHostingMode: (state, action: PayloadAction<"register" | "update">) => {
       state.hostingMode = action.payload;
+    },
+    setSearchMode: (
+      state,
+      action: PayloadAction<"location" | "date" | "guest">
+    ) => {
+      state.searchMode = action.payload;
     },
     setValidation: (state, action: PayloadAction<boolean>) => {
       state.validation = action.payload;

@@ -9,6 +9,8 @@ import RoomCardSkeleton from "components/skeleton/RoomCardSkeleton";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
 import RoomCard from "../../../common/RoomCard";
+import { tabletSmallBreakpoint } from "styles/theme";
+import SmallRoomCard from "components/common/SmallRoomCard";
 
 const Container = styled.div`
   .paginate-container {
@@ -76,6 +78,7 @@ const Empty = styled.div`
 `;
 
 const RoomList = () => {
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   const searchResults = useSelector((state) => state.room.search.searchResults);
   const originalLength = useSelector(
     (state) => state.room.search.originalLength
@@ -139,9 +142,13 @@ const RoomList = () => {
 
   return (
     <Container>
-      {searchResults.map((room, index) => (
-        <RoomCard key={index} index={index} room={room} />
-      ))}
+      {searchResults.map((room, index) =>
+        innerWidth >= tabletSmallBreakpoint ? (
+          <RoomCard key={index} index={index} room={room} />
+        ) : (
+          <SmallRoomCard key={index} room={room} useSlider isSearchPage />
+        )
+      )}
       <ReactPaginate
         pageCount={Math.ceil(originalLength / Number(limit))}
         pageRangeDisplayed={3}

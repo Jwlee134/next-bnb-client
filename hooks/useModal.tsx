@@ -19,6 +19,9 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   z-index: 11;
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    max-height: calc(100vh - 64px);
+  }
 `;
 
 const Background = styled.div<{ modalOpened: boolean }>`
@@ -53,11 +56,10 @@ const Children = styled.div<{ modalOpened: boolean }>`
     width: 100vw;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    position: absolute;
-    bottom: 64px;
+    height: 100%;
     > div {
       width: 100%;
-      max-height: calc(100vh - 64px);
+      max-height: 100%;
     }
     ${({ modalOpened }) =>
       modalOpened

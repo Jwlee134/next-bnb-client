@@ -1,6 +1,6 @@
 import React from "react";
 import Navigator from "./navigator";
-import SearchBar from "./searchBar";
+import Search from "./search";
 
 const MobileHeader = ({
   useSearchBar,
@@ -11,7 +11,7 @@ const MobileHeader = ({
 }) => {
   return (
     <>
-      {useSearchBar && <SearchBar scroll={scroll} />}
+      {useSearchBar && <Search scroll={scroll} />}
       <Navigator />
     </>
   );

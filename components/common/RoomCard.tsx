@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import { IRoom } from "types/room";
-import Image from "next/image";
 import { IoMdHeart, IoMdHeartEmpty, IoIosStar } from "react-icons/io";
 import { FaWonSign } from "react-icons/fa";
 
@@ -17,6 +16,21 @@ import WishlistModal from "components/modal/wishlistModal";
 import useWishlist from "hooks/useWishlist";
 import AuthModal from "components/modal/authModal";
 import RoomCardSlider from "./RoomCardSlider";
+
+const WishlistButton = styled.div`
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  top: 18px;
+  right: -6px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background-color: ${palette.gray_f7};
+  }
+`;
 
 const Container = styled.div`
   &:hover {
@@ -43,9 +57,15 @@ const Container = styled.div`
     overflow: hidden;
     margin-right: 12px;
     background-color: ${palette.gray_eb};
+    img {
+      width: 300px;
+      height: 200px;
+      object-fit: cover;
+    }
   }
   .room-card_info-container {
     flex-grow: 1;
+    max-width: calc(100% - 300px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -53,7 +73,7 @@ const Container = styled.div`
       display: flex;
       justify-content: space-between;
       > div:first-child {
-        margin-right: 35px;
+        max-width: calc(100% - 45px);
         flex-grow: 1;
         .info-container_top_info-text {
           font-size: 14px;
@@ -61,14 +81,14 @@ const Container = styled.div`
           opacity: 0.8;
         }
         .info-container_top_title {
+          width: 100%;
           font-size: 20px;
           margin-top: 3px;
           margin-bottom: 8px;
           overflow: hidden;
+          white-space: nowrap;
           text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
+          display: block;
         }
         .room-card_divider {
           width: 50px;
@@ -123,21 +143,6 @@ const Container = styled.div`
   }
 `;
 
-const WishlistButton = styled.div`
-  width: 35px;
-  height: 35px;
-  position: absolute;
-  top: 18px;
-  right: -6px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    background-color: ${palette.gray_f7};
-  }
-`;
-
 const RoomCard = ({
   room,
   index,
@@ -188,7 +193,7 @@ const RoomCard = ({
         <div className="room-card_image-container">
           <RoomCardSlider>
             {room.photos.map((photo, index) => (
-              <Image key={index} src={photo} width={300} height={201} />
+              <img key={index} src={photo} alt="" />
             ))}
           </RoomCardSlider>
         </div>

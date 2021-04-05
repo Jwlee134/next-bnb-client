@@ -4,10 +4,18 @@ import moment from "moment";
 import "moment/locale/ko";
 
 import "react-dates/initialize";
-import { DateRangePicker as RangePicker, FocusedInputShape } from "react-dates";
+import {
+  DateRangePicker as RangePicker,
+  DayPickerRangeController,
+  FocusedInputShape,
+  toMomentObject,
+} from "react-dates";
 import "react-dates/lib/css/_datepicker.css";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
+import { useDispatch } from "react-redux";
+import { searchActions } from "store/search";
+import { useSelector } from "store";
 
 moment.locale("ko");
 
@@ -75,7 +83,8 @@ const Container = styled.div<ContainerProps>`
   .DateInput_fang,
   .DayPickerKeyboardShortcuts_buttonReset,
   .DateRangePickerInput_arrow_svg,
-  .DateInput_screenReaderMessage {
+  .DateInput_screenReaderMessage,
+  .DayPickerNavigation__verticalScrollable_prevNav {
     display: none !important;
   }
   .DateRangePicker_picker {
@@ -169,34 +178,47 @@ const Container = styled.div<ContainerProps>`
   .CalendarDay__default:hover {
     border: 0 !important;
   }
+  .DayPicker__verticalScrollable {
+    height: calc(100vh - 144px);
+  }
+  .DayPickerNavigation {
+    width: 33%;
+    margin: 0 auto;
+    div {
+      background-color: transparent;
+    }
+  }
+  .DayPickerNavigation_button {
+    border: 0;
+    box-shadow: none;
+  }
+  .DayPicker__verticalScrollable {
+    border-radius: 0 !important;
+  }
 `;
 
 interface Props {
-  onChange: ({
-    startDate,
-    endDate,
-  }: {
-    startDate: moment.Moment | null;
-    endDate: moment.Moment | null;
-  }) => void;
-  checkIn: moment.Moment | null;
-  checkOut: moment.Moment | null;
   isBlocked?: (day: moment.Moment) => boolean;
   maxDate?: moment.Moment;
   focusEffect?: string;
   keepOpenOnDateSelect?: boolean;
+  mode?: "dayPickerRangeController" | "dateRangePicker";
 }
 
 const DateRangePicker = ({
-  checkIn,
-  checkOut,
-  onChange,
   isBlocked,
   maxDate,
   focusEffect = "normal",
   keepOpenOnDateSelect = true,
+  mode = "dateRangePicker",
 }: Props) => {
-  const [focused, setFocused] = useState<FocusedInputShape | null>(null);
+  const checkIn = useSelector((state) => state.search.checkIn);
+  const checkOut = useSelector((state) => state.search.checkOut);
+
+  const [focused, setFocused] = useState<FocusedInputShape | null>(
+    mode === "dateRangePicker" ? null : "startDate"
+  );
+  const dispatch = useDispatch();
 
   const handleFocus = (focusedInput: FocusedInputShape | null) => {
     setFocused(focusedInput);
@@ -207,30 +229,57 @@ const DateRangePicker = ({
       focused={focused as "startDate" | "endDate"}
       focusEffect={focusEffect as "normal" | "boldBorder"}
     >
-      <RangePicker
-        startDate={checkIn}
-        endDate={checkOut}
-        onDatesChange={({ startDate, endDate }) => {
-          onChange({ startDate, endDate });
-        }}
-        focusedInput={focused}
-        onFocusChange={handleFocus}
-        startDateId="dateRangePicker-start"
-        endDateId="dateRangePicker-end"
-        startDatePlaceholderText="날짜 선택"
-        endDatePlaceholderText="날짜 선택"
-        noBorder
-        readOnly
-        displayFormat="MM월 DD일"
-        keepOpenOnDateSelect={keepOpenOnDateSelect}
-        isDayBlocked={isBlocked}
-        minDate={moment(new Date())}
-        maxDate={maxDate}
-        isOutsideRange={(day) =>
-          day.isBefore(moment(new Date()), "day") ||
-          (maxDate ? day.isAfter(maxDate, "day") : false)
-        }
-      />
+      {mode === "dateRangePicker" && (
+        <RangePicker
+          startDate={toMomentObject(checkIn ? new Date(checkIn) : null)}
+          endDate={toMomentObject(checkOut ? new Date(checkOut) : null)}
+          onDatesChange={({ startDate, endDate }) => {
+            if (startDate) {
+              dispatch(searchActions.setCheckIn(startDate.toISOString()));
+            }
+            if (endDate) {
+              dispatch(searchActions.setCheckOut(endDate.toISOString()));
+            }
+          }}
+          focusedInput={focused}
+          onFocusChange={handleFocus}
+          startDateId="dateRangePicker-start"
+          endDateId="dateRangePicker-end"
+          startDatePlaceholderText="날짜 선택"
+          endDatePlaceholderText="날짜 선택"
+          noBorder
+          readOnly
+          displayFormat="MM월 DD일"
+          keepOpenOnDateSelect={keepOpenOnDateSelect}
+          isDayBlocked={isBlocked}
+          minDate={moment(new Date())}
+          maxDate={maxDate}
+          isOutsideRange={(day) =>
+            day.isBefore(moment(new Date()), "day") ||
+            (maxDate ? day.isAfter(maxDate, "day") : false)
+          }
+        />
+      )}
+      {mode === "dayPickerRangeController" && (
+        <DayPickerRangeController
+          startDate={toMomentObject(checkIn ? new Date(checkIn) : null)}
+          endDate={toMomentObject(checkOut ? new Date(checkOut) : null)}
+          onDatesChange={({ startDate, endDate }) => {
+            if (startDate) {
+              dispatch(searchActions.setCheckIn(startDate.toISOString()));
+            }
+            if (endDate) {
+              dispatch(searchActions.setCheckOut(endDate.toISOString()));
+            }
+          }}
+          focusedInput={focused || "startDate"}
+          onFocusChange={handleFocus}
+          initialVisibleMonth={null}
+          orientation="verticalScrollable"
+          isOutsideRange={(day) => day.isBefore(moment(new Date()), "day")}
+          numberOfMonths={2}
+        />
+      )}
     </Container>
   );
 };

@@ -47,6 +47,29 @@ const Container = styled.div`
       top: -3.5px;
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    .slick-slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      .slick-list {
+        height: 100%;
+        .slick-track {
+          height: 100%;
+          .slick-slide {
+            height: 100%;
+            > div {
+              height: 100%;
+              padding-top: 66.66%;
+              position: relative;
+            }
+          }
+        }
+      }
+    }
+  }
 `;
 
 const RoomCardSlider = ({

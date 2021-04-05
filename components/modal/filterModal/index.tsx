@@ -51,6 +51,7 @@ const Container = styled.div`
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
     width: 100%;
+    max-height: calc(100% - 144px) !important;
   }
 `;
 

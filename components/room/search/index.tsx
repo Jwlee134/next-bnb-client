@@ -29,6 +29,23 @@ const Container = styled.div<{ showMap: boolean }>`
       padding: ${({ theme }) => theme.padding.tablet};
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    padding-top: ${({ showMap }) => (showMap ? "0px" : "80px")};
+    .search_contents {
+      max-height: calc(100vh - 144px);
+      min-height: initial;
+      overflow: auto;
+      padding: 24px;
+      .search_info {
+        margin-top: 0px;
+      }
+      .search_title {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
 `;
 
 const SearchResults = () => {
