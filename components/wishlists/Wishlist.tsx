@@ -17,6 +17,9 @@ import useWishlist from "hooks/useWishlist";
 import { IWishlist } from "types/user";
 import RoomCardSkeleton from "components/skeleton/RoomCardSkeleton";
 import Skeleton from "react-loading-skeleton";
+import { useSelector } from "store";
+import { pcSmallBreakpoint, tabletBreakpoint } from "styles/theme";
+import SmallRoomCard from "components/common/smallRoomCard";
 
 const Map = dynamic(() => import("../common/Map"), { ssr: false });
 
@@ -27,6 +30,11 @@ const Container = styled.div`
   .wishlist_room-card-container {
     width: 50%;
     padding: 24px;
+    .wishlist_flex-container {
+      > a {
+        margin-bottom: 20px;
+      }
+    }
     .wishlist_room-card-container_buttons {
       display: flex;
       justify-content: space-between;
@@ -64,30 +72,50 @@ const Container = styled.div`
   .wishlist_map-container {
     width: 50%;
   }
+  @media ${({ theme }) => theme.device.tablet} {
+    .wishlist_room-card-container {
+      width: 100%;
+      .wishlist_flex-container {
+        display: flex;
+        flex-wrap: wrap;
+        > a {
+          width: 50%;
+        }
+      }
+    }
+  }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    .wishlist_room-card-container {
+      padding-bottom: 64px;
+      .wishlist_flex-container {
+        display: block !important;
+        > a {
+          width: 100% !important;
+          > div {
+            margin-bottom: 20px;
+          }
+        }
+      }
+    }
+  }
 `;
 
 const Wishlist = () => {
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   const router = useRouter();
   const { query } = router;
 
   const { user, wishlist } = useWishlist();
-
-  const dispatch = useDispatch();
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
   const [data, setData] = useState<IWishlist>();
 
   useEffect(() => {
-    dispatch(commonActions.setShowMiniSearchBar(false));
-    dispatch(commonActions.setShowSearchBar(false));
-  }, []);
-
-  useEffect(() => {
-    if (!wishlist || isEmpty(wishlist)) return;
+    if (!wishlist || isEmpty(wishlist) || !query.id) return;
     const data = wishlist.find((list) => list._id === (query.id as string));
     setData(data);
-  }, [wishlist]);
+  }, [wishlist, query]);
 
   return (
     <>
@@ -119,14 +147,36 @@ const Wishlist = () => {
             {data && `${data.title} · 숙소 ${data.list.length}개`}
           </div>
           {!data && <RoomCardSkeleton />}
-          {data &&
-            data.list.map((item: IRoom, i: number) => (
-              <RoomCard key={i} room={item} index={i} showPriceWIthoutDates />
-            ))}
+          <div className="wishlist_flex-container">
+            {data &&
+              (innerWidth >= pcSmallBreakpoint
+                ? data.list.map((item: IRoom, i: number) => (
+                    // eslint-disable-next-line react/jsx-indent
+                    <RoomCard
+                      key={item._id}
+                      room={item}
+                      index={i}
+                      showPriceWIthoutDates
+                    />
+                  ))
+                : data.list.map((item: IRoom, i: number) => (
+                    // eslint-disable-next-line react/jsx-indent
+                    <SmallRoomCard
+                      key={item._id}
+                      index={innerWidth >= tabletBreakpoint ? i : undefined}
+                      room={item}
+                      useSlider
+                      showPriceWIthoutDates
+                      isMobile={innerWidth < tabletBreakpoint}
+                    />
+                  )))}
+          </div>
         </div>
-        <div className="wishlist_map-container">
-          {data && <Map roomList={data.list} useFitBounds />}
-        </div>
+        {data && innerWidth >= tabletBreakpoint && (
+          <div className="wishlist_map-container">
+            <Map roomList={data.list} useFitBounds />
+          </div>
+        )}
       </Container>
       <ModalPortal>
         {data && <Setting originTitle={data.title} closeModal={closeModal} />}

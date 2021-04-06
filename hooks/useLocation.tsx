@@ -93,7 +93,9 @@ const useLocation = (mode: "pc" | "mobile") => {
         const { latitude, longitude } = coords;
         dispatch(searchActions.setLatitude(latitude));
         dispatch(searchActions.setLongitude(longitude));
-        dispatch(commonActions.setIsGettingCoordinates(false));
+        if (mode === "pc") {
+          dispatch(commonActions.setIsGettingCoordinates(false));
+        }
       },
       () => {
         alert("현재 위치를 불러올 수 없습니다.");

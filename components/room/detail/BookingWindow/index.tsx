@@ -13,9 +13,11 @@ import useUser from "hooks/useUser";
 import { makeReservationAPI } from "lib/api/reservation";
 import { useRouter } from "next/router";
 import useRoom from "hooks/useRoom";
-import CounterBox from "./CounterBox";
+import DateRangePicker from "components/common/DateRangePicker";
+import { IoCloseSharp } from "react-icons/io5";
 import DatePicker from "./DatePicker";
 import Warning from "../../../../public/static/svg/warning.svg";
+import CounterBox from "./CounterBox";
 
 const Container = styled.div<{ notValid: boolean }>`
   width: 100%;
@@ -27,12 +29,26 @@ const Container = styled.div<{ notValid: boolean }>`
   border-radius: 12px;
   border: 1px solid ${palette.gray_dd};
   margin-bottom: 48px;
+  .booking-window_mobile-calendar {
+    margin-top: 24px;
+    .DayPicker__withBorder {
+      box-shadow: none;
+      border: 1px solid ${palette.gray_c4};
+    }
+  }
   > div:nth-child(3) {
     position: relative;
   }
   .booking-window_title {
     font-size: 22px;
     font-weight: bold;
+    position: relative;
+    .booking-window_close-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      cursor: pointer;
+    }
   }
   .booking-window_guest {
     border: 1px solid ${palette.gray_c4};
@@ -85,6 +101,22 @@ const Container = styled.div<{ notValid: boolean }>`
       font-weight: 600;
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    position: fixed;
+    top: initial;
+    left: 0;
+    bottom: 64px;
+    width: 100%;
+    padding: 24px !important;
+    height: fit-content;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+    .booking-window_title {
+      padding-right: 30px;
+    }
+  }
 `;
 
 const NotValid = styled.div`
@@ -100,7 +132,13 @@ const NotValid = styled.div`
   }
 `;
 
-const BookingWindow = () => {
+const BookingWindow = ({
+  isMobile = false,
+  setWindowOpened,
+}: {
+  isMobile?: boolean;
+  setWindowOpened?: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { room } = useRoom();
   const search = useSelector((state) => state.search);
 
@@ -224,8 +262,24 @@ const BookingWindow = () => {
               : "예약 준비가 완료되었습니다!"}
           </div>
         )}
+        {isMobile && setWindowOpened && (
+          <div
+            className="booking-window_close-button"
+            onClick={() => {
+              setWindowOpened(false);
+              document.body.style.overflow = "inherit";
+            }}
+          >
+            <IoCloseSharp size={30} />
+          </div>
+        )}
       </div>
-      <DatePicker />
+      {!isMobile && <DatePicker />}
+      {isMobile && (
+        <div className="booking-window_mobile-calendar">
+          <DateRangePicker mode="dayPickerRangeController" />
+        </div>
+      )}
       <OutsideClickHandler onOutsideClick={() => setOpened(false)}>
         <div
           className="booking-window_guest"

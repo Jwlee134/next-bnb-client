@@ -4,11 +4,13 @@ import { useRouter } from "next/router";
 import React from "react";
 import { FaWonSign } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { roomActions } from "store/room";
 import styled from "styled-components";
 import palette from "styles/palette";
 import { IRoom } from "types/room";
 import { addComma, getRoomTypeText } from "utils";
-import RoomCardSlider from "./RoomCardSlider";
+import RoomCardSlider from "../RoomCardSlider";
 
 const Container = styled.div<{ isSearchPage: boolean }>`
   width: 100%;
@@ -86,69 +88,88 @@ const Container = styled.div<{ isSearchPage: boolean }>`
   }
 `;
 
-const SmallRoomCard = ({
+const Contents = ({
+  isSearchPage,
   room,
-  useSlider = false,
-  isSearchPage = false,
+  useSlider,
+  index,
+  showPriceWIthoutDates,
 }: {
   room: IRoom;
-  useSlider?: boolean;
-  isSearchPage?: boolean;
+  isSearchPage: boolean;
+  useSlider: boolean;
+  index?: number;
+  showPriceWIthoutDates: boolean;
 }) => {
   const {
     query: { checkIn, checkOut },
   } = useRouter();
+  const dispatch = useDispatch();
 
   const difference = differenceInDays(
     new Date(checkOut as string),
     new Date(checkIn as string)
   );
+
   return (
-    <a
-      href={`/room/${room._id}?adults=1&children=0&infants=0`}
-      target="_blank"
-      rel="noreferrer"
+    <Container
+      className="contents_container"
+      isSearchPage={isSearchPage}
+      onMouseEnter={() => {
+        if (index === undefined) return;
+        dispatch(roomActions.setHoveredItemIndex(index));
+      }}
+      onMouseLeave={() => {
+        if (index === undefined) return;
+        dispatch(roomActions.setHoveredItemIndex(null));
+      }}
     >
-      <Container isSearchPage={isSearchPage}>
-        {!useSlider && (
-          <div>
-            <img src={room.photos[0]} alt="" />
+      {!useSlider && (
+        <div>
+          <img src={room.photos[0]} alt="" />
+        </div>
+      )}
+      {useSlider && (
+        <RoomCardSlider>
+          {room.photos.map((photo, i) => (
+            <img src={photo} key={i} alt="" />
+          ))}
+        </RoomCardSlider>
+      )}
+      <div className="small-room-card_text-container">
+        {!isEmpty(room.review) && (
+          <div className="small-room-card_text-container_rating">
+            <IoIosStar size={18} />
+            <span>{room.avgOfRating}</span>
+            <span>({room.review.length})</span>
           </div>
         )}
-        {useSlider && (
-          <RoomCardSlider>
-            {room.photos.map((photo, i) => (
-              <img src={photo} key={i} alt="" />
-            ))}
-          </RoomCardSlider>
-        )}
-        <div className="small-room-card_text-container">
-          {!isEmpty(room.review) && (
-            <div className="small-room-card_text-container_rating">
-              <IoIosStar size={18} />
-              <span>{room.avgOfRating}</span>
-              <span>({room.review.length})</span>
+        <div className="small-room-card_text-container_room">
+          <div>
+            {getRoomTypeText(room)} · {room.buildingType.label} · {room.city}
+          </div>
+          <div>{room.title}</div>
+          {checkIn && checkOut && (
+            <div className="text-container_room-price">
+              <div>
+                <FaWonSign />
+                {addComma(String(room.price))} <span>/ 박</span>
+              </div>
+              <div>총액 ₩{addComma(String(room.price * difference))}</div>
             </div>
           )}
-          <div className="small-room-card_text-container_room">
-            <div>
-              {getRoomTypeText(room)} · {room.buildingType.label} · {room.city}
-            </div>
-            <div>{room.title}</div>
-            {checkIn && checkOut && (
-              <div className="text-container_room-price">
-                <div>
-                  <FaWonSign />
-                  {addComma(String(room.price))} <span>/ 박</span>
-                </div>
-                <div>총액 ₩{addComma(String(room.price * difference))}</div>
+          {showPriceWIthoutDates && (
+            <div className="text-container_room-price">
+              <div>
+                <FaWonSign />
+                {addComma(String(room.price))} <span>/ 박</span>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      </Container>
-    </a>
+      </div>
+    </Container>
   );
 };
 
-export default SmallRoomCard;
+export default Contents;

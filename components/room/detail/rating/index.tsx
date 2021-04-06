@@ -52,6 +52,19 @@ const Container = styled.div`
       padding: 0px 24px;
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    padding: 48px 24px;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    padding-bottom: 0;
+    .detail_rating-container_bar,
+    .detail_rating-container_card {
+      > div {
+        width: 100% !important;
+        margin-right: 0 !important;
+      }
+    }
+  }
 `;
 
 const Rating = () => {

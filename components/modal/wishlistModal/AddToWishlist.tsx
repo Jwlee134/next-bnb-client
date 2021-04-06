@@ -55,6 +55,9 @@ const Container = styled.div`
       align-items: center;
     }
   }
+  @media ${({ theme }) => theme.device.tablet} {
+    max-height: calc(100vh - 128px);
+  }
 `;
 
 const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {

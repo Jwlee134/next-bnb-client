@@ -3,8 +3,10 @@ import { uploadPhotoAPI } from "lib/api/file";
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { HiPencil } from "react-icons/hi";
+import { useSelector } from "store";
 import styled from "styled-components";
 import palette from "styles/palette";
+import { tabletSmallBreakpoint } from "styles/theme";
 import { IUser } from "types/user";
 
 const EditProfile = dynamic(() => import("./EditProfile"));
@@ -58,9 +60,34 @@ const Container = styled.div`
       margin-top: 5px;
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    > div:last-child {
+      > div:first-child {
+        font-size: 28px;
+      }
+    }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    > div:first-child {
+      width: 64px;
+      min-width: 64px;
+      height: 64px;
+      > div {
+        width: 24px;
+        height: 24px;
+        padding: 2px;
+      }
+    }
+    > div:last-child {
+      > div:first-child {
+        font-size: 22px;
+      }
+    }
+  }
 `;
 
 const UserIntro = ({ data }: { data: IUser }) => {
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   const { user } = useUser();
   const [modifyMode, setModifyMode] = useState(false);
   const [newAvatarUrl, setNewAvatarUrl] = useState<string | null>(null);
@@ -109,7 +136,10 @@ const UserIntro = ({ data }: { data: IUser }) => {
         )}
       </div>
       <div>
-        <div>안녕하세요. 저는 {data.name}입니다.</div>
+        <div>
+          안녕하세요.{innerWidth < tabletSmallBreakpoint && <br />}저는{" "}
+          {data.name}입니다.
+        </div>
         <div>회원가입: {new Date(data.createdAt).getFullYear()}</div>
         {user?._id === data._id && (
           <EditProfile

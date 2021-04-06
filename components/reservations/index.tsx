@@ -11,24 +11,6 @@ import Past from "./Past";
 import Upcoming from "./Upcoming";
 import MyRoom from "./MyRoom";
 
-const Container = styled.div`
-  .reservations_main {
-    padding: 36px 80px;
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    > div:first-child {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 32px;
-    }
-    .reservations_button-container {
-      border-bottom: 1px solid ${palette.gray_dd};
-      margin-bottom: 16px;
-    }
-  }
-`;
-
 const Button = styled.button<{ clicked: boolean }>`
   background-color: white;
   outline: none;
@@ -56,6 +38,40 @@ const Button = styled.button<{ clicked: boolean }>`
         bottom: -1px;
       }
     `}
+`;
+
+const Container = styled.div`
+  .reservations_main {
+    padding: 36px 80px;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    > div:first-child {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+    .reservations_button-container {
+      border-bottom: 1px solid ${palette.gray_dd};
+      margin-bottom: 16px;
+    }
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    .reservations_main {
+      padding: 36px 24px;
+    }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    .reservations_main {
+      > div:first-child {
+        font-size: 26px;
+        font-weight: 500;
+      }
+    }
+    ${Button} {
+      padding: 12px;
+    }
+  }
 `;
 
 const Reservations = () => {

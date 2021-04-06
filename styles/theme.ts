@@ -1,6 +1,7 @@
 import { DefaultTheme } from "styled-components";
 
 export const pcSmallBreakpoint = 1200;
+export const tabletBreakpoint = 1024;
 export const tabletSmallBreakpoint = 768;
 export const mobileBreakpoint = 480;
 

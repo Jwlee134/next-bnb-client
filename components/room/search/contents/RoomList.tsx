@@ -8,9 +8,9 @@ import querystring from "querystring";
 import RoomCardSkeleton from "components/skeleton/RoomCardSkeleton";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import RoomCard from "../../../common/RoomCard";
 import { tabletSmallBreakpoint } from "styles/theme";
-import SmallRoomCard from "components/common/SmallRoomCard";
+import SmallRoomCard from "components/common/smallRoomCard";
+import RoomCard from "components/common/RoomCard";
 
 const Container = styled.div`
   .paginate-container {
@@ -146,7 +146,13 @@ const RoomList = () => {
         innerWidth >= tabletSmallBreakpoint ? (
           <RoomCard key={index} index={index} room={room} />
         ) : (
-          <SmallRoomCard key={index} room={room} useSlider isSearchPage />
+          <SmallRoomCard
+            isMobile
+            key={index}
+            room={room}
+            useSlider
+            isSearchPage
+          />
         )
       )}
       <ReactPaginate

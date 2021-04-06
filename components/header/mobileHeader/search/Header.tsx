@@ -3,7 +3,6 @@ import { IoIosArrowBack, IoMdClose } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import { commonActions } from "store/common";
-import { searchActions } from "store/search";
 import styled from "styled-components";
 
 const Container = styled.div`

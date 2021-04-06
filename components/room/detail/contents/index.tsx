@@ -3,8 +3,10 @@ import { isEmpty } from "lodash";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
+import { useSelector } from "store";
 import styled from "styled-components";
 import palette from "styles/palette";
+import { mobileBreakpoint } from "styles/theme";
 import { getRoomTypeText } from "utils";
 import Bed from "../../../../public/static/svg/room/bed.svg";
 
@@ -23,6 +25,7 @@ const Container = styled.div`
     }
     a {
       width: 56px;
+      min-width: 56px;
       height: 56px;
       border-radius: 50%;
       overflow: hidden;
@@ -80,10 +83,22 @@ const Container = styled.div`
       flex-wrap: wrap;
     }
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    .bed-type_container {
+      width: calc(50% - 12px) !important;
+      &:nth-child(2n) {
+        margin-right: 0px !important;
+      }
+      &:nth-child(3n) {
+        margin-right: 24px !important;
+      }
+    }
+  }
 `;
 
 const Contents = () => {
   const { room } = useRoom();
+  const innerWidth = useSelector((state) => state.common.innerWidth);
 
   const bedTypeCount = (i: number) =>
     room?.bedType[i].beds
@@ -99,10 +114,19 @@ const Contents = () => {
       <div className="main-container_left_title_avatar-url">
         <div>
           <div className="detail_content-title" style={{ paddingBottom: 5 }}>
-            {room.creator.name}님이 호스팅하는 {room.largeBuildingType.label}{" "}
-            {getRoomTypeText(room)}
+            {innerWidth > mobileBreakpoint ? (
+              ` ${room.creator.name}님이 호스팅하는 ${
+                room.largeBuildingType.label
+              }${" "}
+            ${getRoomTypeText(room)}`
+            ) : (
+              <div>
+                {room.largeBuildingType.label} {getRoomTypeText(room)}
+                <div>호스트: {room.creator.name}님</div>
+              </div>
+            )}
           </div>
-          <div>
+          <div className="detail_content-room-info">
             최대 인원 {room.maximumGuestCount}명 · 침실 {room.bedroomCount}개 ·
             침대 {room.bedCount}개 · 욕실 {room.bathroomCount}개
           </div>

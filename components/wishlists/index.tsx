@@ -1,4 +1,3 @@
-import Header from "components/header";
 import React from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
@@ -13,7 +12,9 @@ import useUser from "hooks/useUser";
 const Container = styled.div`
   padding: 36px 80px 24px 80px;
   width: 100%;
+  max-width: ${({ theme }) => theme.maxWidth.wide};
   min-height: calc(100vh - 80px);
+  margin: 0 auto;
   header {
     display: flex;
     justify-content: space-between;
@@ -29,6 +30,17 @@ const Container = styled.div`
   main {
     display: flex;
     flex-wrap: wrap;
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    padding: 36px 24px 64px 24px;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    header {
+      > div {
+        font-size: 26px;
+        font-weight: 500;
+      }
+    }
   }
 `;
 

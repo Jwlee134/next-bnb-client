@@ -44,6 +44,7 @@ const Footer = () => {
       handleSkip();
       return;
     }
+    dispatch(commonActions.setIsLoading(true));
     router.push(
       `/search/rooms${makeQueryString({
         ...router.query,

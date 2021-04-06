@@ -7,22 +7,6 @@ import { IReview } from "types/review";
 import { IUser } from "types/user";
 import ReviewList from "./ReviewList";
 
-const Container = styled.div`
-  button {
-    width: fit-content;
-    padding: 0px 24px;
-    transition: transform 0.05s ease-in-out;
-    &:active {
-      transform: scale(0.95);
-    }
-  }
-  .reviews_tab-container {
-    display: flex;
-    border-bottom: 1px solid ${palette.gray_eb};
-    margin-bottom: 24px;
-  }
-`;
-
 const Tab = styled.div<{ clicked: boolean }>`
   font-size: 15px;
   font-weight: 500;
@@ -44,12 +28,39 @@ const Tab = styled.div<{ clicked: boolean }>`
         content: "";
         left: 50%;
         transform: translate(-50%);
-        bottom: -1px;
+        bottom: 0px;
         width: 85%;
         height: 1px;
         background-color: ${palette.black};
       }
     `}
+`;
+
+const Container = styled.div`
+  button {
+    width: fit-content;
+    padding: 0px 24px;
+    transition: transform 0.05s ease-in-out;
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  .reviews_tab-container {
+    display: flex;
+    border-bottom: 1px solid ${palette.gray_eb};
+    margin-bottom: 24px;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    ${Tab} {
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .reviews_tab-container {
+      overflow-x: auto;
+    }
+  }
 `;
 
 const Reviews = ({ user }: { user: IUser }) => {

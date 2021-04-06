@@ -25,6 +25,9 @@ const Container = styled.div`
   svg {
     margin-right: 10px;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
 `;
 
 const Amenity = ({ amenity }: { amenity: string }) => {

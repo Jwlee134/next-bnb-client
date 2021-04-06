@@ -1,4 +1,4 @@
-import SmallRoomCard from "components/common/SmallRoomCard";
+import SmallRoomCard from "components/common/smallRoomCard";
 import { fetcher } from "lib/api";
 import { isEmpty } from "lodash";
 import Head from "next/head";
@@ -12,6 +12,8 @@ import useSWR from "swr";
 import { IRoom } from "types/room";
 import { IUser } from "types/user";
 import dynamic from "next/dynamic";
+import { useSelector } from "store";
+import { mobileBreakpoint, tabletSmallBreakpoint } from "styles/theme";
 import Reviews from "./reviews";
 import UserIntro from "./UserIntro";
 
@@ -47,7 +49,7 @@ const Container = styled.div`
       }
     }
     .user_main-container_rooms {
-      margin-top: 48px;
+      margin-top: 24px;
       .slick-prev {
         left: -6px !important;
       }
@@ -65,15 +67,41 @@ const Container = styled.div`
       margin-top: 24px;
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    .user_main-container {
+      padding-top: 24px;
+      padding-bottom: 64px;
+    }
+    .user_main-container_section-rooms {
+      > a {
+        width: 50% !important;
+      }
+    }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    .user_main-container_section-rooms {
+      > a {
+        width: 100% !important;
+      }
+    }
+  }
 `;
 
 const User = () => {
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   const { query } = useRouter();
 
   const { data, error } = useSWR<IUser>(
     query.id ? `/api/user?id=${query.id}` : null,
     fetcher
   );
+
+  const numberOfRoomCard =
+    innerWidth < tabletSmallBreakpoint
+      ? 2
+      : innerWidth < mobileBreakpoint
+      ? 1
+      : 3;
 
   if (!data) return null;
   if (error) {
@@ -100,20 +128,28 @@ const User = () => {
               <div className="user_main-container_section-title">
                 {data.name}님의 숙소
               </div>
-              {data.rooms.length > 3 ? (
+              {data.rooms.length > numberOfRoomCard ? (
                 <RoomCardSlider
-                  slideToScroll={3}
-                  slidesToShow={3}
+                  slideToScroll={numberOfRoomCard}
+                  slidesToShow={numberOfRoomCard}
                   infinite={false}
                 >
                   {data.rooms.map((room: IRoom, i: number) => (
-                    <SmallRoomCard room={room} key={i} />
+                    <SmallRoomCard
+                      isMobile={innerWidth < tabletSmallBreakpoint && true}
+                      room={room}
+                      key={i}
+                    />
                   ))}
                 </RoomCardSlider>
               ) : (
                 <div className="user_main-container_section-rooms">
                   {data.rooms.map((room: IRoom, i: number) => (
-                    <SmallRoomCard room={room} key={i} />
+                    <SmallRoomCard
+                      isMobile={innerWidth < tabletSmallBreakpoint && true}
+                      room={room}
+                      key={i}
+                    />
                   ))}
                 </div>
               )}

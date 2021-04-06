@@ -27,6 +27,10 @@ const Container = styled.div`
     text-align: right;
     cursor: pointer;
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    bottom: 56px;
+    z-index: 10;
+  }
 `;
 
 const CounterBox = ({
@@ -41,7 +45,7 @@ const CounterBox = ({
   const dispatch = useDispatch();
 
   const handleAdult = (value: number) => {
-    router.push(
+    router.replace(
       `/room/${room?._id}${makeQueryString({
         ...query,
         id: "",
@@ -54,7 +58,7 @@ const CounterBox = ({
   };
 
   const handleChildren = (value: number) => {
-    router.push(
+    router.replace(
       `/room/${room?._id}${makeQueryString({
         ...query,
         id: "",
@@ -67,7 +71,7 @@ const CounterBox = ({
   };
 
   const handleInfants = (value: number) => {
-    router.push(
+    router.replace(
       `/room/${room?._id}${makeQueryString({
         ...query,
         id: "",
@@ -109,8 +113,8 @@ const CounterBox = ({
         disableValue={0}
       />
       <div className="counter-box_info-text">
-        최대 {room?.maximumGuestCount}명, 유아는 숙박 인원에 포함되지
-        <br /> 않습니다.
+        최대 {room?.maximumGuestCount}명,
+        <br /> 유아는 숙박 인원에 포함되지 않습니다.
       </div>
       <div className="counter-box_close" onClick={() => setOpened(false)}>
         닫기

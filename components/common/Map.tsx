@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import { searchActions } from "store/search";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { makeQueryString } from "utils";
 import { isEmpty } from "lodash";
 import { MdRefresh } from "react-icons/md";
@@ -17,7 +17,7 @@ import FilterModal from "components/modal/filterModal";
 import { mapActions } from "store/map";
 import InfoWindow from "../room/search/map/InfoWindow";
 
-const Container = styled.div`
+const Container = styled.div<{ pathname: string }>`
   width: 100%;
   height: calc(100vh - 80px);
   position: sticky;
@@ -116,6 +116,20 @@ const Container = styled.div`
   @media ${({ theme }) => theme.device.tabletSmall} {
     height: calc(100vh - 64px);
   }
+  ${({ pathname }) =>
+    pathname !== "/search/rooms" &&
+    css`
+      > div:first-child {
+        .gm-bundled-control {
+          .gmnoprint {
+            top: 10px !important;
+            @media ${({ theme }) => theme.device.tabletSmall} {
+              display: none;
+            }
+          }
+        }
+      }
+    `}
 `;
 
 declare global {
@@ -148,7 +162,7 @@ const Map = ({
   const search = useSelector((state) => state.search);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { query } = router;
+  const { query, pathname } = router;
 
   const { openModal, closeModal, ModalPortal } = useModal();
 
@@ -362,20 +376,24 @@ const Map = ({
 
   return (
     <>
-      <Container className="map">
+      <Container pathname={pathname} className="map">
         <div ref={mapRef} />
-        <div
-          className="map_close-button map_button map_fullscreen-button"
-          onClick={() => dispatch(mapActions.setShowMap(false))}
-        >
-          <IoCloseSharp size={30} />
-        </div>
-        <div
-          className="map_filter-button map_button map_fullscreen-button"
-          onClick={openModal}
-        >
-          <IoFilter size={26} />
-        </div>
+        {pathname === "/search/rooms" && (
+          <>
+            <div
+              className="map_close-button map_button map_fullscreen-button"
+              onClick={() => dispatch(mapActions.setShowMap(false))}
+            >
+              <IoCloseSharp size={30} />
+            </div>
+            <div
+              className="map_filter-button map_button map_fullscreen-button"
+              onClick={openModal}
+            >
+              <IoFilter size={26} />
+            </div>
+          </>
+        )}
         {useMoveToSearch && (
           <label
             className="map_move-to-search_toggle map_button"

@@ -56,10 +56,13 @@ const Children = styled.div<{ modalOpened: boolean }>`
     width: 100vw;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    height: 100%;
+    max-height: 100%;
+    height: auto;
+    position: absolute;
+    bottom: 0px;
     > div {
       width: 100%;
-      max-height: 100%;
+      max-height: calc(100vh - 64px);
     }
     ${({ modalOpened }) =>
       modalOpened

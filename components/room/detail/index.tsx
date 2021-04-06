@@ -10,21 +10,19 @@ import { searchActions } from "store/search";
 import useRoom from "hooks/useRoom";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import { useSelector } from "store";
+import { tabletSmallBreakpoint } from "styles/theme";
 
 import Photos from "./contents/Photos";
-import BookingWindow from "./BookingWindow";
+import BookingWindow from "./bookingWindow";
 import Contents from "./contents";
 import Title from "./title";
+import BookingButton from "./BookingButton";
 
 const Rating = dynamic(() => import("./rating"));
 const Map = dynamic(() => import("components/common/Map"), { ssr: false });
 
 const Container = styled.div`
-  @media screen and (max-width: 1023px) {
-    > div {
-      padding: 24px 24px !important;
-    }
-  }
   > div {
     padding: 24px 80px;
     max-width: 1280px;
@@ -55,7 +53,7 @@ const Container = styled.div`
       padding-bottom: 24px;
     }
     .detail_map-container {
-      padding: 48px 0px;
+      padding: 48px 0px 24px 0px;
       .detail_map-container_address {
         padding-bottom: 24px;
         font-weight: 300;
@@ -65,9 +63,50 @@ const Container = styled.div`
       }
     }
   }
+  @media ${({ theme }) => theme.device.tablet} {
+    > div {
+      padding: 24px;
+    }
+  }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    > div {
+      padding: 24px 0px;
+      .detail_content-title {
+        margin-right: 12px;
+      }
+      .detail_main-container {
+        padding: 0px 24px;
+        display: block;
+        padding-top: 0;
+        .detail_main-container_left {
+          width: 100%;
+        }
+      }
+      .detail_content-room-info {
+        margin-right: 12px;
+      }
+      .detail_map-container {
+        padding: 48px 24px 64px 24px;
+      }
+    }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    .detail_content-title {
+      div {
+        font-size: 18px;
+        font-weight: 500 !important;
+      }
+    }
+    .detail_map-container {
+      > div {
+        max-height: 360px !important;
+      }
+    }
+  }
 `;
 
 const RoomDetail = () => {
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   const router = useRouter();
   const { query } = router;
 
@@ -88,11 +127,12 @@ const RoomDetail = () => {
   };
 
   useEffect(() => {
-    if (!query) return;
+    if (!query || query.mobile === "true") return;
+    const queryWithoutId = { ...query };
+    delete queryWithoutId.id;
     dispatch(
       searchActions.setSearch({
-        ...query,
-        id: "",
+        ...queryWithoutId,
         adults: Number(query.adults) < 1 ? 1 : Number(query.adults),
         children: Number(query.children) < 0 ? 0 : Number(query.children),
         infants: Number(query.infants) < 0 ? 0 : Number(query.infants),
@@ -127,16 +167,20 @@ const RoomDetail = () => {
         </Head>
         <div>
           <Title />
-          <div className="detail_photo-container">
-            <Photos photos={room.photos} />
-          </div>
+          {innerWidth >= tabletSmallBreakpoint && (
+            <div className="detail_photo-container">
+              <Photos photos={room.photos} />
+            </div>
+          )}
           <div className="detail_main-container">
             <div className="detail_main-container_left">
               <Contents />
             </div>
-            <div className="detail_main-container_right">
-              <BookingWindow />
-            </div>
+            {innerWidth >= tabletSmallBreakpoint && (
+              <div className="detail_main-container_right">
+                <BookingWindow />
+              </div>
+            )}
           </div>
           <Rating />
           <div className="detail_map-container">
@@ -152,6 +196,7 @@ const RoomDetail = () => {
             />
           </div>
         </div>
+        {innerWidth < tabletSmallBreakpoint && <BookingButton />}
       </Container>
     </>
   );

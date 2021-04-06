@@ -77,9 +77,7 @@ const EditProfile = ({
   return (
     <>
       {!modifyMode && (
-        <Container onClick={() => setModifyMode(true)}>
-          프로필 수정하기
-        </Container>
+        <Container onClick={() => setModifyMode(true)}>프로필 수정</Container>
       )}
       {modifyMode && (
         <TextContainer>

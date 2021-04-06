@@ -1,13 +1,10 @@
 import DateRangePicker from "components/common/DateRangePicker";
 import moment, { Moment } from "moment";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import styled from "styled-components";
 import palette from "styles/palette";
-import { searchActions } from "store/search";
 import { useRouter } from "next/router";
-import { toMomentObject } from "react-dates";
 import { makeQueryString } from "utils";
 import useRoom from "hooks/useRoom";
 
@@ -89,7 +86,7 @@ const DatePicker = () => {
 
   useEffect(() => {
     if (checkIn && room) {
-      router.push(
+      router.replace(
         `/room/${room._id}${makeQueryString({
           ...query,
           id: "",
@@ -103,7 +100,7 @@ const DatePicker = () => {
 
   useEffect(() => {
     if (checkOut && room) {
-      router.push(
+      router.replace(
         `/room/${room._id}${makeQueryString({
           ...query,
           id: "",

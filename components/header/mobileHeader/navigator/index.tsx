@@ -67,7 +67,7 @@ const Navigator = () => {
           <Link href="/reservations">
             <a onClick={handleClick}>
               <FaAirbnb size={25} />
-              <div>여행</div>
+              <div>예약</div>
             </a>
           </Link>
           <Link href="/wishlists">

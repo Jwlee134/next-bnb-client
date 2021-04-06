@@ -11,9 +11,8 @@ import useUser from "./useUser";
 
 const useWishlist = (roomId?: string) => {
   const { user } = useUser();
-
   const { data: wishlist, mutate: mutateWishlist } = useSWR<IWishlist[]>(
-    user && user.isLoggedIn ? "/api/wishlist" : null,
+    user && user.isLoggedIn ? `/api/wishlist?id=${user._id}` : null,
     fetcher
   );
   const dispatch = useDispatch();

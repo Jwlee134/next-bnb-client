@@ -3,13 +3,14 @@ import { format } from "date-fns";
 import useModal from "hooks/useModal";
 import Link from "next/link";
 import React from "react";
+import { useSelector } from "store";
 import styled from "styled-components";
+import { tabletSmallBreakpoint } from "styles/theme";
 import { IReservation } from "types/reservation";
 import { addComma } from "utils";
 
 const Container = styled.div`
   width: 100%;
-  height: 128px;
   box-shadow: 0 1px 8px 0 rgb(0 0 0 / 12%), 0 2px 3px -1px rgb(0 0 0 / 20%);
   padding: 24px;
   display: flex;
@@ -62,12 +63,26 @@ const Container = styled.div`
     align-items: flex-end;
     div:first-child {
       font-weight: 700;
+      text-align: right;
+      > div {
+        margin-bottom: 4px;
+      }
     }
     span {
       font-weight: 300;
       font-size: 15px;
       a {
         text-decoration: underline;
+      }
+    }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    img {
+      margin-bottom: 12px;
+    }
+    .reservation-card_left {
+      > a {
+        flex-direction: column;
       }
     }
   }
@@ -91,38 +106,60 @@ const ReservationCard = ({
   isMyRoom?: boolean;
   isPast?: boolean;
 }) => {
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   const { openModal, closeModal, ModalPortal } = useModal();
   return (
     <>
       <Container>
         <div className="reservation-card_left">
-          <a
-            href={`/room/${reservation.room._id}?adults=1&children=0&infants=0`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <img src={reservation.room.photos[0]} alt="" />
-            <div className="reservation-card_text-container">
-              <div>{reservation.room.title}</div>
-              <div>
-                {format(new Date(reservation.checkIn), formatText)} ~{" "}
-                {format(new Date(reservation.checkOut), formatText)} ·{" "}
-                {reservation.room.city}
+          {innerWidth >= tabletSmallBreakpoint ? (
+            <a
+              href={`/room/${reservation.room._id}?adults=1&children=0&infants=0`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img src={reservation.room.photos[0]} alt="" />
+              <div className="reservation-card_text-container">
+                <div>{reservation.room.title}</div>
+                <div>
+                  {format(new Date(reservation.checkIn), formatText)} ~{" "}
+                  {format(new Date(reservation.checkOut), formatText)} ·{" "}
+                  {reservation.room.city}
+                </div>
+                <div>게스트 {reservation.guestCount}명</div>
               </div>
-              <div>게스트 {reservation.guestCount}명</div>
-            </div>
-          </a>
+            </a>
+          ) : (
+            <Link
+              href={`/room/${reservation.room._id}?adults=1&children=0&infants=0`}
+            >
+              <a>
+                <img src={reservation.room.photos[0]} alt="" />
+                <div className="reservation-card_text-container">
+                  <div>{reservation.room.title}</div>
+                  <div>
+                    {format(new Date(reservation.checkIn), formatText)} ~{" "}
+                    {format(new Date(reservation.checkOut), formatText)} ·{" "}
+                    {reservation.room.city}
+                  </div>
+                  <div>게스트 {reservation.guestCount}명</div>
+                </div>
+              </a>
+            </Link>
+          )}
         </div>
         <div className="reservation-card_right">
-          <div>￦{addComma(String(reservation.price))}</div>{" "}
-          {isMyRoom && (
-            <span>
-              게스트:{" "}
-              <Link href={`/user/${reservation.guest._id}`}>
-                <a>{reservation.guest.name}</a>
-              </Link>
-            </span>
-          )}
+          <div>
+            <div>￦{addComma(String(reservation.price))}</div>{" "}
+            {isMyRoom && (
+              <span>
+                게스트:{" "}
+                <Link href={`/user/${reservation.guest._id}`}>
+                  <a>{reservation.guest.name}</a>
+                </Link>
+              </span>
+            )}
+          </div>
           {isPast &&
             (!reservation.guestReviewed ? (
               <Review onClick={openModal}>후기 남기기</Review>

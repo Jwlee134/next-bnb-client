@@ -3,6 +3,7 @@ import useLocation from "hooks/useLocation";
 import React, { useState } from "react";
 import { useSelector } from "store";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 import Footer from "./Footer";
 import Input from "./Input";
 import Header from "./Header";
@@ -21,10 +22,11 @@ const SearchPopup = styled.div`
 const Search = ({ scroll }: { scroll: number }) => {
   const searchMode = useSelector((state) => state.common.searchMode);
   const showMap = useSelector((state) => state.map.showMap);
+  const { pathname } = useRouter();
   const { value, setValue, ListItem } = useLocation("mobile");
   const [opened, setOpened] = useState(false);
 
-  if (showMap) return null;
+  if (showMap || pathname === "/room/[id]") return null;
   return (
     <>
       {searchMode === "location" && (

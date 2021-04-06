@@ -45,6 +45,22 @@ const Container = styled.div`
       font-weight: 300;
     }
   }
+  @media ${({ theme }) => theme.device.tablet} {
+    width: calc(50% - 12px);
+    margin-bottom: 24px;
+    &:nth-child(2n) {
+      margin-right: 0px;
+    }
+    &:nth-child(2n - 1) {
+      margin-right: 24px;
+    }
+  }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    width: 100%;
+    &:nth-child(n) {
+      margin-right: 0;
+    }
+  }
 `;
 
 const ListCard = ({ item }: { item: IWishlist }) => {
