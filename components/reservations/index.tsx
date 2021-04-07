@@ -61,6 +61,11 @@ const Container = styled.div`
       padding: 36px 24px;
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    .reservations_main {
+      padding-bottom: 64px;
+    }
+  }
   @media ${({ theme }) => theme.device.mobile} {
     .reservations_main {
       > div:first-child {

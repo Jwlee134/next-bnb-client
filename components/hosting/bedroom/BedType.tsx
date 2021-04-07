@@ -2,36 +2,20 @@ import Button from "components/common/Button";
 import Counter from "components/common/Counter";
 import Selector from "components/common/Selector";
 import { bedTypeList } from "lib/staticData";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { hostingActions } from "store/hosting";
 import styled from "styled-components";
-import palette from "styles/palette";
 
-const BedTypeContainer = styled.div`
+const Container = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 24px 0px;
   border-top: 1px solid #dddddd;
+  .bedroom_bed-type_counter-container {
+    margin: 20px 0px;
+  }
 `;
-
-const CounterContainer = styled.div`
-  margin: 20px 0px;
-`;
-
-const LeftContainer = styled.div`
-  width: 100%;
-  margin-right: 50px;
-`;
-
-const Label = styled.div``;
-
-const Bed = styled.div`
-  opacity: 0.7;
-  font-size: 15px;
-`;
-
-const RightContainer = styled.div``;
 
 interface Props {
   bedroom: {
@@ -75,21 +59,23 @@ const BedType = ({ bedroom }: Props) => {
     .join(", ");
 
   return (
-    <BedTypeContainer>
-      <LeftContainer>
-        <Label>{bedroom.id}번 침실</Label>
-        <Bed>침대 {totalBedCount()}개</Bed>
-        {!add && <Bed>{beds}</Bed>}
+    <Container>
+      <div className="bedroom_bed-type_left-container">
+        <div>{bedroom.id}번 침실</div>
+        <div className="bedroom_bed-type_bed-text">
+          침대 {totalBedCount()}개
+        </div>
+        {!add && <div className="bedroom_bed-type_bed-text">{beds}</div>}
         {add &&
           bedroom.beds.map((bed, index) => (
-            <CounterContainer key={index}>
+            <div className="bedroom_bed-type_counter-container" key={index}>
               <Counter
                 onClick={(value) => handleClick(value, bed.label, bedroom.id)}
                 label={bed.label}
                 value={bed.count}
                 disableValue={0}
               />
-            </CounterContainer>
+            </div>
           ))}
         {add && (
           <Selector
@@ -100,19 +86,13 @@ const BedType = ({ bedroom }: Props) => {
             onChange={(e) => handleChange(e, bedroom.id)}
           />
         )}
-      </LeftContainer>
-      <RightContainer>
-        <Button
-          backgroundColor="white"
-          onClick={() => setAdd(!add)}
-          style={{
-            width: 160,
-          }}
-        >
+      </div>
+      <div className="bedroom_bed-type_right-container">
+        <Button backgroundColor="white" onClick={() => setAdd(!add)}>
           {add ? "완료" : "침대 추가하기"}
         </Button>
-      </RightContainer>
-    </BedTypeContainer>
+      </div>
+    </Container>
   );
 };
 

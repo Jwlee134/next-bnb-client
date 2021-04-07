@@ -29,11 +29,11 @@ const Header = ({ useSearchBar = true }: { useSearchBar?: boolean }) => {
     };
   }, []);
 
-  return innerWidth >= tabletSmallBreakpoint ? (
-    <PCHeader scroll={scroll} useSearchBar={useSearchBar} />
-  ) : (
-    <MobileHeader scroll={scroll} useSearchBar={useSearchBar} />
-  );
+  if (!innerWidth) return null;
+  if (innerWidth >= tabletSmallBreakpoint) {
+    return <PCHeader scroll={scroll} useSearchBar={useSearchBar} />;
+  }
+  return <MobileHeader scroll={scroll} useSearchBar={useSearchBar} />;
 };
 
 export default Header;

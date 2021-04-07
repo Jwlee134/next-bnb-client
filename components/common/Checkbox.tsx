@@ -5,33 +5,30 @@ import { isDetailOptions } from "types/typeguards";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const InputContainer = styled.label`
-  margin-bottom: 16px;
-  cursor: pointer;
-  width: fit-content;
-  display: flex;
-  align-items: center;
-  &:last-child {
-    margin-bottom: 24px;
+  .checkbox_input-container {
+    margin-bottom: 16px;
+    cursor: pointer;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    &:last-child {
+      margin-bottom: 24px;
+    }
+    input {
+      min-width: 16px;
+      min-height: 16px;
+    }
   }
-  input {
-    min-width: 16px;
-    min-height: 16px;
+  .checkbox_text-container {
+    span {
+      margin-left: 16px;
+    }
+    div {
+      margin-left: 16px;
+      font-weight: 300;
+      font-size: 14px;
+    }
   }
-`;
-
-const Text = styled.span`
-  margin-left: 16px;
-`;
-
-const TextContainer = styled.div``;
-
-const Description = styled.div`
-  margin-left: 16px;
-  font-weight: 300;
-  font-size: 14px;
 `;
 
 export interface DetailOptions {
@@ -51,7 +48,7 @@ const Checkbox = ({ options, items, onChange }: Props) => {
     <Container>
       {options &&
         options.map((option: string | DetailOptions, index: number) => (
-          <InputContainer key={index}>
+          <label className="checkbox_input-container" key={index}>
             <input
               type="checkbox"
               value={
@@ -71,17 +68,17 @@ const Checkbox = ({ options, items, onChange }: Props) => {
                 isDetailOptions(option) ? option.value || option.label : option
               )}
             />
-            {!isDetailOptions(option) && <Text>{option}</Text>}
+            {!isDetailOptions(option) && <span>{option}</span>}
             {isDetailOptions(option) && option.label && (
-              <TextContainer>
-                <Text>{option.label}</Text>
-                <Description>{option.description}</Description>
-              </TextContainer>
+              <div className="checkbox_text-container">
+                <span>{option.label}</span>
+                <div>{option.description}</div>
+              </div>
             )}
-          </InputContainer>
+          </label>
         ))}
     </Container>
   );
 };
 
-export default React.memo(Checkbox);
+export default Checkbox;

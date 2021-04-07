@@ -51,7 +51,10 @@ const Setting = ({
     try {
       await deleteWishlistAPI(query.id as string);
       mutateWishlist();
-      router.replace("/wishlists");
+      closeModal();
+      setTimeout(() => {
+        router.replace("/wishlists");
+      }, 400);
     } catch (error) {
       alert(error.response.data);
     }

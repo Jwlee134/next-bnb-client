@@ -7,6 +7,11 @@ const Container = styled.div`
   height: 100%;
   border-radius: 32px;
   cursor: pointer;
+  @media ${({ theme }) => theme.device.pcSmall} {
+    .DateRangePicker_picker {
+      left: -210px !important;
+    }
+  }
 `;
 
 const CheckIn = () => {

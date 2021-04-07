@@ -13,16 +13,37 @@ interface BlockProps {
 
 const Container = styled.div`
   max-width: 485px;
-`;
-
-const Title = styled.p`
-  margin-bottom: 32px;
-`;
-
-const InputContainer = styled.label`
-  display: block;
-  margin-bottom: 24px;
-  cursor: pointer;
+  .radio-input_title {
+    margin-bottom: 32px;
+  }
+  .radio-input_label {
+    display: block;
+    margin-bottom: 24px;
+    cursor: pointer;
+  }
+  .radio-input_label {
+    font-weight: 300;
+    margin-bottom: 5px;
+  }
+  .radio-input_description {
+    font-weight: 300;
+    font-size: 14px;
+    margin-left: 30px;
+    opacity: 0.7;
+  }
+  .radio-input_error-message {
+    margin-top: 8px;
+    color: ${palette.tawny};
+    font-weight: 300;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    svg {
+      margin-right: 5px;
+      margin-bottom: 1px;
+    }
+  }
 `;
 
 const Block = styled.div<BlockProps>`
@@ -67,32 +88,6 @@ const Block = styled.div<BlockProps>`
   }
 `;
 
-const Label = styled.p`
-  font-weight: 300;
-  margin-bottom: 5px;
-`;
-
-const Description = styled.p`
-  font-weight: 300;
-  font-size: 14px;
-  margin-left: 30px;
-  opacity: 0.7;
-`;
-
-const ErrorMessage = styled.div`
-  margin-top: 8px;
-  color: ${palette.tawny};
-  font-weight: 300;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 24px;
-  svg {
-    margin-right: 5px;
-    margin-bottom: 1px;
-  }
-`;
-
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   title?: string;
   options: {
@@ -117,9 +112,9 @@ const RadioInput = ({
   return (
     <>
       <Container>
-        {title && <Title>{title}</Title>}
+        {title && <div className="radio-input_title">{title}</div>}
         {options.map((option, index) => (
-          <InputContainer key={index}>
+          <label className="radio-input_label" key={index}>
             <Block
               isValid={isValid}
               validation={validation}
@@ -132,22 +127,24 @@ const RadioInput = ({
                 checked={currentValue === option.value}
                 {...props}
               />
-              <Label>{option.label}</Label>
+              <div className="radio-input_label">{option.label}</div>
             </Block>
             {option.description && (
-              <Description>{option.description}</Description>
+              <div className="radio-input_description">
+                {option.description}
+              </div>
             )}
-          </InputContainer>
+          </label>
         ))}
         {!isValid && useValidationMode && validation && (
-          <ErrorMessage>
+          <div className="radio-input_error-message">
             <Warning />
             필수 항목입니다.
-          </ErrorMessage>
+          </div>
         )}
       </Container>
     </>
   );
 };
 
-export default React.memo(RadioInput);
+export default RadioInput;

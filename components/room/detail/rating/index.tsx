@@ -53,7 +53,11 @@ const Container = styled.div`
     }
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
-    padding: 48px 24px;
+    padding: 48px 0px 0px 0px;
+    margin: 0px 24px;
+    .detail_rating_empty {
+      margin-bottom: 48px;
+    }
   }
   @media ${({ theme }) => theme.device.mobile} {
     padding-bottom: 0;

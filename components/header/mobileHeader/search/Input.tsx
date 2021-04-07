@@ -103,7 +103,7 @@ const Input = ({
           onFocus={handleFocus}
           type="text"
           placeholder="어디로 여행가세요?"
-          value={value}
+          value={value || ""}
           onChange={setValue}
         />
       </label>

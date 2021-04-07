@@ -11,41 +11,38 @@ import { IoCloseSharp } from "react-icons/io5";
 import palette from "styles/palette";
 import Footer from "../Footer";
 
-const Container = styled.div``;
-
-const InputContainer = styled.form`
-  display: flex;
-  position: relative;
-  button {
-    width: 62px;
-    background-color: white;
-    border: 1px solid ${palette.gray_dd};
-    color: black;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    &:active {
-      border-color: ${palette.dark_cyan};
+const Container = styled.div`
+  .rules_input-container {
+    display: flex;
+    position: relative;
+    button {
+      width: 62px;
+      background-color: white;
+      border: 1px solid ${palette.gray_dd};
+      color: black;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      &:active {
+        border-color: ${palette.dark_cyan};
+      }
+    }
+    input {
+      margin-bottom: 24px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
   }
-  input {
-    padding-right: 73px;
-    margin-bottom: 24px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+  .rules_text {
+    margin-bottom: 15px;
+    max-width: 450px;
   }
-`;
-
-const Text = styled.div`
-  margin-bottom: 15px;
-  max-width: 450px;
-`;
-
-const TextContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  svg {
-    cursor: pointer;
-    opacity: 0.5;
+  .rules_text-container {
+    display: flex;
+    justify-content: space-between;
+    svg {
+      cursor: pointer;
+      opacity: 0.5;
+    }
   }
 `;
 
@@ -89,23 +86,23 @@ const Rules = () => {
           items={forbiddenRules}
           onChange={handleCheckbox}
         />
-        <Text>추가 규칙</Text>
+        <div className="rules_text">추가 규칙</div>
         {customRules.map((rule, index) => (
-          <TextContainer key={index}>
-            <Text>{rule}</Text>
+          <div className="rules_text-container" key={index}>
+            <div className="rules_text">{rule}</div>
             <IoCloseSharp onClick={() => handleDelete(index)} size={22} />
-          </TextContainer>
+          </div>
         ))}
-        <InputContainer onSubmit={handleSubmit}>
+        <form className="rules_input-container" onSubmit={handleSubmit}>
           <Input
             value={text}
             onChange={handleChange}
-            placeholder="조용히 해야 하는 시간, 실내 신발 착용 여부 등"
+            placeholder="예: 조용히 해야 하는 시간"
           />
           <Button backgroundColor="white" onClick={handleAdd}>
             추가
           </Button>
-        </InputContainer>
+        </form>
       </Container>
       <Footer nextHref="/become-a-host/availability" />
     </>

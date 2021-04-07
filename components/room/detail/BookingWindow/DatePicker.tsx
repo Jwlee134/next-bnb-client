@@ -16,11 +16,8 @@ const Container = styled.div`
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   .DateRangePicker_picker {
-    left: -300px !important;
     top: 55px !important;
-  }
-  .DayPicker {
-    border-top-right-radius: 0 !important;
+    left: -300px !important;
   }
   .DateInput {
     &:hover {
@@ -35,12 +32,6 @@ const Container = styled.div`
         font-size: 12px !important;
       }
     }
-    &:first-child {
-      border-top-left-radius: 12px;
-    }
-    &:last-child {
-      border-top-right-radius: 12px;
-    }
     input {
       padding: 20px 10px 0px 10px;
     }
@@ -51,7 +42,6 @@ const Container = styled.div`
   }
   .DateInput_input__disabled {
     background-color: ${palette.gray_f7};
-    border-top-right-radius: 12px;
     z-index: 0;
     font-style: normal;
   }
@@ -60,6 +50,12 @@ const Container = styled.div`
     color: #cacccd;
     &:hover {
       background-color: inherit !important;
+    }
+  }
+  @media ${({ theme }) => theme.device.pcSmall} {
+    .DateRangePicker_picker {
+      left: initial !important;
+      transform: translateX(-50%);
     }
   }
 `;

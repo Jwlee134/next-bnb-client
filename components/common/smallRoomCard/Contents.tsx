@@ -16,21 +16,6 @@ const Container = styled.div<{ isSearchPage: boolean }>`
   width: 100%;
   padding: ${({ isSearchPage }) =>
     isSearchPage ? "0px 0px 24px 0px" : "0px 10px"};
-  > div:first-child {
-    position: relative;
-    padding-top: 66.66%;
-    height: 0;
-    border-radius: 10px;
-    overflow: hidden;
-    img {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      object-fit: cover;
-    }
-  }
   .small-room-card_text-container {
     margin-top: 12px;
     .small-room-card_text-container_rating {

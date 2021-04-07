@@ -26,7 +26,10 @@ const Search = ({ scroll }: { scroll: number }) => {
   const { value, setValue, ListItem } = useLocation("mobile");
   const [opened, setOpened] = useState(false);
 
-  if (showMap || pathname === "/room/[id]") return null;
+  if ((pathname === "/search/rooms" && showMap) || pathname === "/room/[id]") {
+    return null;
+  }
+
   return (
     <>
       {searchMode === "location" && (

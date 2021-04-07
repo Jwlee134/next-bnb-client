@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React from "react";
 import { IoIosStar } from "react-icons/io";
 import styled from "styled-components";
@@ -8,9 +7,13 @@ import querystring from "querystring";
 import { SearchState } from "store/search";
 import { FaWonSign } from "react-icons/fa";
 import { addComma, getRoomTypeText } from "utils";
-import RoomCardSlider from "../../../common/RoomCardSlider";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { slickStyles } from "styles/slick";
 
 const Container = styled.div`
+  ${slickStyles};
   width: 250px;
   overflow: hidden;
   font-family: Noto Sans KR;
@@ -19,64 +22,60 @@ const Container = styled.div`
       display: block !important;
     }
   }
-`;
-
-const ImageContainer = styled.div`
-  background-color: ${palette.gray_eb};
-  max-height: 167px;
-`;
-
-const TextContainer = styled.div`
-  padding: 8px;
-`;
-
-const Title = styled.div`
-  font-size: 16px;
-  font-weight: 400;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-`;
-
-const Rating = styled.div`
-  svg {
-    color: ${palette.bittersweet};
-    margin-right: 3px;
-    margin-bottom: 2px;
+  img {
+    width: 100%;
+    height: 167px;
   }
-  font-size: 14px;
-  display: flex;
-  align-items: flex-end;
-`;
-
-const Score = styled.span`
-  margin-right: 2px;
-`;
-
-const RatingCount = styled.span`
-  font-weight: 300;
-  opacity: 0.7;
-`;
-
-const FlexContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div {
-    font-size: 12px;
+  .info-window_img-container {
+    background-color: ${palette.gray_eb};
+    max-height: 167px;
   }
-`;
-
-const Price = styled.div`
-  display: flex;
-  font-weight: bold;
-  align-items: center;
-  svg {
+  .info-window_text-container {
+    padding: 8px;
+  }
+  .info-window_text-title {
+    font-size: 16px;
+    font-weight: 400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .info-window_flex-container {
+    display: flex;
+    justify-content: space-between;
+    > div {
+      font-size: 12px;
+    }
+  }
+  .info-window_flex-container_rating {
+    svg {
+      color: ${palette.bittersweet};
+      margin-right: 3px;
+      margin-bottom: 2px;
+    }
+    font-size: 14px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .info-window_flex-container_rating-score {
     margin-right: 2px;
-    margin-top: 1px;
   }
-  span {
-    margin-left: 4px;
+  .info-window_flex-container_rating-count {
     font-weight: 300;
+    opacity: 0.7;
+  }
+  .info-window_flex-container_price {
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    svg {
+      margin-right: 2px;
+      margin-top: 1px;
+    }
+    span {
+      margin-left: 4px;
+      font-weight: 300;
+    }
   }
 `;
 
@@ -90,39 +89,37 @@ const InfoWindow = ({ room, search }: { room: IRoom; search: SearchState }) => {
       rel="noreferrer"
     >
       <Container>
-        <ImageContainer>
-          <RoomCardSlider>
+        <div className="info-window_img-container">
+          <Slider slidesToScroll={1} slidesToShow={1} infinite={true}>
             {room.photos.map((photo, index) => (
-              <Image
-                key={index}
-                src={photo}
-                width={250}
-                height={167}
-                quality="50"
-              />
+              <img key={index} src={photo} alt="" />
             ))}
-          </RoomCardSlider>
-        </ImageContainer>
-        <TextContainer>
-          <Title>{room.title}</Title>
+          </Slider>
+        </div>
+        <div className="info-window_text-container">
+          <div className="info-window_text-title">{room.title}</div>
           <div>
             {room.buildingType.label} {getRoomTypeText(room)}
           </div>
-          <FlexContainer>
-            <Rating>
+          <div className="info-window_flex-container">
+            <div className="info-window_flex-container_rating">
               <IoIosStar size={14} />
-              <Score>{room.avgOfRating}</Score>
-              <RatingCount>({room.review.length})</RatingCount>
-            </Rating>
+              <div className="info-window_flex-container_rating-score">
+                {room.avgOfRating}
+              </div>
+              <div className="info-window_flex-container_rating-count">
+                ({room.review.length})
+              </div>
+            </div>
             {checkIn && checkOut && (
-              <Price>
+              <div className="info-window_flex-container_price">
                 <FaWonSign />
                 {addComma(String(room.price))} <span>/ 박</span>
-              </Price>
+              </div>
             )}
             {!checkIn && !checkOut && <div>날짜를 입력하여 가격 확인</div>}
-          </FlexContainer>
-        </TextContainer>
+          </div>
+        </div>
       </Container>
     </a>
   );

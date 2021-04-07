@@ -33,7 +33,7 @@ const Others = () => {
           !!query.buildingType
         }
         className="filter-title"
-        onClick={() => openModal()}
+        onClick={openModal}
       >
         필터 추가하기
       </Title>
@@ -44,4 +44,4 @@ const Others = () => {
   );
 };
 
-export default React.memo(Others);
+export default Others;

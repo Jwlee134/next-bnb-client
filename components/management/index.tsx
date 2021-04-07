@@ -43,6 +43,7 @@ const Container = styled.div`
           color: ${palette.gray_80};
           &:first-child {
             min-width: 250px;
+            max-width: 400px;
             position: sticky;
             left: 0;
             background-color: white;
@@ -92,6 +93,43 @@ const Container = styled.div`
           }
         }
       }
+    }
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    main {
+      padding: 32px 24px;
+    }
+  }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    th,
+    td {
+      &:first-child {
+        min-width: initial !important;
+        max-width: 250px !important;
+      }
+    }
+    td {
+      &:first-child {
+        div {
+          span {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    th,
+    td {
+      &:first-child {
+        position: initial !important;
+      }
+    }
+    .filter_input-container,
+    input {
+      width: 100% !important;
     }
   }
 `;

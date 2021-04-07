@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import palette from "styles/palette";
 
-const Container = styled.div`
+const Container = styled.div<{ isNavigator: boolean }>`
   position: absolute;
   width: 16px;
   height: 16px;
@@ -15,10 +15,20 @@ const Container = styled.div`
   align-items: center;
   top: 0;
   right: 0;
+  ${({ isNavigator }) =>
+    isNavigator &&
+    css`
+      top: 7px;
+      right: 47px;
+    `}
 `;
 
-const Notification = ({ children }: { children: React.ReactNode }) => (
-  <Container>{children}</Container>
-);
+const Notification = ({
+  children,
+  isNavigator = false,
+}: {
+  children: React.ReactNode;
+  isNavigator?: boolean;
+}) => <Container isNavigator={isNavigator}>{children}</Container>;
 
 export default Notification;

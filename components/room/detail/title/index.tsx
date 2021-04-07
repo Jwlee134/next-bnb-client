@@ -36,19 +36,12 @@ const Container = styled.div`
     padding-top: 56.25%;
     margin-top: 40px;
     > div {
+      border-radius: 0;
       position: absolute;
       padding-top: 56.25%;
       top: 64px;
       left: 0;
       width: 100%;
-      img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
     }
   }
   .detail_title {
@@ -162,13 +155,11 @@ const Title = () => {
               </div>
             </div>
             <div className="detail_mobile-photo-slider">
-              <div>
-                <RoomCardSlider>
-                  {room.photos.map((photo, i) => (
-                    <img src={photo} alt="" key={i} />
-                  ))}
-                </RoomCardSlider>
-              </div>
+              <RoomCardSlider>
+                {room.photos.map((photo, i) => (
+                  <img src={photo} alt="" key={i} />
+                ))}
+              </RoomCardSlider>
             </div>
           </>
         )}

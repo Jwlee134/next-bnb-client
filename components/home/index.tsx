@@ -1,7 +1,9 @@
+import dynamic from "next/dynamic";
 import React from "react";
 import styled from "styled-components";
 import MainScreen from "./MainScreen";
-import SearchCard from "./SearchCard";
+
+const SearchCard = dynamic(() => import("./SearchCard"));
 
 const Container = styled.div`
   .home_background-img {

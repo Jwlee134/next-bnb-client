@@ -11,8 +11,16 @@ import { commonActions } from "store/common";
 import { tabletSmallBreakpoint } from "styles/theme";
 import SmallRoomCard from "components/common/smallRoomCard";
 import RoomCard from "components/common/RoomCard";
+import SmallRoomCardSkeleton from "components/skeleton/SmallRoomCardSkeleton";
 
 const Container = styled.div`
+  .room-list_page-info {
+    width: 100%;
+    text-align: center;
+    font-weight: 300;
+    margin-top: 10px;
+    font-size: 14px;
+  }
   .paginate-container {
     padding-top: 50px;
     display: flex;
@@ -55,14 +63,6 @@ const Container = styled.div`
     cursor: not-allowed !important;
     opacity: 0.5;
   }
-`;
-
-const Info = styled.div`
-  width: 100%;
-  text-align: center;
-  font-weight: 300;
-  margin-top: 10px;
-  font-size: 14px;
 `;
 
 const Empty = styled.div`
@@ -123,13 +123,11 @@ const RoomList = () => {
           ${(Number(page) - 1) * Number(limit) + searchResults.length}`;
   };
 
-  if (isLoading) {
-    return (
-      <>
-        <RoomCardSkeleton />
-        <RoomCardSkeleton />
-      </>
-    );
+  if (isLoading && innerWidth) {
+    if (innerWidth >= tabletSmallBreakpoint) {
+      return <RoomCardSkeleton />;
+    }
+    return <SmallRoomCardSkeleton />;
   }
 
   if (!originalLength) {
@@ -169,7 +167,7 @@ const RoomList = () => {
         disabledClassName="disabled"
         forcePage={Number(page) - 1}
       />
-      <Info>{info()}</Info>
+      <div className="room-list_page-info">{info()}</div>
     </Container>
   );
 };

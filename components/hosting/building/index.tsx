@@ -18,10 +18,10 @@ import { hostingActions } from "store/hosting";
 import RadioInput from "components/common/RadioInput";
 import Footer from "../Footer";
 
-const Container = styled.div``;
-
-const SelectorContainer = styled.div`
-  margin-bottom: 32px;
+const Container = styled.div`
+  .building_selector-container {
+    margin-bottom: 32px;
+  }
 `;
 
 const Building = () => {
@@ -76,7 +76,7 @@ const Building = () => {
     <>
       <Container>
         <h1>등록하실 숙소 종류는 무엇인가요?</h1>
-        <SelectorContainer>
+        <div className="building_selector-container">
           <AdvancedSelector
             title="숙소의 건물 유형을 선택해주세요."
             options={largeBuildingTypeList}
@@ -85,10 +85,10 @@ const Building = () => {
             onClick={handleLargeBuildingType}
             isValid={!!largeBuildingType.label}
           />
-        </SelectorContainer>
+        </div>
         {largeBuildingType.label && (
           <>
-            <SelectorContainer>
+            <div className="building_selector-container">
               <AdvancedSelector
                 title="이제 더 구체적인 유형을 선택해주세요."
                 options={detailBuildingTypeList()}
@@ -97,7 +97,7 @@ const Building = () => {
                 onClick={handleDetailBuildingType}
                 isValid={!!buildingType.label}
               />
-            </SelectorContainer>
+            </div>
             {buildingType.label && (
               <>
                 <RadioInput

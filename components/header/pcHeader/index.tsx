@@ -39,11 +39,18 @@ const getEffects = (pathname: string, isTop: boolean, showMap: boolean) => {
       }
     `;
   }
-  if (pathname === "/room/[id]") {
+  if (pathname === "/room/[id]" || pathname === "/reservations") {
     return css`
       position: relative;
       > div {
         max-width: ${({ theme }) => theme.maxWidth.normal};
+      }
+    `;
+  }
+  if (pathname === "/wishlists/[id]") {
+    return css`
+      > div {
+        padding: ${({ theme }) => theme.padding.tablet};
       }
     `;
   }
@@ -71,28 +78,26 @@ const Container = styled.div<ContainerProps>`
     justify-content: space-between;
     align-items: center;
   }
+  .header_left-container {
+    font-size: 24px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    svg {
+      margin-right: 6px;
+    }
+  }
+  .header_right-container {
+    color: black;
+    position: relative;
+  }
   ${({ pathname, isTop, showMap }) => getEffects(pathname, isTop, showMap)}
   @media ${({ theme }) => theme.device.tablet} {
     > div {
       padding: ${({ theme }) => theme.padding.tablet};
     }
   }
-`;
-
-const LeftContainer = styled.div`
-  font-size: 24px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  svg {
-    margin-right: 6px;
-  }
-`;
-
-const RightContainer = styled.div`
-  color: black;
-  position: relative;
 `;
 
 const Background = styled.div`
@@ -133,15 +138,15 @@ const PCHeader = ({
       <Container showMap={showMap} isTop={scroll === 0} pathname={pathname}>
         <div>
           <Link href="/">
-            <LeftContainer>
+            <div className="header_left-container">
               <SiAirbnb size={32} />
               airbnb
-            </LeftContainer>
+            </div>
           </Link>
           {useSearchBar && <MiniSearchBar scroll={scroll} />}
-          <RightContainer>
+          <div className="header_right-container">
             <HeaderMenu />
-          </RightContainer>
+          </div>
           {useSearchBar && <SearchBar scroll={scroll} />}
         </div>
       </Container>

@@ -44,6 +44,8 @@ const Container = styled.div<{ pathname: boolean }>`
       background-color: white !important;
     }
   }
+  @media ${({ theme }) => theme.device.mobile} {
+  }
 `;
 
 interface Props extends DayPickerProps {}

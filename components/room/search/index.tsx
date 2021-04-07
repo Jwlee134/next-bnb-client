@@ -24,10 +24,14 @@ const Container = styled.div<{ showMap: boolean }>`
             min-height: calc(100vh - 80px);
           }
         `}
+
   @media ${({ theme }) => theme.device.tablet} {
     .search_contents {
       padding: ${({ theme }) => theme.padding.tablet};
     }
+  }
+  .search_contents {
+    padding-bottom: 48px;
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
     padding-top: ${({ showMap }) => (showMap ? "0px" : "80px")};

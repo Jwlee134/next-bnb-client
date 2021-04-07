@@ -29,6 +29,12 @@ const Container = styled.tbody`
         left: 0;
         background-color: white;
         cursor: pointer;
+        max-width: 400px;
+        span {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
       }
       &:last-child {
         position: relative;

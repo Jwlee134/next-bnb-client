@@ -14,9 +14,10 @@ import { IUser } from "types/user";
 import dynamic from "next/dynamic";
 import { useSelector } from "store";
 import { mobileBreakpoint, tabletSmallBreakpoint } from "styles/theme";
-import Reviews from "./reviews";
+import UserDetailSkeleton from "components/skeleton/UserDetailSkeleton";
 import UserIntro from "./UserIntro";
 
+const Reviews = dynamic(() => import("./reviews"));
 const RoomCardSlider = dynamic(
   () => import("components/common/RoomCardSlider")
 );
@@ -67,6 +68,22 @@ const Container = styled.div`
       margin-top: 24px;
     }
   }
+  .contents_container {
+    > div:first-child {
+      padding-top: 66.66%;
+      position: relative;
+      border-radius: 7px;
+      overflow: hidden;
+      img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+      }
+    }
+  }
   @media ${({ theme }) => theme.device.tabletSmall} {
     .user_main-container {
       padding-top: 24px;
@@ -96,19 +113,30 @@ const User = () => {
     fetcher
   );
 
-  const numberOfRoomCard =
-    innerWidth < tabletSmallBreakpoint
-      ? 2
-      : innerWidth < mobileBreakpoint
-      ? 1
-      : 3;
+  const numberOfRoomCard = () => {
+    if (innerWidth >= tabletSmallBreakpoint) return 3;
+    if (innerWidth < tabletSmallBreakpoint && innerWidth >= mobileBreakpoint) {
+      return 2;
+    }
+    return 1;
+  };
 
-  if (!data) return null;
   if (error) {
     return (
       <Error statusCode={error.response.status} message={error.response.data} />
     );
   }
+
+  if (!data) {
+    return (
+      <Container>
+        <div className="user_main-container">
+          <UserDetailSkeleton />
+        </div>
+      </Container>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -128,15 +156,15 @@ const User = () => {
               <div className="user_main-container_section-title">
                 {data.name}님의 숙소
               </div>
-              {data.rooms.length > numberOfRoomCard ? (
+              {data.rooms.length >= numberOfRoomCard() ? (
                 <RoomCardSlider
-                  slideToScroll={numberOfRoomCard}
-                  slidesToShow={numberOfRoomCard}
+                  slideToScroll={numberOfRoomCard()}
+                  slidesToShow={numberOfRoomCard()}
                   infinite={false}
                 >
                   {data.rooms.map((room: IRoom, i: number) => (
                     <SmallRoomCard
-                      isMobile={innerWidth < tabletSmallBreakpoint && true}
+                      isMobile={innerWidth < tabletSmallBreakpoint}
                       room={room}
                       key={i}
                     />
@@ -146,7 +174,7 @@ const User = () => {
                 <div className="user_main-container_section-rooms">
                   {data.rooms.map((room: IRoom, i: number) => (
                     <SmallRoomCard
-                      isMobile={innerWidth < tabletSmallBreakpoint && true}
+                      isMobile={innerWidth < tabletSmallBreakpoint}
                       room={room}
                       key={i}
                     />

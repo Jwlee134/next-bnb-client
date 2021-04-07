@@ -60,7 +60,7 @@ const CheckBoxContainer = styled.div<{ isBuildingType?: boolean }>`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    label {
+    .checkbox_input-container {
       ${({ isBuildingType }) =>
         !isBuildingType &&
         css`

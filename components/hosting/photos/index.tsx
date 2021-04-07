@@ -21,37 +21,45 @@ const Container = styled.div`
     cursor: pointer;
     z-index: 1;
   }
-`;
-
-const PhotoContainer = styled.div`
-  position: relative;
-  padding-top: 56.25%; /* 16:9 ratio */
-  height: 0;
-  overflow: hidden;
-  margin-bottom: 24px;
-`;
-
-const AddBox = styled.div`
-  border: 2px dashed #bbbbbb;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  button {
-    width: 120px;
-    margin-bottom: 12px;
-    z-index: -1;
+  .photos_photo-container {
+    position: relative;
+    padding-top: 56.25%;
+    height: 0;
+    overflow: hidden;
+    margin-bottom: 24px;
   }
-  span {
-    opacity: 0.5;
-    font-size: 14px;
-    z-index: -1;
+  .photos_add-box {
+    border: 2px dashed #bbbbbb;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    button {
+      width: 120px;
+      margin-bottom: 12px;
+      z-index: -1;
+    }
+    span {
+      opacity: 0.5;
+      font-size: 14px;
+      z-index: -1;
+    }
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    .photos_add-box {
+      button {
+        margin-bottom: 0;
+      }
+      span {
+        display: none;
+      }
+    }
   }
 `;
 
@@ -88,8 +96,8 @@ const Photos = () => {
           있습니다.
         </h3>
         {isEmpty(photos) && (
-          <PhotoContainer>
-            <AddBox>
+          <div className="photos_photo-container">
+            <div className="photos_add-box">
               <input
                 type="file"
                 accept="image/*"
@@ -98,8 +106,8 @@ const Photos = () => {
               />
               <Button backgroundColor="bittersweet">사진 업로드</Button>
               <span>또는 이곳으로 사진을 드래그하세요.</span>
-            </AddBox>
-          </PhotoContainer>
+            </div>
+          </div>
         )}
         {!isEmpty(photos) && <PhotoList photos={photos} />}
       </Container>

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Head from "next/head";
-import { useDispatch } from "react-redux";
-import { commonActions } from "store/common";
 import { useRouter } from "next/router";
 import RoomCard from "components/common/RoomCard";
 import { IRoom } from "types/room";
@@ -18,8 +16,9 @@ import { IWishlist } from "types/user";
 import RoomCardSkeleton from "components/skeleton/RoomCardSkeleton";
 import Skeleton from "react-loading-skeleton";
 import { useSelector } from "store";
-import { pcSmallBreakpoint, tabletBreakpoint } from "styles/theme";
+import { pcSmallBreakpoint, tabletSmallBreakpoint } from "styles/theme";
 import SmallRoomCard from "components/common/smallRoomCard";
+import SmallRoomCardSkeleton from "components/skeleton/SmallRoomCardSkeleton";
 
 const Map = dynamic(() => import("../common/Map"), { ssr: false });
 
@@ -28,7 +27,7 @@ const Container = styled.div`
   min-height: calc(100vh - 80px);
   display: flex;
   .wishlist_room-card-container {
-    width: 50%;
+    max-width: 840px;
     padding: 24px;
     .wishlist_flex-container {
       > a {
@@ -72,28 +71,31 @@ const Container = styled.div`
   .wishlist_map-container {
     width: 50%;
   }
-  @media ${({ theme }) => theme.device.tablet} {
+  .contents_container {
+    padding: 0 !important;
+  }
+  @media ${({ theme }) => theme.device.pcSmall} {
     .wishlist_room-card-container {
-      width: 100%;
+      width: 50%;
+      max-width: 50%;
       .wishlist_flex-container {
-        display: flex;
-        flex-wrap: wrap;
         > a {
-          width: 50%;
+          > div {
+            margin-bottom: 20px;
+          }
         }
       }
     }
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
     .wishlist_room-card-container {
+      width: 100%;
+      max-width: 100%;
       padding-bottom: 64px;
       .wishlist_flex-container {
         display: block !important;
         > a {
           width: 100% !important;
-          > div {
-            margin-bottom: 20px;
-          }
         }
       }
     }
@@ -117,14 +119,27 @@ const Wishlist = () => {
     setData(data);
   }, [wishlist, query]);
 
+  if (!data) {
+    return (
+      <Container>
+        <div className="wishlist_room-card-container">
+          <div className="wishlist_room-card-container_title">
+            <Skeleton width={200} height={36} />
+          </div>
+          {innerWidth && innerWidth >= pcSmallBreakpoint ? (
+            <RoomCardSkeleton />
+          ) : (
+            <SmallRoomCardSkeleton />
+          )}
+        </div>
+      </Container>
+    );
+  }
+
   return (
     <>
       <Head>
-        <title>
-          {data
-            ? `${data.title} · 위시리스트 · 에어비앤비`
-            : "숙소, 체험, 장소를 모두 한 곳에서 - 에어비앤비"}
-        </title>
+        <title>{data.title} · 위시리스트 · 에어비앤비</title>
       </Head>
       <Container>
         <div className="wishlist_room-card-container">
@@ -136,50 +151,47 @@ const Wishlist = () => {
                 </a>
               </Link>
             </div>
-            {data?.creator === user?._id && (
+            {data.creator === user?._id && (
               <div>
                 <IoSettingsSharp onClick={openModal} size={24} />
               </div>
             )}
           </div>
           <div className="wishlist_room-card-container_title">
-            {!data && <Skeleton width={200} height={36} />}
-            {data && `${data.title} · 숙소 ${data.list.length}개`}
+            {data.title} · 숙소 {data.list.length}개
           </div>
-          {!data && <RoomCardSkeleton />}
           <div className="wishlist_flex-container">
-            {data &&
-              (innerWidth >= pcSmallBreakpoint
-                ? data.list.map((item: IRoom, i: number) => (
-                    // eslint-disable-next-line react/jsx-indent
-                    <RoomCard
-                      key={item._id}
-                      room={item}
-                      index={i}
-                      showPriceWIthoutDates
-                    />
-                  ))
-                : data.list.map((item: IRoom, i: number) => (
-                    // eslint-disable-next-line react/jsx-indent
-                    <SmallRoomCard
-                      key={item._id}
-                      index={innerWidth >= tabletBreakpoint ? i : undefined}
-                      room={item}
-                      useSlider
-                      showPriceWIthoutDates
-                      isMobile={innerWidth < tabletBreakpoint}
-                    />
-                  )))}
+            {innerWidth >= pcSmallBreakpoint
+              ? data.list.map((item: IRoom, i: number) => (
+                  // eslint-disable-next-line react/jsx-indent
+                  <RoomCard
+                    key={item._id}
+                    room={item}
+                    index={i}
+                    showPriceWIthoutDates
+                  />
+                ))
+              : data.list.map((item: IRoom, i: number) => (
+                  // eslint-disable-next-line react/jsx-indent
+                  <SmallRoomCard
+                    key={item._id}
+                    index={innerWidth >= tabletSmallBreakpoint ? i : undefined}
+                    room={item}
+                    useSlider
+                    showPriceWIthoutDates
+                    isMobile={innerWidth < tabletSmallBreakpoint}
+                  />
+                ))}
           </div>
         </div>
-        {data && innerWidth >= tabletBreakpoint && (
+        {innerWidth >= tabletSmallBreakpoint && (
           <div className="wishlist_map-container">
             <Map roomList={data.list} useFitBounds />
           </div>
         )}
       </Container>
       <ModalPortal>
-        {data && <Setting originTitle={data.title} closeModal={closeModal} />}
+        <Setting originTitle={data.title} closeModal={closeModal} />
       </ModalPortal>
     </>
   );

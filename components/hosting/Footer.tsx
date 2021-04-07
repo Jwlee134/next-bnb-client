@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import palette from "styles/palette";
 import { IoIosArrowBack } from "react-icons/io";
 import useValidation from "hooks/useValidation";
 import { useSelector } from "store";
@@ -13,6 +12,7 @@ import { hostingActions } from "store/hosting";
 import { registerRoomAPI, updateRoomAPI } from "lib/api/room";
 import Loader from "components/common/Loader";
 import { commonActions } from "store/common";
+import useUser from "hooks/useUser";
 
 const Container = styled.div`
   width: 100%;
@@ -22,6 +22,9 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0px 30px;
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    padding: 0;
+  }
 `;
 
 const GoBack = styled.div`
@@ -50,6 +53,7 @@ const Footer = ({
   isLocation?: boolean;
   isSubmit?: boolean;
 }) => {
+  const { user } = useUser("/");
   const router = useRouter();
   const { setValidation } = useValidation();
   const [loading, setLoading] = useState(false);

@@ -35,18 +35,17 @@ const Container = styled.div<ContainerProps>`
         border-color: ${palette.orange};
       `}
   }
-`;
-
-const ErrorMessage = styled.div`
-  margin-top: 8px;
-  color: ${palette.tawny};
-  font-weight: 300;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  svg {
-    margin-right: 5px;
-    margin-bottom: 1px;
+  .input_error-message {
+    margin-top: 8px;
+    color: ${palette.tawny};
+    font-weight: 300;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    svg {
+      margin-right: 5px;
+      margin-bottom: 1px;
+    }
   }
 `;
 
@@ -71,13 +70,13 @@ const Input = ({
     >
       <input {...props} />
       {!isValid && useValidationMode && validation && showErrorMessage && (
-        <ErrorMessage>
+        <div className="input_error-message">
           <Warning />
           필수 항목입니다.
-        </ErrorMessage>
+        </div>
       )}
     </Container>
   );
 };
 
-export default React.memo(Input);
+export default Input;

@@ -1,4 +1,3 @@
-import Button from "components/common/Button";
 import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useSelector } from "store";
@@ -8,16 +7,13 @@ import differenceInDays from "date-fns/differenceInDays";
 import { addComma } from "utils";
 import { addDays, addMonths, eachDayOfInterval, format } from "date-fns";
 import { IRoom } from "types/room";
-import useSocket from "hooks/useSocket";
-import useUser from "hooks/useUser";
-import { makeReservationAPI } from "lib/api/reservation";
-import { useRouter } from "next/router";
 import useRoom from "hooks/useRoom";
 import DateRangePicker from "components/common/DateRangePicker";
 import { IoCloseSharp } from "react-icons/io5";
 import DatePicker from "./DatePicker";
 import Warning from "../../../../public/static/svg/warning.svg";
 import CounterBox from "./CounterBox";
+import BookingButton from "./BookingButton";
 
 const Container = styled.div<{ notValid: boolean }>`
   width: 100%;
@@ -102,6 +98,7 @@ const Container = styled.div<{ notValid: boolean }>`
     }
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
+    z-index: 2;
     position: fixed;
     top: initial;
     left: 0;
@@ -142,10 +139,6 @@ const BookingWindow = ({
   const { room } = useRoom();
   const search = useSelector((state) => state.search);
 
-  const router = useRouter();
-  const { user } = useUser();
-  const socket = useSocket();
-
   const [opened, setOpened] = useState(false);
   const [notValidDates, setNotValidDates] = useState(false);
   const [notValidGuestCount, setNotValidGuestCount] = useState(false);
@@ -156,44 +149,6 @@ const BookingWindow = ({
         new Date(search.checkOut),
         new Date(search.checkIn)
       );
-    }
-  };
-
-  const handleClick = async () => {
-    if (!search.checkIn) {
-      document.getElementById("dateRangePicker-start")?.focus();
-      return;
-    }
-    if (!search.checkOut) {
-      document.getElementById("dateRangePicker-end")?.focus();
-      return;
-    }
-    if (
-      notValidDates ||
-      notValidGuestCount ||
-      !user?.isLoggedIn ||
-      !socket ||
-      !room
-    ) {
-      return;
-    }
-    const nights = difference();
-    const body = {
-      roomId: room._id as string,
-      guestId: user._id as string,
-      checkIn: search.checkIn,
-      checkOut: search.checkOut,
-      guestCount: search.adults + search.children,
-      price: room.price * (nights as number),
-    };
-    try {
-      await makeReservationAPI(body);
-      socket.emit("makeReservation", {
-        hostId: room.creator._id,
-      });
-      router.push("/reservations");
-    } catch (error) {
-      alert(error.response.room);
     }
   };
 
@@ -305,10 +260,11 @@ const BookingWindow = ({
           최대 인원 수는 {room.maximumGuestCount}명 입니다.
         </NotValid>
       )}
-      <Button backgroundColor="bittersweet" onClick={handleClick}>
-        {!search.checkIn || !search.checkOut ? "예약 가능 여부 보기" : ""}
-        {search.checkIn && search.checkOut && "예약하기"}
-      </Button>
+      <BookingButton
+        notValidDates={notValidDates}
+        notValidGuestCount={notValidGuestCount}
+        difference={difference}
+      />
       {!notValidDates &&
         !notValidGuestCount &&
         search.checkIn &&

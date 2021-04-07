@@ -11,6 +11,15 @@ interface TextareaProps {
 
 const Container = styled.div<TextareaProps>`
   margin-bottom: 24px;
+  .textarea_text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .textarea_length {
+    width: fit-content;
+    font-size: 14px;
+  }
   ${({ isValid, validation }) =>
     !isValid &&
     validation &&
@@ -39,17 +48,6 @@ const StyledTextarea = styled(TextareaAutosize)`
   }
 `;
 
-const Text = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Length = styled.span`
-  width: fit-content;
-  font-size: 14px;
-`;
-
 interface Props {
   isValid?: boolean;
   maxLength?: number;
@@ -70,10 +68,10 @@ const Textarea = ({ isValid = true, maxLength, onChange, value }: Props) => {
         }}
       />
       {maxLength && (
-        <Text>
+        <div className="textarea_text">
           <span />
-          <Length>{maxLength - value.length}</Length>
-        </Text>
+          <span className="textarea_length">{maxLength - value.length}</span>
+        </div>
       )}
     </Container>
   );

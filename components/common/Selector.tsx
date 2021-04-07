@@ -83,4 +83,4 @@ const Selector = ({
   );
 };
 
-export default React.memo(Selector);
+export default Selector;

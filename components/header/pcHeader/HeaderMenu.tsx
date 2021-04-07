@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import OutsideClickHandler from "react-outside-click-handler";
 import { IoIosMenu } from "react-icons/io";
@@ -13,8 +13,7 @@ import useUser from "hooks/useUser";
 import useSocket from "hooks/useSocket";
 import { isEmpty } from "lodash";
 import Notification from "components/common/Notification";
-import { mutate } from "swr";
-import { useRouter } from "next/router";
+import useNotification from "hooks/useNotification";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -40,18 +39,17 @@ const Container = styled.div<{ popupOpened: boolean }>`
     width: 18px;
     height: 18px;
   }
+  img {
+    width: 30px;
+    height: 30px;
+    border-radius: 21px;
+    object-fit: cover;
+  }
   ${({ popupOpened }) =>
     popupOpened &&
     css`
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12);
     `}
-`;
-
-const Image = styled.img`
-  width: 30px;
-  height: 30px;
-  border-radius: 21px;
-  object-fit: cover;
 `;
 
 const PopupContainer = styled.div`
@@ -94,14 +92,12 @@ const Divider = styled.div`
 `;
 
 const HeaderMenu = () => {
-  const { pathname } = useRouter();
   const { user, mutateUser } = useUser();
   const socket = useSocket();
+  const { reservationLength } = useNotification();
 
   const [popupOpened, setPopupOpened] = useState(false);
-  const [reservationLength, setReservationLength] = useState<number | null>(
-    null
-  );
+
   const { openModal, closeModal, ModalPortal } = useModal();
   const dispatch = useDispatch();
 
@@ -114,33 +110,6 @@ const HeaderMenu = () => {
     });
   };
 
-  useEffect(() => {
-    if (!socket || !user) return;
-    if (user.isLoggedIn) {
-      socket.emit("login", { user: user._id });
-    }
-    socket.on("notification", () => {
-      mutateUser();
-      if (pathname.includes("reservation")) {
-        mutate("/api/reservation?keyword=myRoom");
-        mutate("/api/reservation?keyword=past");
-        mutate("/api/reservation");
-      }
-    });
-  }, [socket, user]);
-
-  useEffect(() => {
-    if (!user || !user.isLoggedIn) return;
-    const reservationLength = user.unreadNotifications.filter((notif) => {
-      return notif.label.includes("reservation");
-    }).length;
-    if (reservationLength !== 0) {
-      setReservationLength(reservationLength);
-    } else {
-      setReservationLength(null);
-    }
-  }, [user]);
-
   return (
     <>
       <OutsideClickHandler onOutsideClick={() => setPopupOpened(false)}>
@@ -149,11 +118,12 @@ const HeaderMenu = () => {
           onClick={() => setPopupOpened(!popupOpened)}
         >
           <IoIosMenu size={20} />
-          <Image
+          <img
             src={
               user?.avatarUrl ||
               "/static/image/user/default_user_profile_image.jpg"
             }
+            alt=""
           />
           {user?.isLoggedIn && !isEmpty(user.unreadNotifications) && (
             <Notification>{user.unreadNotifications.length}</Notification>
@@ -240,4 +210,4 @@ const HeaderMenu = () => {
   );
 };
 
-export default React.memo(HeaderMenu);
+export default HeaderMenu;
