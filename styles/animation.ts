@@ -59,3 +59,21 @@ export const slideDown = keyframes`
         transform: translateY(1000px);
     }
 `;
+
+export const slideToLeft = keyframes`
+    0%{
+        transform: translateX(500px)
+    }
+    100%{
+        transform: translateX(0px);
+    }
+`;
+
+export const slideToRight = keyframes`
+    0%{
+        transform: translateX(0px)
+    }
+    100%{
+        transform: translateX(500px);
+    }
+`;

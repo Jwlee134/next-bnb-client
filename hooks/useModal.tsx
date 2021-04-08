@@ -96,7 +96,7 @@ const useModal = () => {
 
   useEffect(() => {
     if (document) {
-      const element = document.getElementById("modal");
+      const element = document.getElementById("portal");
       dom.current = element;
     }
   }, []);

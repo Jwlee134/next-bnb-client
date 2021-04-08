@@ -16,6 +16,7 @@ import { useSelector } from "store";
 import { mobileBreakpoint, tabletSmallBreakpoint } from "styles/theme";
 import UserDetailSkeleton from "components/skeleton/UserDetailSkeleton";
 import UserIntro from "./UserIntro";
+import MobileHeader from "./mobileHeader";
 
 const Reviews = dynamic(() => import("./reviews"));
 const RoomCardSlider = dynamic(
@@ -143,6 +144,7 @@ const User = () => {
         <title>{data.name}님의 프로필 · 에어비앤비</title>
       </Head>
       <Container>
+        {innerWidth < tabletSmallBreakpoint && <MobileHeader data={data} />}
         <div className="user_main-container">
           <UserIntro data={data} />
           {data.introduction && (

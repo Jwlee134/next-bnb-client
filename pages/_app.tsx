@@ -18,7 +18,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <PersistGate persistor={persistor}>
         <ThemeProvider theme={theme}>
           <Component {...pageProps} />
-          <div id="modal" />
+          <div id="portal" />
         </ThemeProvider>
       </PersistGate>
     </>
