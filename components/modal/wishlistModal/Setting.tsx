@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
+import { IWishlist } from "types/user";
 import ModalFooter from "../ModalFooter";
 import ModalHeader from "../ModalHeader";
 
@@ -33,37 +34,42 @@ const Container = styled.div`
 
 const Setting = ({
   closeModal,
-  originTitle,
+  data,
+  mutate,
 }: {
   closeModal: () => void;
-  originTitle: string;
+  data: IWishlist;
+  mutate: (data?: any, shouldRevalidate?: boolean | undefined) => Promise<any>;
 }) => {
-  const { mutateWishlist } = useWishlist();
-
+  const { wishlist, mutateWishlist } = useWishlist();
   const router = useRouter();
   const { query } = router;
-  const [text, setText] = useState(originTitle);
+  const [text, setText] = useState(data.title);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setText(e.target.value);
 
   const handleDelete = async () => {
-    try {
-      await deleteWishlistAPI(query.id as string);
-      mutateWishlist();
-      closeModal();
-      setTimeout(() => {
+    if (wishlist) {
+      try {
+        const filtered = wishlist.filter((item) => item._id !== query.id);
+        mutateWishlist(filtered, false);
+        closeModal();
         router.replace("/wishlists");
-      }, 400);
-    } catch (error) {
-      alert(error.response.data);
+        await deleteWishlistAPI(query.id as string);
+      } catch (error) {
+        alert(error.response.data);
+      }
     }
   };
 
   const handleSave = async () => {
     try {
-      await updateWishlistAPI({ title: text, listId: query.id as string });
-      mutateWishlist();
+      const { data } = await updateWishlistAPI({
+        title: text,
+        listId: query.id as string,
+      });
+      mutate(data, false);
       closeModal();
     } catch (error) {
       alert(error.response.data);

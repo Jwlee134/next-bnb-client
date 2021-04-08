@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -10,8 +10,6 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import useModal from "hooks/useModal";
 import Setting from "components/modal/wishlistModal/Setting";
-import { isEmpty } from "lodash";
-import useWishlist from "hooks/useWishlist";
 import { IWishlist } from "types/user";
 import RoomCardSkeleton from "components/skeleton/RoomCardSkeleton";
 import Skeleton from "react-loading-skeleton";
@@ -19,6 +17,9 @@ import { useSelector } from "store";
 import { pcSmallBreakpoint, tabletSmallBreakpoint } from "styles/theme";
 import SmallRoomCard from "components/common/smallRoomCard";
 import SmallRoomCardSkeleton from "components/skeleton/SmallRoomCardSkeleton";
+import useSWR from "swr";
+import { fetcher } from "lib/api";
+import useUser from "hooks/useUser";
 
 const Map = dynamic(() => import("../common/Map"), { ssr: false });
 
@@ -28,6 +29,7 @@ const Container = styled.div`
   display: flex;
   .wishlist_room-card-container {
     max-width: 840px;
+    width: 100%;
     padding: 24px;
     .wishlist_flex-container {
       > a {
@@ -107,17 +109,13 @@ const Wishlist = () => {
   const router = useRouter();
   const { query } = router;
 
-  const { user, wishlist } = useWishlist();
-
+  const { user } = useUser("/");
   const { openModal, closeModal, ModalPortal } = useModal();
 
-  const [data, setData] = useState<IWishlist>();
-
-  useEffect(() => {
-    if (!wishlist || isEmpty(wishlist) || !query.id) return;
-    const data = wishlist.find((list) => list._id === (query.id as string));
-    setData(data);
-  }, [wishlist, query]);
+  const { data, mutate } = useSWR<IWishlist>(
+    query.id ? `/api/wishlist/${query.id}` : null,
+    fetcher
+  );
 
   if (!data) {
     return (
@@ -126,11 +124,12 @@ const Wishlist = () => {
           <div className="wishlist_room-card-container_title">
             <Skeleton width={200} height={36} />
           </div>
-          {innerWidth && innerWidth >= pcSmallBreakpoint ? (
-            <RoomCardSkeleton />
-          ) : (
-            <SmallRoomCardSkeleton />
-          )}
+          {innerWidth &&
+            (innerWidth >= pcSmallBreakpoint ? (
+              <RoomCardSkeleton />
+            ) : (
+              <SmallRoomCardSkeleton />
+            ))}
         </div>
       </Container>
     );
@@ -139,7 +138,7 @@ const Wishlist = () => {
   return (
     <>
       <Head>
-        <title>{data.title} · 위시리스트 · 에어비앤비</title>
+        <title>{data.title} - 위시리스트 - 에어비앤비</title>
       </Head>
       <Container>
         <div className="wishlist_room-card-container">
@@ -191,7 +190,7 @@ const Wishlist = () => {
         )}
       </Container>
       <ModalPortal>
-        <Setting originTitle={data.title} closeModal={closeModal} />
+        <Setting data={data} mutate={mutate} closeModal={closeModal} />
       </ModalPortal>
     </>
   );

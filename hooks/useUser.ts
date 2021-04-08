@@ -1,14 +1,20 @@
 import { fetcher, setAuthToken } from "lib/api";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import useSWR from "swr";
+import useSWR, { cache } from "swr";
 import { IUser } from "types/user";
+
+const key = "/api/auth/me";
 
 const useUser = (redirectUrl?: string) => {
   const router = useRouter();
   const { data: user, error, mutate: mutateUser } = useSWR<IUser, Error>(
-    "/api/auth/me",
-    fetcher
+    key,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: !cache.has(key),
+    }
   );
 
   useEffect(() => {

@@ -107,7 +107,7 @@ const HeaderMenu = () => {
     mutateUser(async () => {
       const { data } = await logoutAPI();
       return data;
-    });
+    }, false);
   };
 
   return (
