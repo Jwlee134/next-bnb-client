@@ -143,7 +143,7 @@ const UserIntro = ({ data }: { data: IUser }) => {
         <div>회원가입: {new Date(data.createdAt).getFullYear()}</div>
         {user?._id === data._id && (
           <EditProfile
-            user={user as IUser}
+            data={data}
             newAvatarUrl={newAvatarUrl}
             modifyMode={modifyMode}
             setModifyMode={setModifyMode}

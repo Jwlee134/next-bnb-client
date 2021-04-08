@@ -5,6 +5,7 @@ interface Body {
   avatarUrl: string | null;
   text: string;
   user: IUser;
+  currentUser: IUser;
 }
 
-export const updateUserAPI = (body: Body) => api.put("/api/user", body);
+export const updateUserAPI = (body: Body) => api.put<IUser>("/api/user", body);

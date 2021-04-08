@@ -1,9 +1,12 @@
 import Button from "components/common/Button";
 import Textarea from "components/common/Textarea";
+import useUser from "hooks/useUser";
 import { deletePhotoAPI } from "lib/api/file";
 import { updateUserAPI } from "lib/api/user";
 import React, { useState } from "react";
+import { useSelector } from "store";
 import styled from "styled-components";
+import { tabletSmallBreakpoint } from "styles/theme";
 import { mutate } from "swr";
 import { IUser } from "types/user";
 
@@ -43,15 +46,17 @@ const EditProfile = ({
   setModifyMode,
   newAvatarUrl,
   setNewAvatarUrl,
-  user,
+  data,
 }: {
   modifyMode: boolean;
   setModifyMode: React.Dispatch<React.SetStateAction<boolean>>;
   newAvatarUrl: string | null;
   setNewAvatarUrl: React.Dispatch<React.SetStateAction<string | null>>;
-  user: IUser;
+  data: IUser;
 }) => {
-  const [text, setText] = useState("");
+  const { user, mutateUser } = useUser();
+  const innerWidth = useSelector((state) => state.common.innerWidth);
+  const [text, setText] = useState(data.introduction || "");
 
   const handleChange = (value: string) => setText(value);
 
@@ -66,9 +71,25 @@ const EditProfile = ({
 
   const handleSave = async () => {
     try {
-      await updateUserAPI({ avatarUrl: newAvatarUrl, text, user: user._id });
+      mutate(
+        `/api/user?id=${data._id}`,
+        {
+          ...data,
+          avatarUrl: newAvatarUrl || data.avatarUrl,
+          introduction: text,
+        },
+        false
+      );
+      await updateUserAPI({
+        avatarUrl: newAvatarUrl,
+        text,
+        user: data._id,
+        currentUser: user?._id,
+      });
+      if (innerWidth >= tabletSmallBreakpoint && newAvatarUrl) {
+        mutateUser();
+      }
       setModifyMode(false);
-      mutate(`/api/user?id=${user._id}`);
     } catch (error) {
       alert(error.response.data);
     }
