@@ -16,7 +16,7 @@ const Container = styled.div`
   .radio-input_title {
     margin-bottom: 32px;
   }
-  .radio-input_label {
+  .radio-input-container {
     display: block;
     margin-bottom: 24px;
     cursor: pointer;
@@ -114,7 +114,7 @@ const RadioInput = ({
       <Container>
         {title && <div className="radio-input_title">{title}</div>}
         {options.map((option, index) => (
-          <label className="radio-input_label" key={index}>
+          <label className="radio-input-container" key={index}>
             <Block
               isValid={isValid}
               validation={validation}

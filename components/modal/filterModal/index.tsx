@@ -65,6 +65,9 @@ const CheckBoxContainer = styled.div<{ isBuildingType?: boolean }>`
         !isBuildingType &&
         css`
           width: 33.3%;
+          &:last-child {
+            margin-bottom: 16px;
+          }
           @media ${({ theme }) => theme.device.mobile} {
             width: 50%;
           }

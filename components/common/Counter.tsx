@@ -2,11 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 
+const Description = styled.div`
+  margin-bottom: 8px;
+`;
+
 const Container = styled.div`
   max-width: 320px;
-  .counter_description {
-    margin-bottom: 8px;
-  }
   .counter_button-container {
     display: flex;
     justify-content: space-between;
@@ -72,7 +73,7 @@ const Counter = ({
 }: Props) => {
   return (
     <>
-      {description && <div className="counter_description">{description}</div>}
+      {description && <Description>{description}</Description>}
       <Container style={style}>
         <div className="counter_button-container">
           <div>

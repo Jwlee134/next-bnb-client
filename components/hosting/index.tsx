@@ -129,6 +129,11 @@ const Container = styled.div`
     color: ${palette.gray_76};
     margin-bottom: 24px;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    h1 {
+      font-size: 20px;
+    }
+  }
 `;
 
 const Header = styled.div`

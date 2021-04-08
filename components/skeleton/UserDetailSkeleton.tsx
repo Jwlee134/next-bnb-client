@@ -26,6 +26,7 @@ const Container = styled.div`
     display: block;
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
+    margin-top: 64px;
     .user-detail-skeleton_name {
       width: 200px;
       height: 60px;

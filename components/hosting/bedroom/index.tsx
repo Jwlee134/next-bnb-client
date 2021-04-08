@@ -44,6 +44,9 @@ const Container = styled.div`
     .bedroom_bed-type_left-container {
       margin-right: 16px;
     }
+    .bedroom_bed-type-label {
+      font-size: 20px;
+    }
     .bedroom_bed-type_right-container {
       button {
         width: fit-content;

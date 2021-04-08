@@ -19,10 +19,10 @@ const Container = styled.div`
       min-height: 16px;
     }
   }
+  span {
+    margin-left: 16px;
+  }
   .checkbox_text-container {
-    span {
-      margin-left: 16px;
-    }
     div {
       margin-left: 16px;
       font-weight: 300;
