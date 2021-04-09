@@ -1,4 +1,3 @@
-import Header from "components/header";
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -15,8 +14,11 @@ const Container = styled.div`
   color: white;
   font-size: 50px;
   font-weight: 700;
+  overflow: hidden;
+  text-shadow: 0px 0px 2px #000000;
   div {
     text-align: center;
+    max-width: 100%;
   }
   a {
     margin-top: 30px;
@@ -27,6 +29,13 @@ const Container = styled.div`
   background-image: url("/static/image/error.jpg");
   background-position: center center;
   background-size: cover;
+  @media ${({ theme }) => theme.device.tablet} {
+    font-size: 40px;
+  }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    height: calc(100vh - 64px);
+    font-size: 30px;
+  }
 `;
 
 interface Props {
@@ -40,7 +49,6 @@ const Error: NextPage<Props> = ({ statusCode, message }) => {
       <Head>
         <title>웹페이지를 표시할 수 없습니다.</title>
       </Head>
-      <Header useSearchBar={false} />
       <Container>
         <div>
           {statusCode

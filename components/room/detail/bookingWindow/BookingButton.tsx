@@ -1,10 +1,10 @@
 import Button from "components/common/Button";
+import { SocketContext } from "context/Socket";
 import useRoom from "hooks/useRoom";
-import useSocket from "hooks/useSocket";
 import useUser from "hooks/useUser";
 import { makeReservationAPI } from "lib/api/reservation";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext } from "react";
 import { useSelector } from "store";
 
 const BookingButton = ({
@@ -20,7 +20,7 @@ const BookingButton = ({
   const router = useRouter();
   const { user } = useUser();
   const { room } = useRoom();
-  const socket = useSocket();
+  const { socket } = useContext(SocketContext);
 
   const handleClick = async () => {
     if (!search.checkIn) {

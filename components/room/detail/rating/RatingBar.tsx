@@ -37,6 +37,17 @@ const Container = styled.div<{ value: string }>`
       font-weight: 700;
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    .detail_rating_options_value {
+      width: 50%;
+      .detail_rating_options_value-bar {
+        width: 78%;
+      }
+      > span {
+        width: 22%;
+      }
+    }
+  }
 `;
 
 const RatingBar = ({

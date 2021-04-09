@@ -32,6 +32,19 @@ const Container = styled.div`
       width: 100%;
     }
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    .rating-modal_main {
+      max-height: calc(100vh - 208px);
+    }
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    .rating-modal_main {
+      display: block;
+      .rating-modal_options {
+        width: 100%;
+      }
+    }
+  }
 `;
 
 const Star = styled.span<{ clicked: boolean }>`
