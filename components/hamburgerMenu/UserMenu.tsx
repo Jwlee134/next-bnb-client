@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import {
   IoSettingsOutline,
@@ -7,8 +7,8 @@ import {
 } from "react-icons/io5";
 import Link from "next/link";
 import palette from "styles/palette";
-import useSocket from "hooks/useSocket";
 import { logoutAPI } from "lib/api/auth";
+import { SocketContext } from "context/Socket";
 import useUser from "hooks/useUser";
 import MenuHeader from "./MenuHeader";
 
@@ -30,6 +30,7 @@ const Container = styled.div`
   }
   .user-menu_logout {
     border-top: 1px solid ${palette.gray_f7};
+    cursor: pointer;
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
     width: 300px;
@@ -40,10 +41,13 @@ const Container = styled.div`
 `;
 
 const UserMenu = ({ closeMenu }: { closeMenu: () => void }) => {
+  const { user } = useUser();
+  const { socket } = useContext(SocketContext);
   const { mutateUser } = useUser();
 
   const handleLogout = () => {
     closeMenu();
+    socket?.emit("logout", { user: user?._id });
     mutateUser(async () => {
       const { data } = await logoutAPI();
       return data;

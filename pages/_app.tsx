@@ -8,6 +8,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { useStore } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import theme from "styles/theme";
+import { SocketContextProvider } from "context/Socket";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const store = useStore();
@@ -17,8 +18,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <GlobalStyles />
       <PersistGate persistor={persistor}>
         <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-          <div id="portal" />
+          <SocketContextProvider>
+            <Component {...pageProps} />
+            <div id="portal" />
+          </SocketContextProvider>
         </ThemeProvider>
       </PersistGate>
     </>

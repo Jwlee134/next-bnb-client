@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled, { css } from "styled-components";
 import OutsideClickHandler from "react-outside-click-handler";
 import { IoIosMenu } from "react-icons/io";
@@ -10,10 +10,10 @@ import { commonActions } from "store/common";
 import { logoutAPI } from "lib/api/auth";
 import Link from "next/link";
 import useUser from "hooks/useUser";
-import useSocket from "hooks/useSocket";
 import { isEmpty } from "lodash";
 import Notification from "components/common/Notification";
 import useNotification from "hooks/useNotification";
+import { SocketContext } from "context/Socket";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -93,7 +93,7 @@ const Divider = styled.div`
 
 const HeaderMenu = () => {
   const { user, mutateUser } = useUser();
-  const socket = useSocket();
+  const { socket } = useContext(SocketContext);
   const { reservationLength } = useNotification();
 
   const [popupOpened, setPopupOpened] = useState(false);
