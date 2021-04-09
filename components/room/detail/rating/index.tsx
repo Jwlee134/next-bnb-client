@@ -58,6 +58,9 @@ const Container = styled.div`
     .detail_rating_empty {
       margin-bottom: 48px;
     }
+    button {
+      margin-bottom: 48px;
+    }
   }
   @media ${({ theme }) => theme.device.mobile} {
     padding-bottom: 0;
@@ -73,7 +76,7 @@ const Container = styled.div`
 
 const Rating = () => {
   const { room } = useRoom();
-  const { openModal, closeModal, ModalPortal } = useModal();
+  const { modalOpened, openModal, closeModal, ModalPortal } = useModal();
 
   if (!room) return null;
   return (
@@ -117,9 +120,8 @@ const Rating = () => {
       </Container>
       <ModalPortal>
         <ReviewModal
-          ratingAvg={room.avgOfRating}
-          rating={room.rating}
-          review={room.review}
+          room={room}
+          modalOpened={modalOpened}
           closeModal={closeModal}
         />
       </ModalPortal>

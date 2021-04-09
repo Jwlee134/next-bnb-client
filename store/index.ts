@@ -23,6 +23,7 @@ import hosting from "./hosting";
 import search from "./search";
 import room from "./room";
 import map from "./map";
+import user from "./user";
 
 const rootReducer = combineReducers({
   common,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   search,
   room,
   map,
+  user,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

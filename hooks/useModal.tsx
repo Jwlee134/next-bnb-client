@@ -115,7 +115,7 @@ const useModal = () => {
     return null;
   };
 
-  return { openModal, closeModal, ModalPortal };
+  return { modalOpened, openModal, closeModal, ModalPortal };
 };
 
 export default useModal;

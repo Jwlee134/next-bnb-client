@@ -1,11 +1,10 @@
-import ReviewCard from "components/common/ReviewCard";
 import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
-import { IReview } from "types/review";
 import { IUser } from "types/user";
-import ReviewList from "./ReviewList";
+import ReviewFromGuest from "./ReviewFromGuest";
+import ReviewFromHost from "./ReviewFromHost";
 
 const Tab = styled.div<{ clicked: boolean }>`
   font-size: 15px;
@@ -72,10 +71,7 @@ const Reviews = ({ user }: { user: IUser }) => {
 
   return (
     <Container>
-      {isEmpty(user.rooms) &&
-        user.reviewFromHost.map((review: IReview, i: number) => (
-          <ReviewCard key={i} review={review} />
-        ))}
+      {isEmpty(user.rooms) && <ReviewFromHost user={user} />}
       {!isEmpty(user.rooms) && (
         <>
           <div className="reviews_tab-container">
@@ -89,7 +85,8 @@ const Reviews = ({ user }: { user: IUser }) => {
               </Tab>
             ))}
           </div>
-          <ReviewList user={user} tab={currentTab} />
+          {currentTab === 0 && <ReviewFromGuest user={user} />}
+          {currentTab === 1 && <ReviewFromHost user={user} />}
         </>
       )}
     </Container>

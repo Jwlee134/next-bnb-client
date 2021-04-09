@@ -4,7 +4,7 @@ import { isEmpty } from "lodash";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Error from "pages/_error";
-import React from "react";
+import React, { useEffect } from "react";
 import { IoIosStar } from "react-icons/io";
 import styled from "styled-components";
 import palette from "styles/palette";
@@ -15,6 +15,8 @@ import dynamic from "next/dynamic";
 import { useSelector } from "store";
 import { mobileBreakpoint, tabletSmallBreakpoint } from "styles/theme";
 import UserDetailSkeleton from "components/skeleton/UserDetailSkeleton";
+import { useDispatch } from "react-redux";
+import { userActions } from "store/user";
 import UserIntro from "./UserIntro";
 import MobileHeader from "./mobileHeader";
 
@@ -88,7 +90,7 @@ const Container = styled.div`
   @media ${({ theme }) => theme.device.tabletSmall} {
     .user_main-container {
       padding-top: 24px;
-      padding-bottom: 64px;
+      padding-bottom: 88px;
     }
     .user_main-container_section-rooms {
       > a {
@@ -108,6 +110,7 @@ const Container = styled.div`
 const User = () => {
   const innerWidth = useSelector((state) => state.common.innerWidth);
   const { query } = useRouter();
+  const dispatch = useDispatch();
 
   const { data, error } = useSWR<IUser>(
     query.id ? `/api/user?id=${query.id}` : null,
@@ -121,6 +124,12 @@ const User = () => {
     }
     return 1;
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(userActions.initState());
+    };
+  }, [query]);
 
   if (error) {
     return (
