@@ -17,7 +17,7 @@ import Photos from "./contents/Photos";
 import BookingWindow from "./bookingWindow";
 import Contents from "./contents";
 import Title from "./title";
-import BookingButton from "./BookingButton";
+import MobileBookingButton from "./mobileOnly/MobileBookingButton";
 
 const Rating = dynamic(() => import("./rating"));
 const Map = dynamic(() => import("components/common/Map"), { ssr: false });
@@ -196,7 +196,7 @@ const RoomDetail = () => {
             />
           </div>
         </div>
-        {innerWidth < tabletSmallBreakpoint && <BookingButton />}
+        {innerWidth < tabletSmallBreakpoint && <MobileBookingButton />}
       </Container>
     </>
   );

@@ -49,7 +49,6 @@ const useWishlist = (roomId?: string) => {
 
   useEffect(() => {
     if (!wishlist || isEmpty(wishlist)) return;
-    setLiked(false);
     wishlist.forEach((list) => {
       if (list.list.some((item: IRoom) => item._id === roomId)) {
         setLiked(true);

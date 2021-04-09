@@ -38,7 +38,7 @@ const Container = styled.div`
   }
 `;
 
-const IconButton = styled.div<{ current: boolean }>`
+const IconButton = styled.div<{ current: boolean | undefined }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,34 +82,38 @@ const Navigator = () => {
               </IconButton>
             </a>
           </Link>
-          <Link href="/reservations">
-            <a onClick={handleClick}>
-              {user &&
-                user.isLoggedIn &&
-                !isEmpty(user.unreadNotifications) && (
-                  <Notification isNavigator>
-                    {user.unreadNotifications.length}
-                  </Notification>
-                )}
-              <IconButton current={pathname.includes("reservation")}>
-                <FaAirbnb size={25} />
-                <div>예약</div>
-              </IconButton>
-            </a>
-          </Link>
-          <Link href="/wishlists">
-            <a onClick={handleClick}>
-              <IconButton current={pathname.includes("wishlist")}>
-                <IoMdHeartEmpty size={25} />
-                <div>위시리스트</div>
-              </IconButton>
-            </a>
-          </Link>
+          {user && user.isLoggedIn && (
+            <>
+              <Link href="/reservations">
+                <a onClick={handleClick}>
+                  {!isEmpty(user.unreadNotifications) && (
+                    <Notification isNavigator>
+                      {user.unreadNotifications.length}
+                    </Notification>
+                  )}
+                  <IconButton current={pathname.includes("reservation")}>
+                    <FaAirbnb size={25} />
+                    <div>예약</div>
+                  </IconButton>
+                </a>
+              </Link>
+              <Link href="/wishlists">
+                <a onClick={handleClick}>
+                  <IconButton current={pathname.includes("wishlist")}>
+                    <IoMdHeartEmpty size={25} />
+                    <div>위시리스트</div>
+                  </IconButton>
+                </a>
+              </Link>
+            </>
+          )}
           <Link href={`/user/${user?._id}`}>
             <a onClick={handleClick}>
-              <IconButton current={pathname === "/user/[id]"}>
+              <IconButton
+                current={pathname === "/user/[id]" && user?.isLoggedIn}
+              >
                 <BsPerson size={25} />
-                <div>프로필</div>
+                <div>{user?.isLoggedIn ? "프로필" : "로그인"}</div>
               </IconButton>
             </a>
           </Link>

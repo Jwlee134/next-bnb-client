@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineSchedule } from "react-icons/ai";
 import styled from "styled-components";
-import BookingWindow from "./bookingWindow";
+import BookingWindow from "../bookingWindow";
 
 const Container = styled.div`
   position: fixed;
@@ -19,7 +19,7 @@ const Container = styled.div`
   z-index: 2;
 `;
 
-const BookingButton = () => {
+const MobileBookingButton = () => {
   const [windowOpened, setWindowOpened] = useState(false);
 
   if (!windowOpened) {
@@ -37,4 +37,4 @@ const BookingButton = () => {
   return <BookingWindow isMobile setWindowOpened={setWindowOpened} />;
 };
 
-export default BookingButton;
+export default MobileBookingButton;

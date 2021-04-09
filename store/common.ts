@@ -18,7 +18,7 @@ interface IState {
 }
 
 const initialState: IState = {
-  authMode: "signUp",
+  authMode: "login",
   wishlistMode: "add",
   hostingMode: "register",
   searchMode: "location",

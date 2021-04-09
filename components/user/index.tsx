@@ -141,7 +141,7 @@ const User = () => {
   return (
     <>
       <Head>
-        <title>{data.name}님의 프로필 · 에어비앤비</title>
+        <title>{data.name}님의 프로필 - 에어비앤비</title>
       </Head>
       <Container>
         {innerWidth < tabletSmallBreakpoint && <MobileHeader data={data} />}
