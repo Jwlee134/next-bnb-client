@@ -14,7 +14,13 @@ export const registerRoomAPI = (body: IHostingState) =>
 export const updateRoomAPI = (body: IHostingState, id: string) =>
   api.put<IRoom>(`/api/room/${id}`, { body });
 
-export const deleteRoomAPI = (id: string) => api.delete(`/api/room/${id}`);
+export const deleteRoomAPI = ({
+  roomId,
+  userId,
+}: {
+  roomId: string;
+  userId: string;
+}) => api.delete(`/api/room/${roomId}?userId=${userId}`);
 
 export const searchRoomAPI = (query: ParsedUrlQuery) =>
   api.get<ISearchResults>(`/api/room/search${makeQueryString(query)}`);

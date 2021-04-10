@@ -1,5 +1,5 @@
 import ReservationCard from "components/common/ReservationCard";
-import { api } from "lib/api";
+import { fetcher } from "lib/api";
 import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
 import styled from "styled-components";
@@ -8,8 +8,6 @@ import { IReservation } from "types/reservation";
 import { IUser } from "types/user";
 
 const Container = styled.div``;
-
-const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 const Past = ({
   setError,

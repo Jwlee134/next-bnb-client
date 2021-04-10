@@ -181,15 +181,13 @@ const HeaderMenu = () => {
                       </ListItem>
                     </a>
                   </Link>
-                  {!isEmpty(user.rooms) && (
-                    <Link href="/management">
-                      <a>
-                        <ListItem onClick={() => setPopupOpened(false)}>
-                          숙소 관리
-                        </ListItem>
-                      </a>
-                    </Link>
-                  )}
+                  <Link href="/management">
+                    <a>
+                      <ListItem onClick={() => setPopupOpened(false)}>
+                        숙소 관리
+                      </ListItem>
+                    </a>
+                  </Link>
                   <Link href={`/user/${user._id}`}>
                     <a>
                       <ListItem onClick={() => setPopupOpened(false)}>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 import { useSelector } from "store";
 import styled from "styled-components";
+import palette from "styles/palette";
 import { tabletSmallBreakpoint } from "styles/theme";
 import { IReservation } from "types/reservation";
 import { addComma } from "utils";
@@ -17,12 +18,14 @@ const Container = styled.div`
   justify-content: space-between;
   border-radius: 5px;
   margin-bottom: 16px;
-  img {
+  .reservation-card_img {
     width: 80px;
+    min-width: 80px;
     height: 80px;
     border-radius: 5px;
     object-fit: cover;
     margin-right: 24px;
+    background-color: ${palette.gray_eb};
   }
   &:hover {
     box-shadow: 0 3px 18px 0 rgb(0 0 0 / 12%), 0 3px 5px -1px rgb(0 0 0 / 20%);
@@ -31,26 +34,30 @@ const Container = styled.div`
     > a {
       display: flex;
       flex-grow: 1;
-      .reservation-card_text-container {
-        width: 100%;
-        div:first-child {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          margin-bottom: 5px;
-        }
-        div:not(:first-child) {
-          font-size: 14px;
-          opacity: 0.7;
-          font-weight: 300;
-          margin-bottom: 5px;
-          a {
-            text-decoration: underline;
-            cursor: pointer;
-          }
-        }
+    }
+  }
+  .reservation-card_left_no-room {
+    display: flex;
+    flex-grow: 1;
+  }
+  .reservation-card_text-container {
+    width: 100%;
+    div:first-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      margin-bottom: 5px;
+    }
+    div:not(:first-child) {
+      font-size: 14px;
+      opacity: 0.7;
+      font-weight: 300;
+      margin-bottom: 5px;
+      a {
+        text-decoration: underline;
+        cursor: pointer;
       }
     }
   }
@@ -77,13 +84,21 @@ const Container = styled.div`
     }
   }
   @media ${({ theme }) => theme.device.mobile} {
-    img {
+    .reservation-card_img {
       margin-bottom: 12px;
     }
     .reservation-card_left {
       > a {
         flex-direction: column;
       }
+    }
+    .reservation-card_left_no-room {
+      flex-direction: column;
+    }
+    .reservation-card_right {
+      min-width: initial;
+      white-space: nowrap;
+      margin-left: 12px;
     }
   }
 `;
@@ -111,30 +126,19 @@ const ReservationCard = ({
   return (
     <>
       <Container>
-        <div className="reservation-card_left">
-          {innerWidth >= tabletSmallBreakpoint ? (
-            <a
-              href={`/room/${reservation.room._id}?adults=1&children=0&infants=0`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <img src={reservation.room.photos[0]} alt="" />
-              <div className="reservation-card_text-container">
-                <div>{reservation.room.title}</div>
-                <div>
-                  {format(new Date(reservation.checkIn), formatText)} ~{" "}
-                  {format(new Date(reservation.checkOut), formatText)} ·{" "}
-                  {reservation.room.city}
-                </div>
-                <div>게스트 {reservation.guestCount}명</div>
-              </div>
-            </a>
-          ) : (
-            <Link
-              href={`/room/${reservation.room._id}?adults=1&children=0&infants=0`}
-            >
-              <a>
-                <img src={reservation.room.photos[0]} alt="" />
+        {reservation.room &&
+          (innerWidth >= tabletSmallBreakpoint ? (
+            <div className="reservation-card_left">
+              <a
+                href={`/room/${reservation.room._id}?adults=1&children=0&infants=0`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  className="reservation-card_img"
+                  src={reservation.room.photos[0]}
+                  alt=""
+                />
                 <div className="reservation-card_text-container">
                   <div>{reservation.room.title}</div>
                   <div>
@@ -145,9 +149,44 @@ const ReservationCard = ({
                   <div>게스트 {reservation.guestCount}명</div>
                 </div>
               </a>
-            </Link>
-          )}
-        </div>
+            </div>
+          ) : (
+            <div className="reservation-card_left">
+              <Link
+                href={`/room/${reservation.room._id}?adults=1&children=0&infants=0`}
+              >
+                <a>
+                  <img
+                    className="reservation-card_img"
+                    src={reservation.room.photos[0]}
+                    alt=""
+                  />
+                  <div className="reservation-card_text-container">
+                    <div>{reservation.room.title}</div>
+                    <div>
+                      {format(new Date(reservation.checkIn), formatText)} ~{" "}
+                      {format(new Date(reservation.checkOut), formatText)} ·{" "}
+                      {reservation.room.city}
+                    </div>
+                    <div>게스트 {reservation.guestCount}명</div>
+                  </div>
+                </a>
+              </Link>
+            </div>
+          ))}
+        {!reservation.room && (
+          <div className="reservation-card_left reservation-card_left_no-room">
+            <div className="reservation-card_img" />
+            <div className="reservation-card_text-container">
+              <div>삭제된 숙소</div>
+              <div>
+                {format(new Date(reservation.checkIn), formatText)} ~{" "}
+                {format(new Date(reservation.checkOut), formatText)}
+              </div>
+              <div>게스트 {reservation.guestCount}명</div>
+            </div>
+          </div>
+        )}
         <div className="reservation-card_right">
           <div>
             <div>￦{addComma(String(reservation.price))}</div>{" "}

@@ -137,7 +137,7 @@ const UserIntro = ({ data }: { data: IUser }) => {
       </div>
       <div>
         <div>
-          안녕하세요.{innerWidth < tabletSmallBreakpoint && <br />}저는{" "}
+          안녕하세요. {innerWidth < tabletSmallBreakpoint && <br />}저는{" "}
           {data.name}입니다.
         </div>
         <div>회원가입: {new Date(data.createdAt).getFullYear()}</div>

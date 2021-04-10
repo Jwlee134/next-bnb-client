@@ -2,14 +2,32 @@ import Button from "components/common/Button";
 import ReviewCard from "components/common/ReviewCard";
 import { getReviewAPI } from "lib/api/review";
 import { isEmpty } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import { userActions } from "store/user";
 import styled from "styled-components";
 import { IUser } from "types/user";
 
-const Container = styled.div``;
+const Container = styled.div`
+  .review-list_room-info {
+    display: flex;
+    margin-bottom: 16px;
+    align-items: center;
+    a {
+      width: 70px;
+      height: 48px;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-right: 16px;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+`;
 
 const ReviewFromGuest = ({ user }: { user: IUser }) => {
   const { reviewFromGuest, reviewFromGuestPage } = useSelector(
@@ -45,7 +63,19 @@ const ReviewFromGuest = ({ user }: { user: IUser }) => {
   return (
     <Container>
       {reviewFromGuest.map((review, i) => (
-        <ReviewCard review={review} key={i} />
+        <Fragment key={i}>
+          <div className="review-list_room-info">
+            <a
+              href={`/room/${review.room._id}?adults=1&children=0&infants=0`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img src={review.room.photos[0]} alt="" />
+            </a>
+            <div>{review.room.title}</div>
+          </div>
+          <ReviewCard review={review} />
+        </Fragment>
       ))}
       {user.reviewFromGuest.length > reviewFromGuest.length && (
         <Button onClick={handleClick} backgroundColor="white">
