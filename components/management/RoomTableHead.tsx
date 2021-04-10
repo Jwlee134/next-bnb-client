@@ -51,7 +51,9 @@ const RoomTableHead = () => {
         ...query,
         sortBy: currentValue,
         order: asc ? "asc" : "desc",
-      })}`
+      })}`,
+      undefined,
+      { scroll: false }
     );
   }, [currentValue, asc]);
 
@@ -62,21 +64,22 @@ const RoomTableHead = () => {
   }, []);
 
   return (
-    <thead>
-      <tr>
+    <thead className="management_thead">
+      <tr className="management_tr">
         {managementHeaders.map((header, index) => (
           <Container
+            className="management_th"
             key={index}
             onClick={() => handleClick(header.value)}
             clicked={currentValue === header.value}
           >
-            <div>
+            <div className="management_th_title">
               {header.label}
               {getIcon(header.value)}
             </div>
           </Container>
         ))}
-        <th>
+        <th className="management_th">
           <IoSettingsOutline size={16} />
         </th>
       </tr>

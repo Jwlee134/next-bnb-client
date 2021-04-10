@@ -14,122 +14,125 @@ import RoomTableHead from "./RoomTableHead";
 import SearchInput from "./SearchInput";
 
 const Container = styled.div`
-  main {
+  .management_main {
     padding: 32px 80px;
     min-height: calc(100vh - 80px);
-    > div {
-      .management_title {
-        padding-bottom: 16px;
-        font-size: 26px;
-        font-weight: 500;
-        height: 50px;
+  }
+  .management_title {
+    padding-bottom: 16px;
+    font-size: 26px;
+    font-weight: 500;
+    height: 50px;
+  }
+  .management_main_table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .management_table {
+    width: 100%;
+    white-space: nowrap;
+  }
+  .management_th {
+    padding: 8px;
+    font-size: 13px;
+    text-align: left;
+    font-weight: 500;
+    min-width: 100px;
+    cursor: pointer;
+    border-bottom: 1px solid ${palette.gray_eb};
+    color: ${palette.gray_80};
+    &:hover {
+      color: ${palette.black};
+    }
+    &:last-child {
+      width: 30px;
+      min-width: 30px;
+      position: relative;
+      svg {
+        position: absolute;
+        top: 7.5px;
       }
     }
-    > div:last-child {
-      width: 100%;
-      overflow-x: auto;
-      padding-bottom: 80px;
-      table {
-        width: 100%;
-        white-space: nowrap;
-        th {
-          padding: 8px;
-          font-size: 13px;
-          text-align: left;
-          font-weight: 500;
-          min-width: 100px;
-          cursor: pointer;
-          border-bottom: 1px solid ${palette.gray_eb};
-          color: ${palette.gray_80};
+  }
+  .management_th_title {
+    display: flex;
+    align-items: center;
+    svg {
+      margin-left: 5px;
+    }
+  }
+  .management_td {
+    padding: 16px 8px;
+    border-bottom: 1px solid ${palette.gray_eb};
+    vertical-align: middle;
+    &:not(:first-child) {
+      div {
+        font-weight: 300;
+      }
+    }
+    > div {
+      display: flex;
+      align-items: center;
+    }
+    &:last-child {
+      div {
+        cursor: pointer;
+        div {
           &:first-child {
-            min-width: 250px;
-            max-width: 400px;
-            position: sticky;
-            left: 0;
-            background-color: white;
-          }
-          &:hover {
-            color: ${palette.black};
-          }
-          &:last-child {
-            width: 30px;
-            min-width: 30px;
-            position: relative;
-            svg {
-              position: absolute;
-              top: 7.5px;
-            }
-          }
-          div {
             display: flex;
-            align-items: center;
-            svg {
-              margin-left: 5px;
-            }
-          }
-        }
-        td {
-          padding: 16px 8px;
-          border-bottom: 1px solid ${palette.gray_eb};
-          vertical-align: middle;
-          &:not(:first-child) {
-            div {
-              font-weight: 300;
-            }
-          }
-          > div {
-            display: flex;
-            align-items: center;
-          }
-          &:last-child {
-            div {
-              cursor: pointer;
-              div {
-                &:first-child {
-                  display: flex;
-                }
-              }
-            }
           }
         }
       }
     }
   }
-  @media ${({ theme }) => theme.device.tablet} {
-    main {
+  .management_th,
+  .management_td {
+    &:first-child {
+      max-width: 500px;
+      width: 500px;
+      position: sticky;
+      left: 0;
+      background-color: white;
+    }
+  }
+  @media ${({ theme }) => theme.device.pcSmall} {
+    .management_main {
       padding: 32px 24px;
+    }
+    .management_th,
+    .management_td {
+      &:first-child {
+        position: initial;
+      }
     }
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
-    th,
-    td {
+    .management_th,
+    .management_td {
       &:first-child {
-        min-width: initial !important;
-        max-width: 250px !important;
-      }
-    }
-    td {
-      &:first-child {
-        div {
-          span {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-          }
-        }
+        min-width: initial;
+        max-width: 300px;
       }
     }
   }
   @media ${({ theme }) => theme.device.mobile} {
-    th,
-    td {
-      &:first-child {
-        position: initial !important;
-      }
+    .management_main {
+      padding: 32px 0px;
+    }
+    .management_main_text-input-container {
+      padding: 0px 24px;
+    }
+    .management_th:first-child,
+    .management_td:first-child {
+      padding-left: 24px;
+    }
+    .management_th:last-child,
+    .management_td:last-child {
+      padding-right: 24px;
     }
     .filter_input-container,
     input {
-      width: 100% !important;
+      width: 100%;
     }
   }
 `;
@@ -141,7 +144,9 @@ const Management = () => {
   const BASE_URL = "/api/room/management";
 
   const { data, error } = useSWR<IRoom[]>(
-    user && user.isLoggedIn ? `${BASE_URL}${makeQueryString(query)}` : null,
+    user && user.isLoggedIn
+      ? `${BASE_URL}${makeQueryString({ ...query, id: user._id })}`
+      : null,
     fetcher
   );
 
@@ -149,13 +154,13 @@ const Management = () => {
   return (
     <>
       <Container>
-        <main>
-          <div>
+        <main className="management_main">
+          <div className="management_main_text-input-container">
             <div className="management_title">숙소 {data?.length}개</div>
             <SearchInput data={data} />
           </div>
-          <div>
-            <table>
+          <div className="management_main_table-container">
+            <table className="management_table">
               <RoomTableHead />
               {!data && <ManagementSkeleton />}
               {data?.map((room, i) => (

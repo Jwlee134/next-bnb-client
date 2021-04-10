@@ -54,6 +54,15 @@ const getEffects = (pathname: string, isTop: boolean, showMap: boolean) => {
       }
     `;
   }
+  if (pathname === "/management") {
+    return css`
+      @media ${({ theme }) => theme.device.pcSmall} {
+        > div {
+          padding: 0px 24px;
+        }
+      }
+    `;
+  }
 };
 
 const Container = styled.div<ContainerProps>`
