@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import Head from "next/head";
@@ -7,10 +6,10 @@ import { commonTitle } from "lib/staticData";
 import { api } from "lib/api";
 import { mutate } from "swr";
 import { IUser } from "types/user";
+import Header from "components/header";
+import OauthText from "components/common/OauthText";
 
 const Container = styled.div``;
-
-const Header = dynamic(() => import("components/header"));
 
 const google = () => {
   const router = useRouter();
@@ -37,6 +36,7 @@ const google = () => {
         <title>{commonTitle}</title>
       </Head>
       <Header useSearchBar={false} />
+      <OauthText />
     </Container>
   );
 };

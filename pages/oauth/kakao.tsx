@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import Head from "next/head";
@@ -7,16 +6,16 @@ import { commonTitle } from "lib/staticData";
 import { api } from "lib/api";
 import { mutate } from "swr";
 import { IUser } from "types/user";
+import OauthText from "components/common/OauthText";
+import Header from "components/header";
 
 const Container = styled.div``;
-
-const Header = dynamic(() => import("components/header"));
 
 const kakao = () => {
   const router = useRouter();
   const { query } = router;
 
-  const googleLogin = async () => {
+  const kakaoLogin = async () => {
     await mutate("/api/auth/me", async () => {
       const { data } = await api.post<IUser>(
         `/api/oauth/kakao?code=${query.code}`
@@ -28,7 +27,7 @@ const kakao = () => {
 
   useEffect(() => {
     if (!query.code) return;
-    googleLogin();
+    kakaoLogin();
   }, [query]);
 
   return (
@@ -37,6 +36,7 @@ const kakao = () => {
         <title>{commonTitle}</title>
       </Head>
       <Header useSearchBar={false} />
+      <OauthText />
     </Container>
   );
 };
