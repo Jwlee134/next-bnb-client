@@ -21,7 +21,11 @@ export const getServerSideProps: GetServerSideProps = async ({
     params: {
       client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/oauth/google`,
+      redirect_uri: `${
+        process.env.NODE_ENV === "development"
+          ? process.env.NEXT_PUBLIC_BASE_URL
+          : process.env.NEXT_PUBLIC_BASE_URL_PROD
+      }/oauth/google`,
       code: query.code,
       grant_type: "authorization_code",
     },

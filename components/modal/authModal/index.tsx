@@ -65,7 +65,13 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
 
   const handleGoogleLogin = () => {
     const link = document.createElement("a");
-    link.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:3000/oauth/google&response_type=code&scope=email profile`;
+    link.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+    }&redirect_uri=${
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_BASE_URL
+        : process.env.NEXT_PUBLIC_BASE_URL_PROD
+    }/oauth/google&response_type=code&scope=email profile`;
     link.click();
   };
 
@@ -77,7 +83,13 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
 
   const handleKakaoLogin = () => {
     const link = document.createElement("a");
-    link.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=http://localhost:3000/oauth/kakao&response_type=code`;
+    link.href = `https://kauth.kakao.com/oauth/authorize?client_id=${
+      process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY
+    }&redirect_uri=${
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_BASE_URL
+        : process.env.NEXT_PUBLIC_BASE_URL_PROD
+    }/oauth/kakao&response_type=code`;
     link.click();
   };
 

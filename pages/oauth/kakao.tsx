@@ -23,7 +23,11 @@ export const getServerSideProps: GetServerSideProps = async ({
       grant_type: "authorization_code",
       client_id: process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY,
       client_secret: process.env.KAKAO_CLIENT_SECRET,
-      redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/oauth/kakao`,
+      redirect_uri: `${
+        process.env.NODE_ENV === "development"
+          ? process.env.NEXT_PUBLIC_BASE_URL
+          : process.env.NEXT_PUBLIC_BASE_URL_PROD
+      }/oauth/kakao`,
       code: query.code,
     },
   });
