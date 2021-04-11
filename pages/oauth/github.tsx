@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     "Set-Cookie",
     `access_token=${token}; path=/; expires=${new Date(
       Date.now() + 60 * 60 * 24 * 1000 * 3
-    ).toUTCString()}; httponly`
+    ).toUTCString()}; httponly; sameSite=none; secure`
   );
   res.setHeader("location", "/");
   res.statusCode = 301;
