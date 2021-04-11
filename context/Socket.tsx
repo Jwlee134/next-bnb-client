@@ -37,7 +37,11 @@ export const SocketContextProvider = ({
 
   useEffect(() => {
     if (socket) return;
-    const socketIo = io(process.env.NEXT_PUBLIC_API_URL!);
+    const socketIo = io(
+      process.env.NODE_ENV === "development"
+        ? process.env.NEXT_PUBLIC_API_URL!
+        : process.env.NEXT_PUBLIC_API_URL_PROD!
+    );
     setSocket(socketIo);
   }, [socket]);
 
