@@ -56,7 +56,7 @@ const Container = styled.div`
     }
   }
   @media ${({ theme }) => theme.device.tablet} {
-    max-height: calc(100vh - 64px);
+    max-height: 70vh;
   }
 `;
 

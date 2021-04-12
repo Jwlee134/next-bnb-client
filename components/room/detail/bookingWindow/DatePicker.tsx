@@ -45,13 +45,6 @@ const Container = styled.div`
     z-index: 0;
     font-style: normal;
   }
-  .CalendarDay__blocked_calendar {
-    text-decoration: line-through !important;
-    color: #cacccd;
-    &:hover {
-      background-color: inherit !important;
-    }
-  }
   @media ${({ theme }) => theme.device.pcSmall} {
     .DateRangePicker_picker {
       left: initial !important;
@@ -60,25 +53,19 @@ const Container = styled.div`
   }
 `;
 
-const DatePicker = () => {
+const DatePicker = ({
+  isBlocked,
+  maxDate,
+}: {
+  isBlocked: (day: Moment) => boolean | undefined;
+  maxDate: () => moment.Moment | undefined;
+}) => {
   const { room } = useRoom();
   const checkIn = useSelector((state) => state.search.checkIn);
   const checkOut = useSelector((state) => state.search.checkOut);
 
   const router = useRouter();
   const { query } = router;
-
-  const isBlocked = (day: Moment) => {
-    if (!room) return;
-    return room.blockedDayList.some((date) => day.isSame(date, "day"));
-  };
-
-  const maxDate = () => {
-    if (room && room.availability > 1) {
-      return moment(new Date()).add(room.availability, "M");
-    }
-    return undefined;
-  };
 
   useEffect(() => {
     if (checkIn && room) {

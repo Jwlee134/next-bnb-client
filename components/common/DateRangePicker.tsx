@@ -195,6 +195,13 @@ const Container = styled.div<ContainerProps>`
   .DayPicker__verticalScrollable {
     border-radius: 0 !important;
   }
+  .CalendarDay__blocked_calendar {
+    text-decoration: line-through !important;
+    color: #cacccd;
+    &:hover {
+      background-color: inherit !important;
+    }
+  }
 `;
 
 interface Props {
@@ -276,8 +283,12 @@ const DateRangePicker = ({
           onFocusChange={handleFocus}
           initialVisibleMonth={null}
           orientation="verticalScrollable"
-          isOutsideRange={(day) => day.isBefore(moment(new Date()), "day")}
+          isOutsideRange={(day) =>
+            day.isBefore(moment(new Date()), "day") ||
+            (maxDate ? day.isAfter(maxDate, "day") : false)
+          }
           numberOfMonths={2}
+          isDayBlocked={isBlocked}
         />
       )}
     </Container>

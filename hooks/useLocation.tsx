@@ -82,29 +82,25 @@ const useLocation = (mode: "pc" | "mobile") => {
   const handleNear = () => {
     if (mode === "pc") {
       dispatch(commonActions.setShowLocationPopup(false));
-      dispatch(commonActions.setIsGettingCoordinates(true));
       document.getElementById("dateRangePicker-start")?.focus();
-    } else {
-      dispatch(commonActions.setSearchMode("date"));
     }
+    dispatch(commonActions.setIsGettingCoordinates(true));
     dispatch(searchActions.setValue("가까운 여행지 둘러보기"));
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
         const { latitude, longitude } = coords;
         dispatch(searchActions.setLatitude(latitude));
         dispatch(searchActions.setLongitude(longitude));
-        if (mode === "pc") {
-          dispatch(commonActions.setIsGettingCoordinates(false));
-        }
+        dispatch(commonActions.setIsGettingCoordinates(false));
+        dispatch(commonActions.setSearchMode("date"));
       },
       () => {
         alert("현재 위치를 불러올 수 없습니다.");
         dispatch(searchActions.setValue(""));
-        if (mode === "pc") {
-          dispatch(commonActions.setIsGettingCoordinates(false));
-        } else {
+        if (mode === "mobile") {
           dispatch(commonActions.setSearchMode("location"));
         }
+        dispatch(commonActions.setIsGettingCoordinates(false));
       }
     );
   };

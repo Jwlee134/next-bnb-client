@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useSelector } from "store";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import Loader from "components/common/Loader";
 import Footer from "./Footer";
 import Input from "./Input";
 import Header from "./Header";
@@ -22,6 +23,9 @@ const SearchPopup = styled.div`
 const Search = ({ scroll }: { scroll: number }) => {
   const searchMode = useSelector((state) => state.common.searchMode);
   const showMap = useSelector((state) => state.map.showMap);
+  const isGettingCoordinates = useSelector(
+    (state) => state.common.isGettingCoordinates
+  );
   const { pathname } = useRouter();
   const { value, setValue, ListItem } = useLocation("mobile");
   const [opened, setOpened] = useState(false);
@@ -45,6 +49,7 @@ const Search = ({ scroll }: { scroll: number }) => {
         <SearchPopup>
           <Header setOpened={setOpened} />
           {searchMode === "location" && <ListItem />}
+          {isGettingCoordinates && <Loader whiteBackground />}
           {searchMode === "date" && (
             <DateRangePicker mode="dayPickerRangeController" />
           )}

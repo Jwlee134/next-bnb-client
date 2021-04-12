@@ -38,8 +38,7 @@ const AuthContainer = styled.div`
   overflow-y: auto;
   max-height: 568px;
   @media ${({ theme }) => theme.device.tabletSmall} {
-    height: calc(100% - 64px);
-    max-height: initial;
+    max-height: 75vh;
   }
 `;
 

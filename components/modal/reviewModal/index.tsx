@@ -67,7 +67,7 @@ const Container = styled.div`
     }
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
-    max-height: calc(100vh - 64px) !important;
+    max-height: 75vh !important;
     flex-direction: column;
     padding: 0;
     .review-modal_left-container {

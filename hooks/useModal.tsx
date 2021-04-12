@@ -55,7 +55,7 @@ const Children = styled.div<{ modalOpened: boolean }>`
     border-bottom-right-radius: 0;
     max-height: 100%;
     height: auto;
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     > div {
       width: 100%;

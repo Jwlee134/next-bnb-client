@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { IoCloseSharp } from "react-icons/io5";
 import palette from "styles/palette";
@@ -34,13 +34,21 @@ const Container = styled.header`
   }
 `;
 
-const ModalHeader = ({ children, onClick }: Props) => (
-  <Container>
-    {children}
-    <div>
-      <IoCloseSharp size={20} onClick={onClick} />
-    </div>
-  </Container>
-);
+const ModalHeader = ({ children, onClick }: Props) => {
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "inherit";
+    };
+  }, []);
+
+  return (
+    <Container>
+      {children}
+      <div>
+        <IoCloseSharp size={20} onClick={onClick} />
+      </div>
+    </Container>
+  );
+};
 
 export default ModalHeader;

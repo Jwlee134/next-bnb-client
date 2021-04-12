@@ -23,7 +23,7 @@ import ModalHeader from "../ModalHeader";
 const Container = styled.div`
   padding: 20px 20px 0px 20px;
   width: 767px;
-  max-height: 70vh;
+  max-height: 75vh;
   overflow-y: auto;
   .filter-modal_option-title {
     font-size: 18px;
@@ -109,6 +109,9 @@ const FilterModal = ({ closeModal }: { closeModal: () => void }) => {
     amenities: [],
     spaces: [],
     buildingType: [],
+    ...(innerWidth < pcSmallBreakpoint && { roomType: [] }),
+    ...(innerWidth < pcSmallBreakpoint && { minPrice: "" }),
+    ...(innerWidth < pcSmallBreakpoint && { maxPrice: "" }),
   });
 
   const [totalRoomCount, setTotalRoomCount] = useState(originalLength);
@@ -161,26 +164,6 @@ const FilterModal = ({ closeModal }: { closeModal: () => void }) => {
       clearTimeout(timeout);
     };
   }, [filterState]);
-
-  useEffect(() => {
-    if (innerWidth < pcSmallBreakpoint) {
-      setFilterState({
-        ...filterState,
-        roomType:
-          typeof query.roomType === "string"
-            ? [query.roomType]
-            : query.roomType || [],
-        minPrice: (query.minPrice as string) || "",
-        maxPrice: (query.maxPrice as string) || "",
-      });
-    } else {
-      const state = { ...filterState };
-      delete state.roomType;
-      delete state.minPrice;
-      delete state.maxPrice;
-      setFilterState({ ...state });
-    }
-  }, [innerWidth]);
 
   useEffect(() => {
     const filterList = Object.keys(filterState);

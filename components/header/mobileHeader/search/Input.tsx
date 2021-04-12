@@ -92,7 +92,6 @@ const Input = ({
   const { pathname } = useRouter();
   const handleFocus = () => {
     setOpened(true);
-    document.body.style.overflow = "hidden";
   };
 
   return (

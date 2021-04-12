@@ -27,7 +27,6 @@ const MobileBookingButton = () => {
       <Container
         onClick={() => {
           setWindowOpened(true);
-          document.body.style.overflow = "hidden";
         }}
       >
         <AiOutlineSchedule size={30} />

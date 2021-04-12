@@ -3,6 +3,9 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { useRouter } from "next/router";
 import FilterModal from "components/modal/filterModal";
+import { useSelector } from "store";
+import { tabletSmallBreakpoint } from "styles/theme";
+import { isEmpty } from "lodash";
 
 const Container = styled.div``;
 
@@ -18,6 +21,7 @@ const Title = styled.div<{ isFiltering: boolean }>`
 `;
 
 const Others = () => {
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   const { query } = useRouter();
   const { openModal, closeModal, ModalPortal } = useModal();
 
@@ -30,7 +34,10 @@ const Others = () => {
           !!query.bathroomCount ||
           !!query.amenities ||
           !!query.spaces ||
-          !!query.buildingType
+          !!query.buildingType ||
+          (innerWidth < tabletSmallBreakpoint
+            ? !isEmpty(query.roomType) || !!query.minPrice || !!query.maxPrice
+            : true)
         }
         className="filter-title"
         onClick={openModal}
