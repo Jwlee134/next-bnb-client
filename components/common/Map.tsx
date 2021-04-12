@@ -160,6 +160,7 @@ const Map = ({
   );
   const isLoading = useSelector((state) => state.common.isLoading);
   const search = useSelector((state) => state.search);
+  const innerWidth = useSelector((state) => state.common.innerWidth);
   const dispatch = useDispatch();
   const router = useRouter();
   const { query, pathname } = router;
@@ -287,7 +288,12 @@ const Map = ({
     });
     info.addListener("domready", () => {
       render(
-        <InfoWindow search={search} room={room} />,
+        <InfoWindow
+          search={search}
+          room={room}
+          innerWidth={innerWidth}
+          router={router}
+        />,
         document.getElementById("infoWindow")
       );
     });
@@ -410,9 +416,7 @@ const Map = ({
                   />
                 )}
                 {isMoved && <MdRefresh size={20} />}
-                <div>
-                  {isMoved ? "이 지역 검색" : "지도를 움직이며 검색하기"}
-                </div>
+                <div>{isMoved ? "이 지역 검색" : "지도를 움직이며 검색"}</div>
               </>
             )}
           </label>

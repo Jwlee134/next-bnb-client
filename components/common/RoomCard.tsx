@@ -184,8 +184,6 @@ const RoomCard = ({
           value: "",
           latitude: 0,
           longitude: 0,
-          children: search.children === 0 ? "0" : search.children,
-          infants: search.infants === 0 ? "0" : search.infants,
         })}`}
         target="_blank"
         rel="noreferrer"

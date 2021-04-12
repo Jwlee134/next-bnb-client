@@ -13,10 +13,12 @@ export const makeQueryString = (query: {
   let queryString = "?";
 
   keys.forEach((key, i) => {
-    if (!values[i]) return;
-
-    // 필수 키워드 둘 이외에 0으로 들어오면 그 키는 리턴
-    if (key !== "children" && key !== "infants" && values[i] === "0") return;
+    if (
+      !values[i] ||
+      (key !== "children" && key !== "infants" && values[i] === "0")
+    ) {
+      return;
+    }
 
     if (typeof values[i] === "string") {
       queryString += `${key}=${encodeURIComponent(values[i] as string)}&`;
