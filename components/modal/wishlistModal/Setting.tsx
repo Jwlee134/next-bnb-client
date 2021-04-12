@@ -30,6 +30,9 @@ const Container = styled.div`
     font-weight: 500;
     width: fit-content;
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    padding-bottom: 80px;
+  }
 `;
 
 const Setting = ({

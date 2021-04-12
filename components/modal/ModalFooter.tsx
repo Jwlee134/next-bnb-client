@@ -26,6 +26,11 @@ const Container = styled.div<ContainerProps>`
         width: 100%;
       }
     `}
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    position: fixed;
+    bottom: 0;
+    background-color: white;
+  }
 `;
 
 const Abort = styled.span`

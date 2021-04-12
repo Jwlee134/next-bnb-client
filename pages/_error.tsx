@@ -33,7 +33,7 @@ const Container = styled.div`
     font-size: 40px;
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
-    height: calc(100vh - 64px);
+    height: 100vh;
     font-size: 30px;
   }
 `;

@@ -17,6 +17,9 @@ const Container = styled.div`
     font-size: 13px;
     opacity: 0.5;
   }
+  @media ${({ theme }) => theme.device.tabletSmall} {
+    padding-bottom: 104px;
+  }
 `;
 
 const NewWishlist = ({

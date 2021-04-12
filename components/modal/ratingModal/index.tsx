@@ -34,7 +34,7 @@ const Container = styled.div`
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
     .rating-modal_main {
-      max-height: calc(100vh - 208px);
+      max-height: calc(100vh - 64px);
     }
   }
   @media ${({ theme }) => theme.device.mobile} {

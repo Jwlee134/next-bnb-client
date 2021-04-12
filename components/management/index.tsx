@@ -104,6 +104,7 @@ const Container = styled.div`
       &:first-child {
         position: initial;
         background-color: initial;
+        min-width: 100px;
       }
     }
   }

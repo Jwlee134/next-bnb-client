@@ -12,7 +12,7 @@ const Container = styled.div<{ searchMode: "location" | "date" | "guest" }>`
   width: 100%;
   height: 64px;
   background-color: white;
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   display: flex;
   justify-content: space-between;
@@ -71,6 +71,7 @@ const Footer = ({
       })}`
     );
     setOpened(false);
+    dispatch(commonActions.setSearchMode("location"));
   };
 
   return (
