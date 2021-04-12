@@ -50,8 +50,6 @@ const Container = styled.div`
     padding: 10px 0px;
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
-    width: 100%;
-    max-height: calc(100vh - 64px) !important;
     padding-bottom: 80px;
   }
 `;
@@ -165,6 +163,26 @@ const FilterModal = ({ closeModal }: { closeModal: () => void }) => {
   }, [filterState]);
 
   useEffect(() => {
+    if (innerWidth < pcSmallBreakpoint) {
+      setFilterState({
+        ...filterState,
+        roomType:
+          typeof query.roomType === "string"
+            ? [query.roomType]
+            : query.roomType || [],
+        minPrice: (query.minPrice as string) || "",
+        maxPrice: (query.maxPrice as string) || "",
+      });
+    } else {
+      const state = { ...filterState };
+      delete state.roomType;
+      delete state.minPrice;
+      delete state.maxPrice;
+      setFilterState({ ...state });
+    }
+  }, [innerWidth]);
+
+  useEffect(() => {
     const filterList = Object.keys(filterState);
     const obj: { [key: string]: string | string[] | undefined } = {};
     filterList.forEach((filter) => {
@@ -185,26 +203,6 @@ const FilterModal = ({ closeModal }: { closeModal: () => void }) => {
     });
     setFilterState({ ...filterState, ...obj });
   }, []);
-
-  useEffect(() => {
-    if (innerWidth < pcSmallBreakpoint) {
-      setFilterState({
-        ...filterState,
-        roomType:
-          typeof query.roomType === "string"
-            ? [query.roomType]
-            : query.roomType || [],
-        minPrice: (query.minPrice as string) || "",
-        maxPrice: (query.maxPrice as string) || "",
-      });
-    } else {
-      const state = { ...filterState };
-      delete state.roomType;
-      delete state.minPrice;
-      delete state.maxPrice;
-      setFilterState({ ...state });
-    }
-  }, [innerWidth]);
 
   return (
     <>

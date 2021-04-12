@@ -12,7 +12,6 @@ import { hostingActions } from "store/hosting";
 import { registerRoomAPI, updateRoomAPI } from "lib/api/room";
 import Loader from "components/common/Loader";
 import { commonActions } from "store/common";
-import useUser from "hooks/useUser";
 
 const Container = styled.div`
   width: 100%;
@@ -53,7 +52,6 @@ const Footer = ({
   isLocation?: boolean;
   isSubmit?: boolean;
 }) => {
-  const { user } = useUser("/");
   const router = useRouter();
   const { setValidation } = useValidation();
   const [loading, setLoading] = useState(false);

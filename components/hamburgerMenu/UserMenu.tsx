@@ -13,9 +13,10 @@ import useUser from "hooks/useUser";
 import MenuHeader from "./MenuHeader";
 
 const Container = styled.div`
+  height: 100%;
   .user-menu_items {
     display: flex;
-    height: calc(100vh - 64px);
+    height: calc(100% - 64px);
     flex-direction: column;
     justify-content: space-between;
   }

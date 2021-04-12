@@ -73,6 +73,7 @@ const Setting = ({
         listId: query.id as string,
       });
       mutate(data, false);
+      mutateWishlist();
       closeModal();
     } catch (error) {
       alert(error.response.data);
