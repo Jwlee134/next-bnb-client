@@ -75,6 +75,13 @@ const Empty = styled.div`
   font-weight: bold;
   margin: 0 auto;
   text-align: center;
+  @media ${({ theme }) => theme.device.pcSmall} {
+    width: 100%;
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    height: 40vh;
+    font-weight: 500;
+  }
 `;
 
 const RoomList = () => {
@@ -119,8 +126,7 @@ const RoomList = () => {
     }
     return `${originalLength}개의 숙소 중 ${
       (Number(page) - 1) * Number(limit) + 1
-    } -
-          ${(Number(page) - 1) * Number(limit) + searchResults.length}`;
+    } - ${(Number(page) - 1) * Number(limit) + searchResults.length}`;
   };
 
   if (isLoading && innerWidth) {

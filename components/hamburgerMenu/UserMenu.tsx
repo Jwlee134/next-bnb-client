@@ -15,14 +15,15 @@ import MenuHeader from "./MenuHeader";
 const Container = styled.div`
   .user-menu_items {
     display: flex;
-    height: calc(100vh - 128px);
+    height: calc(100vh - 64px);
     flex-direction: column;
     justify-content: space-between;
   }
   .user-menu_list {
     display: flex;
     align-items: center;
-    padding: 12px 16px;
+    padding: 0px 16px;
+    height: 64px;
     font-weight: 300;
     svg {
       margin-right: 10px;
@@ -30,7 +31,10 @@ const Container = styled.div`
   }
   .user-menu_logout {
     border-top: 1px solid ${palette.gray_f7};
+    height: 64px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
     width: 300px;

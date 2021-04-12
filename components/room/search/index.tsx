@@ -13,6 +13,7 @@ const Container = styled.div<{ showMap: boolean }>`
     showMap
       ? css`
           .search_contents {
+            min-width: 840px;
             max-width: 840px;
             padding: ${({ theme }) => theme.padding.tablet};
           }

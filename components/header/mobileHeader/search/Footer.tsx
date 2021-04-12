@@ -18,6 +18,7 @@ const Container = styled.div<{ searchMode: "location" | "date" | "guest" }>`
   justify-content: space-between;
   align-items: center;
   padding: 0px 24px;
+  z-index: 12;
   button {
     width: 90px;
     height: 40px;
@@ -29,7 +30,11 @@ const Container = styled.div<{ searchMode: "location" | "date" | "guest" }>`
   }
 `;
 
-const Footer = () => {
+const Footer = ({
+  setOpened,
+}: {
+  setOpened: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const search = useSelector((state) => state.search);
   const searchMode = useSelector((state) => state.common.searchMode);
   const dispatch = useDispatch();
@@ -40,6 +45,10 @@ const Footer = () => {
   };
 
   const handleNext = () => {
+    if (searchMode === "location") {
+      dispatch(commonActions.setSearchMode("date"));
+      return;
+    }
     if (searchMode === "date") {
       handleSkip();
       return;
@@ -61,6 +70,7 @@ const Footer = () => {
         coordsBounds: "0.019114425627257958",
       })}`
     );
+    setOpened(false);
   };
 
   return (
@@ -70,14 +80,15 @@ const Footer = () => {
           건너뛰기
         </Button>
       )}
-      {searchMode !== "location" && (
-        <>
-          <div />
-          <Button backgroundColor="black" onClick={handleNext}>
-            {searchMode === "date" ? "다음" : "검색"}
-          </Button>
-        </>
-      )}
+      <div />
+      <Button
+        useValidation={searchMode === "location"}
+        isValid={!!search.latitude && !!search.longitude}
+        backgroundColor="black"
+        onClick={handleNext}
+      >
+        {searchMode === "guest" ? "검색" : "다음"}
+      </Button>
     </Container>
   );
 };

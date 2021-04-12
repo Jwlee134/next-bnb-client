@@ -98,17 +98,17 @@ const Container = styled.div<{ notValid: boolean }>`
     }
   }
   @media ${({ theme }) => theme.device.tabletSmall} {
-    z-index: 2;
+    z-index: 12;
     position: fixed;
     top: initial;
     left: 0;
-    bottom: 64px;
+    bottom: 0px;
     width: 100%;
     padding: 24px !important;
     height: fit-content;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    max-height: calc(100vh - 64px);
+    max-height: 100vh;
     overflow-y: auto;
     .booking-window_title {
       padding-right: 30px;

@@ -19,7 +19,7 @@ const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
   transition: background-color 0.2s linear;
-  z-index: 10;
+  z-index: 12;
   label {
     position: relative;
     width: 100%;

@@ -18,7 +18,7 @@ const Container = styled.div`
   background-color: white;
   position: fixed;
   bottom: 0;
-  z-index: 12;
+  z-index: 10;
   border-top: 1px solid ${palette.gray_eb};
   .navigator_icon-container {
     display: flex;

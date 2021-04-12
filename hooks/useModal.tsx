@@ -18,10 +18,7 @@ const Container = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 11;
-  @media ${({ theme }) => theme.device.tabletSmall} {
-    max-height: calc(100vh - 64px);
-  }
+  z-index: 13;
 `;
 
 const Background = styled.div<{ modalOpened: boolean }>`
@@ -41,7 +38,7 @@ const Background = styled.div<{ modalOpened: boolean }>`
 `;
 
 const Children = styled.div<{ modalOpened: boolean }>`
-  z-index: 13;
+  z-index: 14;
   background-color: white;
   border-radius: 12px;
   ${({ modalOpened }) =>
@@ -62,7 +59,6 @@ const Children = styled.div<{ modalOpened: boolean }>`
     bottom: 0px;
     > div {
       width: 100%;
-      max-height: calc(100vh - 64px);
     }
     ${({ modalOpened }) =>
       modalOpened

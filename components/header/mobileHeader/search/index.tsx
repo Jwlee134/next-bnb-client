@@ -12,9 +12,9 @@ import Guest from "./Guest";
 const SearchPopup = styled.div`
   width: 100%;
   position: fixed;
-  z-index: 9;
+  z-index: 11;
   top: 0;
-  height: calc(100vh - 64px);
+  min-height: 100vh;
   padding-top: 80px;
   background-color: white;
 `;
@@ -49,7 +49,7 @@ const Search = ({ scroll }: { scroll: number }) => {
             <DateRangePicker mode="dayPickerRangeController" />
           )}
           {searchMode === "guest" && <Guest />}
-          <Footer />
+          <Footer setOpened={setOpened} />
         </SearchPopup>
       )}
     </>

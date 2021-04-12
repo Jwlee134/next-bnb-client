@@ -103,6 +103,7 @@ const Container = styled.div`
     .management_td {
       &:first-child {
         position: initial;
+        background-color: initial;
       }
     }
   }
