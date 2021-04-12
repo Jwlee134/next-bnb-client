@@ -13,12 +13,8 @@ export const makeQueryString = (query: {
   let queryString = "?";
 
   keys.forEach((key, i) => {
-    if (
-      !values[i] ||
-      (key !== "children" && key !== "infants" && values[i] === "0")
-    ) {
-      return;
-    }
+    if (!values[i] && key !== "children" && key !== "infants") return;
+    if (key !== "children" && key !== "infants" && values[i] === "0") return;
 
     if (typeof values[i] === "string") {
       queryString += `${key}=${encodeURIComponent(values[i] as string)}&`;
@@ -33,7 +29,6 @@ export const makeQueryString = (query: {
       }
     }
   });
-
   return queryString.slice(0, -1);
 };
 

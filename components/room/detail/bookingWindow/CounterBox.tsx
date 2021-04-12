@@ -49,7 +49,7 @@ const CounterBox = ({
       `/room/${room?._id}${makeQueryString({
         ...query,
         id: "",
-        adults: String(value),
+        adults: value,
       })}`,
       undefined,
       { scroll: false }
@@ -62,7 +62,7 @@ const CounterBox = ({
       `/room/${room?._id}${makeQueryString({
         ...query,
         id: "",
-        children: String(value),
+        children: value,
       })}`,
       undefined,
       { scroll: false }
@@ -75,7 +75,7 @@ const CounterBox = ({
       `/room/${room?._id}${makeQueryString({
         ...query,
         id: "",
-        infants: String(value),
+        infants: value,
       })}`,
       undefined,
       { scroll: false }

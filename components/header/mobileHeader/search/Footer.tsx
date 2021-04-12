@@ -57,14 +57,7 @@ const Footer = ({
     router.push(
       `/search/rooms${makeQueryString({
         ...router.query,
-        value: search.value,
-        checkIn: search.checkIn,
-        checkOut: search.checkOut,
-        latitude: search.latitude,
-        longitude: search.longitude,
-        adults: search.adults,
-        children: String(search.children),
-        infants: String(search.infants),
+        ...search,
         id: "",
         zoom: "14",
         coordsBounds: "0.019114425627257958",

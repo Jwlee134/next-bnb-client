@@ -4,8 +4,8 @@ export const quickSearchKeywords = {
   latitude: "36.1",
   longitude: "128",
   adults: "1",
-  children: "0",
-  infants: "0",
+  children: 0,
+  infants: 0,
   zoom: "7",
   coordsBounds: "2.4",
 };
