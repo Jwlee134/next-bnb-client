@@ -1,34 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# next-bnb-client
+에어비앤비 웹사이트를 따라 만들어보며 배우는 Next.js
 
-## Getting Started
+웹사이트 링크: [https://next-bnb-client.vercel.app/](https://next-bnb-client.vercel.app/)
 
-First, run the development server:
+백엔드 레포지토리: [next-bnb-server](https://github.com/Jwlee134/next-bnb-server)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+### 기술 스택
+- Next.js
+- TypeScript
+- Redux Toolkit
+- Styled Components
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 미리보기
+|               홈              |              검색             |
+| :---------------------------: | :---------------------------: |
+| <img src="https://user-images.githubusercontent.com/67630303/114498806-b8baad00-9c5f-11eb-9691-4b855412312c.png" width="400px" /> | <img src="https://user-images.githubusercontent.com/67630303/114499576-582c6f80-9c61-11eb-8e16-ee1e5b8aadb1.png" width="400px" /> |
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+|            숙소 상세          |             프로필            |
+| :---------------------------: | :---------------------------: |
+| <img src="https://user-images.githubusercontent.com/67630303/114502061-194ce880-9c66-11eb-9c0f-5b930945551f.png" width="400px" />| <img src="https://user-images.githubusercontent.com/67630303/114503686-a8f39680-9c68-11eb-8903-a0ae0126e1c8.png" width="400px" /> |
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+|           위시리스트          |            숙소 관리           |
+| :---------------------------: | :---------------------------: |
+| <img src="https://user-images.githubusercontent.com/67630303/114503525-6b8f0900-9c68-11eb-9f30-8f5eb960c14f.png" width="400px" /> | <img src="https://user-images.githubusercontent.com/67630303/114503805-cd4f7300-9c68-11eb-8f6f-a724f737611a.png" width="400px" /> |
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+|            호스팅             |             예약              |
+| :---------------------------: | :---------------------------: |
+| <img src="https://user-images.githubusercontent.com/67630303/114503862-e6f0ba80-9c68-11eb-85a9-ad4581f181bb.png" width="400px" /> | <img src="https://user-images.githubusercontent.com/67630303/114504095-4222ad00-9c69-11eb-9355-75c9f9e99ccd.png" width="400px" > |
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
