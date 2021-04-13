@@ -47,11 +47,12 @@ const ReviewFromHost = ({ user }: { user: IUser }) => {
       {reviewFromHost.map((review, i) => (
         <ReviewCard review={review} key={i} />
       ))}
-      {user.reviewFromHost.length > reviewFromHost.length && (
-        <Button onClick={handleClick} backgroundColor="white">
-          더 보기
-        </Button>
-      )}
+      {user.reviewFromHost.length > reviewFromHost.length &&
+        user.reviewFromHost.length > 5 && (
+          <Button onClick={handleClick} backgroundColor="white">
+            더 보기
+          </Button>
+        )}
     </Container>
   );
 };

@@ -18,7 +18,8 @@ export const deleteWishItemAPI = ({
 }: {
   roomId: string;
   listId: string;
-}) => api.delete(`/api/wishlist/item?roomId=${roomId}&listId=${listId}`);
+}) =>
+  api.delete<IWishlist>(`/api/wishlist/item?roomId=${roomId}&listId=${listId}`);
 
 export const deleteWishlistAPI = (id: string) =>
   api.delete(`/api/wishlist/${id}`);

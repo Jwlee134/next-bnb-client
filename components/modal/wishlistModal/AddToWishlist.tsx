@@ -71,8 +71,8 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
   const handleAdd = async (listId: string) => {
     try {
       await addWishItemAPI({ roomId: clickedRoomId, listId });
-      closeModal();
       mutateWishlist();
+      closeModal();
     } catch (error) {
       alert(error.response.data);
     }

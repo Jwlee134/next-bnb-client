@@ -55,8 +55,10 @@ const Setting = ({
   const handleDelete = async () => {
     if (wishlist) {
       try {
-        const filtered = wishlist.filter((item) => item._id !== query.id);
-        mutateWishlist(filtered, false);
+        mutateWishlist(
+          wishlist.filter((item) => item._id !== query.id),
+          false
+        );
         closeModal();
         router.replace("/wishlists");
         await deleteWishlistAPI(query.id as string);
@@ -73,7 +75,6 @@ const Setting = ({
         listId: query.id as string,
       });
       mutate(data, false);
-      mutateWishlist();
       closeModal();
     } catch (error) {
       alert(error.response.data);

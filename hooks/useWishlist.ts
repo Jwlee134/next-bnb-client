@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import useSWR, { cache, mutate } from "swr";
+import useSWR, { mutate } from "swr";
 import { IRoom } from "types/room";
 import { IWishlist } from "types/user";
 import useUser from "./useUser";
@@ -14,15 +14,13 @@ const useWishlist = (roomId?: string) => {
   const { user } = useUser();
   const { pathname } = useRouter();
   const { data: wishlist, mutate: mutateWishlist } = useSWR<IWishlist[]>(
-    user && user.isLoggedIn ? `/api/wishlist?id=${user._id}` : null,
-    fetcher,
-    {
-      revalidateOnMount: !cache.has(`/api/wishlist?id=${user?._id}`),
-    }
+    user && user.isLoggedIn ? "/api/wishlist" : null,
+    fetcher
   );
   const dispatch = useDispatch();
 
   const [liked, setLiked] = useState(false);
+
   const handleItem = async () => {
     if (!roomId) return;
     dispatch(commonActions.setClickedRoomId(roomId as string));
@@ -36,10 +34,18 @@ const useWishlist = (roomId?: string) => {
             }
           });
         });
-        await deleteWishItemAPI({ roomId, listId });
-        mutateWishlist();
+        const { data } = await deleteWishItemAPI({ roomId, listId });
+        mutateWishlist(
+          wishlist.map((list) => {
+            if (list._id === data._id) {
+              return data;
+            }
+            return list;
+          }),
+          false
+        );
         if (pathname === "/wishlists/[id]") {
-          mutate(`/api/wishlist/${listId}`);
+          mutate(`/api/wishlist/${listId}`, data, false);
         }
       } catch (error) {
         alert(error.response.data);
@@ -48,13 +54,13 @@ const useWishlist = (roomId?: string) => {
   };
 
   useEffect(() => {
-    if (!wishlist || isEmpty(wishlist)) return;
+    if (!wishlist || isEmpty(wishlist) || !roomId) return;
     wishlist.forEach((list) => {
       if (list.list.some((item: IRoom) => item._id === roomId)) {
         setLiked(true);
       }
     });
-  }, [wishlist]);
+  }, [wishlist, roomId]);
 
   return { user, liked, wishlist, mutateWishlist, handleItem };
 };

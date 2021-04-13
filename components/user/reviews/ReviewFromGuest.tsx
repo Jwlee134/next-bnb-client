@@ -77,11 +77,12 @@ const ReviewFromGuest = ({ user }: { user: IUser }) => {
           <ReviewCard review={review} />
         </Fragment>
       ))}
-      {user.reviewFromGuest.length > reviewFromGuest.length && (
-        <Button onClick={handleClick} backgroundColor="white">
-          더 보기
-        </Button>
-      )}
+      {user.reviewFromGuest.length > reviewFromGuest.length &&
+        user.reviewFromHost.length > 5 && (
+          <Button onClick={handleClick} backgroundColor="white">
+            더 보기
+          </Button>
+        )}
     </Container>
   );
 };

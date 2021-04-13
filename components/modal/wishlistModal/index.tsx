@@ -42,9 +42,6 @@ const WishlistModal = ({
     if (isEmpty(wishlist)) {
       dispatch(commonActions.setWishlistMode("create"));
     }
-    return () => {
-      document.body.style.overflow = "inherit";
-    };
   }, []);
 
   return (

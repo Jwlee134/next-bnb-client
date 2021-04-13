@@ -34,10 +34,13 @@ const MyRoom = ({
   }, [error]);
 
   useEffect(() => {
-    if (data) {
-      mutate("/api/auth/me");
+    if (data && user) {
+      const unreadNotifications = user.unreadNotifications.filter((notif) => {
+        return !notif.label.includes("myRoom");
+      });
+      mutate("/api/auth/me", { ...user, unreadNotifications }, false);
     }
-  }, [data]);
+  }, [data, user]);
 
   return (
     <Container>

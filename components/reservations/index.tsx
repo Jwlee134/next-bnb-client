@@ -88,8 +88,6 @@ const Reservations = () => {
     message: "",
   });
 
-  const [upcomingNotif, setUpcomingNotif] = useState(0);
-  const [pastNotif, setPastNotif] = useState(0);
   const [myRoomNotif, setMyRoomNotif] = useState(0);
 
   const getNotifCount = (keyword: string) =>
@@ -99,8 +97,6 @@ const Reservations = () => {
 
   useEffect(() => {
     if (!user || !user.isLoggedIn) return;
-    setUpcomingNotif(getNotifCount("upcoming"));
-    setPastNotif(getNotifCount("past"));
     setMyRoomNotif(getNotifCount("myRoom"));
   }, [user]);
 
@@ -119,7 +115,6 @@ const Reservations = () => {
             type="button"
           >
             예정된 예약
-            {upcomingNotif > 0 && <Notification>{upcomingNotif}</Notification>}
           </Button>
           <Button
             clicked={tab === "past"}
@@ -127,7 +122,6 @@ const Reservations = () => {
             type="button"
           >
             이전 예약
-            {pastNotif > 0 && <Notification>{pastNotif}</Notification>}
           </Button>
           {!isEmpty(user?.rooms) && (
             <Button
