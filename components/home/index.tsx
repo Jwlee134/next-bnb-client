@@ -12,7 +12,7 @@ const Container = styled.div`
     left: 0;
     width: 100%;
     height: calc(100vh - 40px);
-    background-image: url("/static/image/home/home.jpeg");
+    background-image: url("/static/image/home/home.jpg");
     background-position: center center;
     background-size: cover;
     z-index: -1;

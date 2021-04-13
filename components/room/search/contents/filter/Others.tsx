@@ -37,7 +37,7 @@ const Others = () => {
           !!query.buildingType ||
           (innerWidth < tabletSmallBreakpoint
             ? !isEmpty(query.roomType) || !!query.minPrice || !!query.maxPrice
-            : true)
+            : false)
         }
         className="filter-title"
         onClick={openModal}
