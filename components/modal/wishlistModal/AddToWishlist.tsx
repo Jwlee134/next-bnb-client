@@ -69,10 +69,10 @@ const AddToWishlist = ({ closeModal }: { closeModal: () => void }) => {
   const handleCreate = () => dispatch(commonActions.setWishlistMode("create"));
 
   const handleAdd = async (listId: string) => {
+    closeModal();
     try {
       await addWishItemAPI({ roomId: clickedRoomId, listId });
       mutateWishlist();
-      closeModal();
     } catch (error) {
       alert(error.response.data);
     }

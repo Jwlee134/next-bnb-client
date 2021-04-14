@@ -74,6 +74,15 @@ const Setting = ({
         title: text,
         listId: query.id as string,
       });
+      mutateWishlist(
+        wishlist?.map((list) => {
+          if (list._id === query.id) {
+            return data;
+          }
+          return list;
+        }),
+        false
+      );
       mutate(data, false);
       closeModal();
     } catch (error) {

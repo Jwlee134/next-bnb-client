@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
-import useSWR, { mutate } from "swr";
+import useSWR, { cache, mutate } from "swr";
 import { IRoom } from "types/room";
 import { IWishlist } from "types/user";
 import useUser from "./useUser";
@@ -15,7 +15,10 @@ const useWishlist = (roomId?: string) => {
   const { pathname } = useRouter();
   const { data: wishlist, mutate: mutateWishlist } = useSWR<IWishlist[]>(
     user && user.isLoggedIn ? "/api/wishlist" : null,
-    fetcher
+    fetcher,
+    {
+      revalidateOnMount: !cache.has("/api/wishlist"),
+    }
   );
   const dispatch = useDispatch();
 
