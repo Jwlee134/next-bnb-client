@@ -49,9 +49,9 @@ const RoomCardSkeleton = () => (
     <div className="room-card-skeleton_info-container">
       <div className="room-card-skeleton_info-container_top">
         <Skeleton width={200} height={16.8} />
-        <Skeleton width={150} height={24} />
+        <Skeleton width={400} height={24} />
         <Skeleton width={250} height={16.8} style={{ marginTop: 22 }} />
-        <Skeleton width={150} height={16.8} />
+        <Skeleton width={300} height={16.8} />
       </div>
       <div className="room-card-skeleton_info-container_bottom">
         <Skeleton width={60} height={16.8} />

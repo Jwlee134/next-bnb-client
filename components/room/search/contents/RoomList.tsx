@@ -131,7 +131,12 @@ const RoomList = () => {
 
   if (isLoading && innerWidth) {
     if (innerWidth >= tabletSmallBreakpoint) {
-      return <RoomCardSkeleton />;
+      return (
+        <>
+          <RoomCardSkeleton />
+          <RoomCardSkeleton />
+        </>
+      );
     }
     return <SmallRoomCardSkeleton />;
   }
