@@ -1,5 +1,5 @@
 import DateRangePicker from "components/common/DateRangePicker";
-import moment, { Moment } from "moment";
+import { Moment } from "moment";
 import React, { useEffect } from "react";
 import { useSelector } from "store";
 import styled from "styled-components";
@@ -53,14 +53,8 @@ const Container = styled.div`
   }
 `;
 
-const DatePicker = ({
-  isBlocked,
-  maxDate,
-}: {
-  isBlocked: (day: Moment) => boolean | undefined;
-  maxDate: () => moment.Moment | undefined;
-}) => {
-  const { room } = useRoom();
+const DatePicker = () => {
+  const { room, isBlocked, maxDate } = useRoom();
   const checkIn = useSelector((state) => state.search.checkIn);
   const checkOut = useSelector((state) => state.search.checkOut);
 

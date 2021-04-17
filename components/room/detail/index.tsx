@@ -1,17 +1,14 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { commonActions } from "store/common";
-import { useRouter } from "next/router";
 import Error from "pages/_error";
 import RoomDetailSkeleton from "components/skeleton/RoomDetailSkeleton";
-import { makeQueryString } from "utils";
-import { searchActions } from "store/search";
 import useRoom from "hooks/useRoom";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useSelector } from "store";
 import { tabletSmallBreakpoint } from "styles/theme";
+import { commonActions } from "store/common";
+import { useDispatch } from "react-redux";
 
 import Photos from "./contents/Photos";
 import BookingWindow from "./bookingWindow";
@@ -107,43 +104,14 @@ const Container = styled.div`
 
 const RoomDetail = () => {
   const innerWidth = useSelector((state) => state.common.innerWidth);
-  const router = useRouter();
-  const { query } = router;
-
-  const { room, error } = useRoom();
-
   const dispatch = useDispatch();
 
-  const redirectTo = (keyword: string, num: number) => {
-    if (Number(query[keyword]) < num) {
-      router.push(
-        `/room/${query.id}${makeQueryString({
-          ...query,
-          id: "",
-          [keyword]: String(num),
-        })}`
-      );
-    }
-  };
+  const { room, error } = useRoom({ useRedirect: true });
 
   useEffect(() => {
-    if (!query || query.mobile === "true") return;
-    const queryWithoutId = { ...query };
-    delete queryWithoutId.id;
-    dispatch(
-      searchActions.setSearch({
-        ...queryWithoutId,
-        adults: Number(query.adults) < 1 ? 1 : Number(query.adults),
-        children: Number(query.children) < 0 ? 0 : Number(query.children),
-        infants: Number(query.infants) < 0 ? 0 : Number(query.infants),
-      })
-    );
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
-    redirectTo("adults", 1);
-    redirectTo("children", 0);
-    redirectTo("infants", 0);
-  }, [query]);
+  }, []);
 
   if (error) {
     return (

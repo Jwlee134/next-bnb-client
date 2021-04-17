@@ -10,7 +10,7 @@ import { IRoom } from "types/room";
 import useRoom from "hooks/useRoom";
 import DateRangePicker from "components/common/DateRangePicker";
 import { IoCloseSharp } from "react-icons/io5";
-import moment, { Moment } from "moment";
+import { Moment } from "moment";
 import DatePicker from "./DatePicker";
 import Warning from "../../../../public/static/svg/warning.svg";
 import CounterBox from "./CounterBox";
@@ -137,7 +137,7 @@ const BookingWindow = ({
   isMobile?: boolean;
   setWindowOpened?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { room } = useRoom();
+  const { room, isBlocked, maxDate } = useRoom();
   const search = useSelector((state) => state.search);
 
   const [opened, setOpened] = useState(false);
@@ -202,18 +202,6 @@ const BookingWindow = ({
     }
   }, [room, search.adults, search.children]);
 
-  const isBlocked = (day: Moment) => {
-    if (!room) return;
-    return room.blockedDayList.some((date) => day.isSame(date, "day"));
-  };
-
-  const maxDate = () => {
-    if (room && room.availability > 1) {
-      return moment(new Date()).add(room.availability, "M");
-    }
-    return undefined;
-  };
-
   if (!room) return null;
   return (
     <Container notValid={notValidDates || notValidGuestCount}>
@@ -241,7 +229,7 @@ const BookingWindow = ({
           </div>
         )}
       </div>
-      {!isMobile && <DatePicker isBlocked={isBlocked} maxDate={maxDate} />}
+      {!isMobile && <DatePicker />}
       {isMobile && (
         <div className="booking-window_mobile-calendar">
           <DateRangePicker

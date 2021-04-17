@@ -150,12 +150,7 @@ const Photos = ({ photos }: { photos: string[] }) => {
       <OnePhoto>
         <div>
           <Background onClick={() => handleIndex(0)} />
-          <Image
-            src={photos[0]}
-            layout="fill"
-            objectFit="cover"
-            loading="eager"
-          />
+          <Image src={photos[0]} layout="fill" objectFit="cover" priority />
         </div>
       </OnePhoto>
     );
@@ -168,12 +163,7 @@ const Photos = ({ photos }: { photos: string[] }) => {
             <div key={i}>
               <div>
                 <Background onClick={() => handleIndex(i)} />
-                <Image
-                  src={photo}
-                  layout="fill"
-                  objectFit="cover"
-                  loading="eager"
-                />
+                <Image src={photo} layout="fill" objectFit="cover" priority />
               </div>
             </div>
           ))}
@@ -195,7 +185,7 @@ const Photos = ({ photos }: { photos: string[] }) => {
               src={photos[0]}
               layout="fill"
               objectFit="cover"
-              loading="eager"
+              priority
             />
           </div>
         </div>
@@ -209,7 +199,7 @@ const Photos = ({ photos }: { photos: string[] }) => {
                   src={photo}
                   layout="fill"
                   objectFit="cover"
-                  loading="eager"
+                  priority
                 />
               </div>
             </div>
