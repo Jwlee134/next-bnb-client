@@ -13,12 +13,12 @@ const Header = ({ useSearchBar = true }: { useSearchBar?: boolean }) => {
 
   const [scroll, setScroll] = useState(0);
 
-  const handleScroll = (scroll: number) => setScroll(scroll);
-
-  const schedule = rafSchd(handleScroll);
-
   useEffect(() => {
     if (!useSearchBar) return;
+
+    const handleScroll = (scroll: number) => setScroll(scroll);
+    const schedule = rafSchd(handleScroll);
+
     window.addEventListener("scroll", () => {
       schedule(window.scrollY);
     });
@@ -27,7 +27,7 @@ const Header = ({ useSearchBar = true }: { useSearchBar?: boolean }) => {
         schedule(window.scrollY);
       });
     };
-  }, []);
+  }, [useSearchBar]);
 
   if (!innerWidth) return null;
   if (innerWidth >= tabletSmallBreakpoint) {

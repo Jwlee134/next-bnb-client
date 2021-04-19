@@ -62,20 +62,19 @@ const useLocation = (mode: "pc" | "mobile") => {
   const setValue = (e: React.ChangeEvent<HTMLInputElement>) =>
     dispatch(searchActions.setValue(e.target.value));
 
-  const searchPlaces = async () => {
-    try {
-      const { data } = await getPlaceAPI(keyword);
-      setPlaceList(data);
-    } catch (error) {
-      alert(error.response.data);
-    }
-  };
-
   useEffect(() => {
     if (!keyword) {
       setPlaceList([]);
       return;
     }
+    const searchPlaces = async () => {
+      try {
+        const { data } = await getPlaceAPI(keyword);
+        setPlaceList(data);
+      } catch (error) {
+        alert(error.response.data);
+      }
+    };
     searchPlaces();
   }, [keyword]);
 

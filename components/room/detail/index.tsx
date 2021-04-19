@@ -111,7 +111,7 @@ const RoomDetail = () => {
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
-  }, []);
+  }, [dispatch]);
 
   if (error) {
     return (

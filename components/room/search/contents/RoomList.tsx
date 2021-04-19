@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
 import palette from "styles/palette";
@@ -108,12 +108,6 @@ const RoomList = () => {
       }`
     );
   };
-
-  useEffect(() => {
-    if (isLoading || !originalLength) {
-      dispatch(commonActions.setIsLoading(false));
-    }
-  }, [searchResults, originalLength]);
 
   const info = () => {
     if (

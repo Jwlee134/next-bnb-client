@@ -95,7 +95,7 @@ const SearchBar = ({ scroll }: { scroll: number }) => {
         }, 100);
       }
     }
-  }, [scroll]);
+  }, [scroll, dispatch, pathname]);
 
   if (!showSearchBar) return null;
   return (

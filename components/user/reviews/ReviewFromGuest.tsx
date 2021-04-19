@@ -78,7 +78,7 @@ const ReviewFromGuest = ({ user }: { user: IUser }) => {
         </Fragment>
       ))}
       {user.reviewFromGuest.length > reviewFromGuest.length &&
-        user.reviewFromHost.length > 5 && (
+        user.reviewFromGuest.length > 5 && (
           <Button onClick={handleClick} backgroundColor="white">
             더 보기
           </Button>

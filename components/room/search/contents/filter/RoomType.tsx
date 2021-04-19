@@ -65,7 +65,7 @@ const RoomType = () => {
     } else {
       setOptions([]);
     }
-  }, [opened]);
+  }, [opened, query.roomType]);
 
   const handleDelete = () => setOptions([]);
 

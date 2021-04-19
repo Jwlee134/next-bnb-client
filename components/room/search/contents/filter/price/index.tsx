@@ -82,7 +82,7 @@ const Price = () => {
     } else {
       setMaxPrice("");
     }
-  }, [opened]);
+  }, [opened, query.minPrice, query.maxPrice]);
 
   return (
     <Container>

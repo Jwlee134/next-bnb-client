@@ -148,7 +148,7 @@ const MiniSearchBar = ({ scroll }: Props) => {
         }, 100);
       }
     }
-  }, [scroll]);
+  }, [scroll, pathname, dispatch]);
 
   // 홈 화면에서는 미니바가 기본적으로 숨겨짐
   if (!showMiniSearchBar) return null;

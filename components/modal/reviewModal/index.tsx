@@ -126,7 +126,7 @@ const ReviewModal = ({
         innerWidth >= tabletSmallBreakpoint ? 250 : 400
       );
     }
-  }, [modalOpened]);
+  }, [modalOpened, innerWidth, dispatch]);
 
   useEffect(() => {
     if (inView && room.review.length > review.length) fetchReview();

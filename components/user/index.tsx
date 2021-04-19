@@ -129,7 +129,7 @@ const User = () => {
     return () => {
       dispatch(userActions.initState());
     };
-  }, [query]);
+  }, [query, dispatch]);
 
   if (error) {
     return (

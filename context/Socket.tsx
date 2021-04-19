@@ -58,7 +58,7 @@ export const SocketContextProvider = ({
         mutate("/api/reservation");
       }
     });
-  }, [socket, user]);
+  }, [socket, user, mutateUser, pathname]);
 
   return (
     <SocketContext.Provider value={{ socket }}>

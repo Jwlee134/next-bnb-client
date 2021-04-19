@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { useSelector } from "store";
 import styled, { css } from "styled-components";
@@ -153,7 +153,7 @@ const BookingWindow = ({
     }
   };
 
-  const dateValidation = () => {
+  const dateValidation = useCallback(() => {
     if (room && room.availability > 1) {
       const maxDate = addMonths(addDays(new Date(), 1), room.availability);
       const initializedMaxDate = new Date(maxDate.setHours(0, 0, 0, 0));
@@ -180,7 +180,7 @@ const BookingWindow = ({
     } else {
       setNotValidDates(false);
     }
-  };
+  }, [room, search.checkIn, search.checkOut]);
 
   useEffect(() => {
     if (!room) return;
@@ -191,7 +191,7 @@ const BookingWindow = ({
     ) {
       dateValidation();
     }
-  }, [room, search.checkIn, search.checkOut]);
+  }, [room, search.checkIn, search.checkOut, dateValidation]);
 
   useEffect(() => {
     if (!room) return;

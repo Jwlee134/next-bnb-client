@@ -42,7 +42,7 @@ const WishlistModal = ({
     if (isEmpty(wishlist)) {
       dispatch(commonActions.setWishlistMode("create"));
     }
-  }, []);
+  }, [dispatch, wishlist]);
 
   return (
     <Container>

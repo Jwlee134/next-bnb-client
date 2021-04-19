@@ -50,7 +50,7 @@ const SearchInput = ({ data }: { data: IRoom[] | undefined }) => {
   useEffect(() => {
     if (!data) return;
     router.push(`/management${makeQueryString({ ...query, term: keyword })}`);
-  }, [keyword]);
+  }, [keyword, data]);
 
   useEffect(() => {
     if (query.term) setText(query.term as string);

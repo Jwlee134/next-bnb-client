@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "store";
 import { searchActions } from "store/search";
@@ -217,34 +217,37 @@ const Map = ({
     const bounds = new google.maps.LatLngBounds();
     coordinates.forEach((coordinate) => bounds.extend(coordinate));
     map.fitBounds(bounds, 100);
-  }, [map, markers]);
+  }, [map, markers, useFitBounds]);
 
   // 지도 움직임 이벤트 후 데이터 가져오는 함수
-  const getNewResults = (map: google.maps.Map<HTMLDivElement>) => {
-    const coordsBounds = (
-      ((map.getBounds() as google.maps.LatLngBounds).getNorthEast().lat() -
-        map.getCenter().lat()) /
-      1.2
-    ).toString();
-    const latitude = map.getCenter().lat();
-    const longitude = map.getCenter().lng();
-    const zoom = map.getZoom().toString();
-    dispatch(commonActions.setIsLoading(true));
-    router.push(
-      `/search/rooms${makeQueryString({
-        ...query,
-        latitude,
-        longitude,
-        value: "지도에서 선택한 지역",
-        page: "1",
-        zoom,
-        coordsBounds,
-      })}`
-    );
-    dispatch(searchActions.setValue("지도에서 선택한 지역"));
-    dispatch(searchActions.setLatitude(latitude));
-    dispatch(searchActions.setLongitude(longitude));
-  };
+  const getNewResults = useCallback(
+    (map: google.maps.Map<HTMLDivElement>) => {
+      const coordsBounds = (
+        ((map.getBounds() as google.maps.LatLngBounds).getNorthEast().lat() -
+          map.getCenter().lat()) /
+        1.2
+      ).toString();
+      const latitude = map.getCenter().lat();
+      const longitude = map.getCenter().lng();
+      const zoom = map.getZoom().toString();
+      dispatch(commonActions.setIsLoading(true));
+      router.push(
+        `/search/rooms${makeQueryString({
+          ...query,
+          latitude,
+          longitude,
+          value: "지도에서 선택한 지역",
+          page: "1",
+          zoom,
+          coordsBounds,
+        })}`
+      );
+      dispatch(searchActions.setValue("지도에서 선택한 지역"));
+      dispatch(searchActions.setLatitude(latitude));
+      dispatch(searchActions.setLongitude(longitude));
+    },
+    [dispatch, query, router]
+  );
 
   useEffect(() => {
     if (!map) return;
@@ -254,8 +257,7 @@ const Map = ({
 
   // 지도를 움직이며 검색 이벤트 함수
   useEffect(() => {
-    if (!map) return;
-    if (!useMoveToSearch) return;
+    if (!map || !useMoveToSearch) return;
     const dragEnd = map.addListener("dragend", () => {
       if (searchWithMoving) {
         getNewResults(map);
@@ -274,36 +276,38 @@ const Map = ({
       dragEnd.remove();
       zoomChanged.remove();
     };
-  }, [map, searchWithMoving, query]);
+  }, [map, searchWithMoving, query, getNewResults, useMoveToSearch]);
 
   // 인포윈도우 생성 함수
-  const createInfoWindow = (
-    e: google.maps.MapMouseEvent,
-    map: google.maps.Map<HTMLDivElement>,
-    room: IRoom
-  ) => {
-    const info = new google.maps.InfoWindow({
-      content: "<div id='infoWindow' />",
-      position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
-    });
-    info.addListener("domready", () => {
-      render(
-        <InfoWindow
-          search={search}
-          room={room}
-          innerWidth={innerWidth}
-          router={router}
-        />,
-        document.getElementById("infoWindow")
-      );
-    });
-    info.open(map);
-    setInfoWindow(info);
-  };
+  const createInfoWindow = useCallback(
+    (
+      e: google.maps.MapMouseEvent,
+      map: google.maps.Map<HTMLDivElement>,
+      room: IRoom
+    ) => {
+      const info = new google.maps.InfoWindow({
+        content: "<div id='infoWindow' />",
+        position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
+      });
+      info.addListener("domready", () => {
+        render(
+          <InfoWindow
+            search={search}
+            room={room}
+            innerWidth={innerWidth}
+            router={router}
+          />,
+          document.getElementById("infoWindow")
+        );
+      });
+      info.open(map);
+      setInfoWindow(info);
+    },
+    [innerWidth, router, search]
+  );
 
   useEffect(() => {
-    if (!map) return;
-    if (!useInteractiveMarker) return;
+    if (!map || !useInteractiveMarker) return;
     const eventArr: google.maps.MapsEventListener[] = [];
     if (!isEmpty(markers) && roomList) {
       markers.forEach((marker, i) => {
@@ -331,7 +335,14 @@ const Map = ({
       });
       clickMapToClose.remove();
     };
-  }, [map, markers, infoWindow]);
+  }, [
+    map,
+    useInteractiveMarker,
+    markers,
+    infoWindow,
+    createInfoWindow,
+    roomList,
+  ]);
 
   useEffect(() => {
     if (!map) return;
@@ -359,7 +370,7 @@ const Map = ({
       arr.push(marker);
     }
     setMarkers(arr);
-  }, [map, roomList]);
+  }, [map, roomList, room]);
 
   // Room card hover 시 마커에 애니메이션 부여
   useEffect(() => {
@@ -368,7 +379,7 @@ const Map = ({
     return () => {
       marker?.setAnimation(null);
     };
-  }, [hoveredItemIndex]);
+  }, [hoveredItemIndex, markers]);
 
   // 이 지역 검색 버튼 클릭 이벤트
   const handleClick = () => {

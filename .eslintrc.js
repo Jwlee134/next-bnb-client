@@ -4,7 +4,11 @@ module.exports = {
     es2021: true,
   },
   globals: { JSX: true }, // JSX is not defined 경고 제거
-  extends: ["plugin:react/recommended", "airbnb"],
+  extends: [
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "airbnb",
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {

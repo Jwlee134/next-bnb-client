@@ -22,7 +22,7 @@ const useUser = (redirectUrl?: string) => {
     } else {
       setAuthToken("");
     }
-  }, [user]);
+  }, [user, redirectUrl, router]);
 
   return { user, error, mutateUser };
 };

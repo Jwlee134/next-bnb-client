@@ -163,7 +163,7 @@ const FilterModal = ({ closeModal }: { closeModal: () => void }) => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [filterState]);
+  }, [filterState, query]);
 
   useEffect(() => {
     const filterList = Object.keys(filterState);

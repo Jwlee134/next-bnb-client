@@ -18,22 +18,11 @@ const useRoom = ({ useRedirect = false } = {}) => {
 
   const dispatch = useDispatch();
 
-  const redirectTo = (keyword: string, num: number) => {
-    if (Number(query[keyword]) < num) {
-      router.push(
-        `/room/${query.id}${makeQueryString({
-          ...query,
-          id: "",
-          [keyword]: String(num),
-        })}`
-      );
-    }
-  };
-
   useEffect(() => {
     if (!query.adults || query.mobile === "true" || !useRedirect) return;
     const queryWithoutId = { ...query };
     delete queryWithoutId.id;
+
     dispatch(
       searchActions.setSearch({
         ...queryWithoutId,
@@ -42,10 +31,23 @@ const useRoom = ({ useRedirect = false } = {}) => {
         infants: Number(query.infants) < 0 ? 0 : Number(query.infants),
       })
     );
+
+    const redirectTo = (keyword: string, num: number) => {
+      if (Number(query[keyword]) < num) {
+        router.push(
+          `/room/${query.id}${makeQueryString({
+            ...query,
+            id: "",
+            [keyword]: String(num),
+          })}`
+        );
+      }
+    };
+
     redirectTo("adults", 1);
     redirectTo("children", 0);
     redirectTo("infants", 0);
-  }, [query, useRedirect]);
+  }, [query, useRedirect, dispatch, router]);
 
   const isBlocked = (day: Moment) => {
     if (!room) return;
