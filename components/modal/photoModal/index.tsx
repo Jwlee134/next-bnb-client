@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import { IoCloseSharp } from "react-icons/io5";
 import { BsChevronRight, BsChevronLeft } from "react-icons/bs";
-import Image from "next/image";
 import { useSelector } from "store";
 import { useDispatch } from "react-redux";
 import { commonActions } from "store/common";
@@ -111,6 +110,13 @@ const PhotoModal = ({
   const photoIndex = useSelector((state) => state.common.photoIndex);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (photoIndex + 1 !== photos.length) {
+      const img = new Image();
+      img.src = photos[photoIndex + 1];
+    }
+  }, [photos, photoIndex]);
+
   return (
     <Container page={photoIndex + 1} length={photos.length}>
       <div className="photo-modal_header">
@@ -131,12 +137,7 @@ const PhotoModal = ({
         </div>
         <div className="photo-container_photo">
           <div>
-            <Image
-              src={photos[photoIndex]}
-              layout="fill"
-              objectFit="cover"
-              priority
-            />
+            <img src={photos[photoIndex]} alt="" />
           </div>
         </div>
         <div

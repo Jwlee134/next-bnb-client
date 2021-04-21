@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Error from "pages/_error";
 import RoomDetailSkeleton from "components/skeleton/RoomDetailSkeleton";
@@ -31,6 +31,7 @@ const Container = styled.div`
         height: 100%;
         top: 0;
         left: 0;
+        object-fit: cover;
       }
     }
     .detail_main-container {
@@ -107,11 +108,38 @@ const RoomDetail = () => {
   const dispatch = useDispatch();
 
   const { room, error } = useRoom({ useRedirect: true });
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   useEffect(() => {
     dispatch(commonActions.setShowMiniSearchBar(true));
     dispatch(commonActions.setShowSearchBar(false));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (room) {
+      const preloadImages = async () => {
+        const photoArr = room.photos.slice(0, 5);
+
+        const arr = await Promise.all(
+          photoArr.map(async (photo, i) => {
+            const img = new Image();
+            img.src = photo;
+            const index = await new Promise<number>((resolve) => {
+              img.onload = () => {
+                resolve(i);
+              };
+            });
+            return index;
+          })
+        );
+
+        if (arr.length === photoArr.length) {
+          setImgLoaded(true);
+        }
+      };
+      preloadImages();
+    }
+  }, [room]);
 
   if (error) {
     return (
@@ -119,7 +147,7 @@ const RoomDetail = () => {
     );
   }
 
-  if (!room) {
+  if (!room || !imgLoaded) {
     return (
       <Container>
         <RoomDetailSkeleton />

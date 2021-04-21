@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
@@ -150,7 +149,7 @@ const Photos = ({ photos }: { photos: string[] }) => {
       <OnePhoto>
         <div>
           <Background onClick={() => handleIndex(0)} />
-          <Image src={photos[0]} layout="fill" objectFit="cover" priority />
+          <img src={photos[0]} alt="" />
         </div>
       </OnePhoto>
     );
@@ -163,7 +162,7 @@ const Photos = ({ photos }: { photos: string[] }) => {
             <div key={i}>
               <div>
                 <Background onClick={() => handleIndex(i)} />
-                <Image src={photo} layout="fill" objectFit="cover" priority />
+                <img src={photo} alt="" />
               </div>
             </div>
           ))}
@@ -180,13 +179,7 @@ const Photos = ({ photos }: { photos: string[] }) => {
         <div className="first-photo">
           <div>
             <Background onClick={() => handleIndex(0)} />
-            <Image
-              className="detail-photo"
-              src={photos[0]}
-              layout="fill"
-              objectFit="cover"
-              priority
-            />
+            <img className="detail-photo" src={photos[0]} alt="" />
           </div>
         </div>
         <div className="rest-photos">
@@ -194,13 +187,7 @@ const Photos = ({ photos }: { photos: string[] }) => {
             <div className="rest-photo" key={i}>
               <div>
                 <Background onClick={() => handleIndex(i + 1)} />
-                <Image
-                  className="detail-photo"
-                  src={photo}
-                  layout="fill"
-                  objectFit="cover"
-                  priority
-                />
+                <img className="detail-photo" src={photo} alt="" />
               </div>
             </div>
           ))}
