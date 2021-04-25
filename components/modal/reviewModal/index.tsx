@@ -85,6 +85,12 @@ const Container = styled.div`
   }
 `;
 
+const Target = styled.div`
+  width: 100%;
+  height: 12px;
+  margin-left: 0 !important;
+`;
+
 const ReviewModal = ({
   room,
   closeModal,
@@ -172,7 +178,7 @@ const ReviewModal = ({
               {review.map((item, i) => (
                 <ReviewCard key={i} review={item} />
               ))}
-              <div ref={ref} />
+              <Target ref={ref} />
             </>
           )}
         </div>

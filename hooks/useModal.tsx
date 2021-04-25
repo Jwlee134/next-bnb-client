@@ -27,13 +27,14 @@ const Background = styled.div<{ modalOpened: boolean }>`
   left: 0;
   width: 100%;
   height: 100%;
+  background-color: black;
   ${({ modalOpened }) =>
     modalOpened
       ? css`
           animation: ${fadeIn} 0.25s linear forwards;
         `
       : css`
-          animation: ${fadeOut} 0.25s linear;
+          animation: ${fadeOut} 0.25s linear forwards;
         `}
 `;
 
@@ -47,7 +48,7 @@ const Children = styled.div<{ modalOpened: boolean }>`
           animation: ${show} 0.25s ease-in-out forwards;
         `
       : css`
-          animation: ${hide} 0.25s ease-in-out;
+          animation: ${hide} 0.25s ease-in-out forwards;
         `}
   @media ${({ theme }) => theme.device.tabletSmall} {
     width: 100vw;

@@ -2,19 +2,19 @@ import { keyframes } from "styled-components";
 
 export const fadeIn = keyframes`
     0%{
-        background-color: transparent;
+        opacity: 0;
     }
     100%{
-        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0.5;
     }
 `;
 
 export const fadeOut = keyframes`
     0%{
-        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0.5;
     }
     100%{
-        background-color: transparent;
+        opacity: 0;
     }
 `;
 

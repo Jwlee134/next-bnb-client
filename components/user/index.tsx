@@ -19,8 +19,8 @@ import { useDispatch } from "react-redux";
 import { userActions } from "store/user";
 import UserIntro from "./UserIntro";
 import MobileHeader from "./mobileHeader";
+import Reviews from "./reviews";
 
-const Reviews = dynamic(() => import("./reviews"));
 const RoomCardSlider = dynamic(
   () => import("components/common/RoomCardSlider")
 );
