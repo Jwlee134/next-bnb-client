@@ -28,3 +28,5 @@
 | :---------------------------: | :---------------------------: |
 | <img src="https://user-images.githubusercontent.com/67630303/114503862-e6f0ba80-9c68-11eb-85a9-ad4581f181bb.png" width="400px" /> | <img src="https://user-images.githubusercontent.com/67630303/114504095-4222ad00-9c69-11eb-9355-75c9f9e99ccd.png" width="400px" > |
 
+### 추가할 목록
+- [ ] 웹 접근성을 고려한 설계
