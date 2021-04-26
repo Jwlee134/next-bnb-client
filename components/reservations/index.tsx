@@ -21,7 +21,8 @@ const Button = styled.button<{ clicked: boolean }>`
   color: ${palette.gray_80};
   cursor: pointer;
   position: relative;
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: ${palette.gray_f7};
   }
   ${({ clicked }) =>
@@ -40,7 +41,7 @@ const Button = styled.button<{ clicked: boolean }>`
     `}
 `;
 
-const Container = styled.div`
+const Container = styled.main`
   .reservations_main {
     padding: 36px 80px;
     width: 100%;
@@ -81,7 +82,7 @@ const Container = styled.div`
 
 const Reservations = () => {
   const router = useRouter();
-  const { tab = "upcoming" } = router.query;
+  const { tab } = router.query;
   const { user } = useUser("/");
   const [error, setError] = useState<{ code: number | null; message: string }>({
     code: null,
@@ -108,7 +109,7 @@ const Reservations = () => {
     <Container>
       <div className="reservations_main">
         <div>예약 목록</div>
-        <div className="reservations_button-container">
+        <header className="reservations_button-container">
           <Button
             clicked={tab === "upcoming"}
             onClick={() => router.push("/reservations?tab=upcoming")}
@@ -133,7 +134,7 @@ const Reservations = () => {
               {myRoomNotif > 0 && <Notification>{myRoomNotif}</Notification>}
             </Button>
           )}
-        </div>
+        </header>
         {tab === "upcoming" && <Upcoming user={user} setError={setError} />}
         {tab === "past" && <Past user={user} setError={setError} />}
         {tab === "myRoom" && <MyRoom user={user} setError={setError} />}

@@ -2,12 +2,13 @@ import Button from "components/common/Button";
 import React from "react";
 import styled, { css } from "styled-components";
 import palette from "styles/palette";
+import { enterKey } from "utils";
 
 interface ContainerProps {
   useOnlyButton: boolean;
 }
 
-const Container = styled.div<ContainerProps>`
+const Container = styled.footer<ContainerProps>`
   width: 100%;
   height: 80px;
   border-top: 1px solid ${palette.gray_eb};
@@ -59,7 +60,19 @@ const ModalFooter = ({
 }: Props) => {
   return (
     <Container useOnlyButton={useOnlyButton}>
-      {!useOnlyButton && <Abort onClick={onAbortClick}>{abortText}</Abort>}
+      {!useOnlyButton && (
+        <Abort
+          tabIndex={0}
+          aria-label="취소"
+          role="button"
+          onClick={onAbortClick}
+          onKeyDown={(e) => {
+            if (enterKey(e) && onAbortClick) onAbortClick();
+          }}
+        >
+          {abortText}
+        </Abort>
+      )}
       <Button
         useValidation={useValidation}
         isValid={isValid}

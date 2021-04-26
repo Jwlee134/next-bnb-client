@@ -6,6 +6,7 @@ import styled, { css } from "styled-components";
 import palette from "styles/palette";
 import { mutate } from "swr";
 import { IReservation } from "types/reservation";
+import { enterKey } from "utils";
 import ModalFooter from "../ModalFooter";
 import ModalHeader from "../ModalHeader";
 
@@ -131,6 +132,8 @@ const RatingModal = ({
               <div>
                 {stars.map((star, i) => (
                   <Star
+                    tabIndex={0}
+                    aria-label={`${option.label} ${i + 1}점`}
                     clicked={
                       rating[
                         rating.findIndex(
@@ -140,6 +143,9 @@ const RatingModal = ({
                     }
                     key={i}
                     onClick={() => handleClick(option.value, i)}
+                    onKeyDown={(e) => {
+                      if (enterKey(e)) handleClick(option.value, i);
+                    }}
                   >
                     {star}
                   </Star>

@@ -6,7 +6,7 @@ import useSWR, { mutate } from "swr";
 import { IReservation } from "types/reservation";
 import { IUser } from "types/user";
 
-const Container = styled.div`
+const Container = styled.article`
   width: 100%;
 `;
 

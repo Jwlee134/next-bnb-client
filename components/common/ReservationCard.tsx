@@ -8,7 +8,7 @@ import styled from "styled-components";
 import palette from "styles/palette";
 import { tabletSmallBreakpoint } from "styles/theme";
 import { IReservation } from "types/reservation";
-import { addComma } from "utils";
+import { addComma, enterKey } from "utils";
 
 const Container = styled.div`
   width: 100%;
@@ -137,7 +137,7 @@ const ReservationCard = ({
                 <img
                   className="reservation-card_img"
                   src={reservation.room.photos[0]}
-                  alt=""
+                  alt="숙소 사진"
                 />
                 <div className="reservation-card_text-container">
                   <div>{reservation.room.title}</div>
@@ -159,7 +159,7 @@ const ReservationCard = ({
                   <img
                     className="reservation-card_img"
                     src={reservation.room.photos[0]}
-                    alt=""
+                    alt="숙소 사진"
                   />
                   <div className="reservation-card_text-container">
                     <div>{reservation.room.title}</div>
@@ -201,14 +201,32 @@ const ReservationCard = ({
           </div>
           {isPast &&
             (!reservation.guestReviewed ? (
-              <Review onClick={openModal}>후기 남기기</Review>
+              <Review
+                tabIndex={0}
+                role="button"
+                onClick={openModal}
+                onKeyDown={(e) => {
+                  if (enterKey(e)) openModal();
+                }}
+              >
+                후기 남기기
+              </Review>
             ) : (
               <div>완료</div>
             ))}
           {isMyRoom &&
             new Date() > new Date(reservation.checkOut) &&
             (!reservation.hostReviewed ? (
-              <Review onClick={openModal}>게스트 후기 남기기</Review>
+              <Review
+                tabIndex={0}
+                role="button"
+                onClick={openModal}
+                onKeyDown={(e) => {
+                  if (enterKey(e)) openModal();
+                }}
+              >
+                게스트 후기 남기기
+              </Review>
             ) : (
               <div>완료</div>
             ))}
