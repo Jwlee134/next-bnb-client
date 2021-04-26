@@ -46,12 +46,15 @@ const Container = styled.button<ContainerProps>`
   width: 100%;
   border-radius: 8px;
   height: 48px;
-  outline: none;
   border: 0;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
   position: relative;
+  outline: none;
+  &:focus {
+    border: 2px solid ${palette.black};
+  }
   ${({ socialAuthButton }) =>
     socialAuthButton &&
     css`

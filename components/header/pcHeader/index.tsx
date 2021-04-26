@@ -19,9 +19,11 @@ interface ContainerProps {
 const getEffects = (pathname: string, isTop: boolean, showMap: boolean) => {
   if (pathname === "/" && isTop) {
     return css`
-      color: white;
       box-shadow: none;
       background-color: transparent;
+      .header_left-container {
+        color: white;
+      }
     `;
   }
   if (pathname.includes("search")) {
@@ -65,13 +67,12 @@ const getEffects = (pathname: string, isTop: boolean, showMap: boolean) => {
   }
 };
 
-const Container = styled.div<ContainerProps>`
+const Container = styled.header<ContainerProps>`
   width: 100%;
   height: 80px;
   position: sticky;
   top: 0;
   z-index: 10;
-  color: #ff395b;
   box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.08);
   background-color: white;
   transition: color 0.15s linear;
@@ -93,6 +94,7 @@ const Container = styled.div<ContainerProps>`
     display: flex;
     align-items: center;
     cursor: pointer;
+    color: #ff395b;
     svg {
       margin-right: 6px;
     }
@@ -147,10 +149,10 @@ const PCHeader = ({
       <Container showMap={showMap} isTop={scroll === 0} pathname={pathname}>
         <div>
           <Link href="/">
-            <div className="header_left-container">
+            <a className="header_left-container" aria-label="에어비앤비 홈">
               <SiAirbnb size={32} />
               airbnb
-            </div>
+            </a>
           </Link>
           {useSearchBar && <MiniSearchBar scroll={scroll} />}
           <div className="header_right-container">

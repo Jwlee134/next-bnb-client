@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { GrGithub } from "react-icons/gr";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import Button from "components/common/Button";
+import { enterKey } from "utils";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import ModalHeader from "../ModalHeader";
@@ -133,8 +134,16 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
             ? "에어비앤비 계정이 없으세요?"
             : "이미 계정을 보유하고 계시나요?"}
           <ChangeAuthMode
+            tabIndex={0}
             onClick={() => {
               dispatch(commonActions.setAuthMode(isLogin ? "signUp" : "login"));
+            }}
+            onKeyDown={(e) => {
+              if (enterKey(e)) {
+                dispatch(
+                  commonActions.setAuthMode(isLogin ? "signUp" : "login")
+                );
+              }
             }}
           >
             {isLogin ? "회원가입" : "로그인"}

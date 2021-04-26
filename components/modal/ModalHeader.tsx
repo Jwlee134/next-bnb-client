@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { IoCloseSharp } from "react-icons/io5";
 import palette from "styles/palette";
+import { enterKey } from "utils";
 
 interface Props {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ interface Props {
 
 const Container = styled.header`
   width: 100%;
+  outline: none;
   position: relative;
   padding: 0px 24px;
   height: 64px;
@@ -35,17 +37,30 @@ const Container = styled.header`
 `;
 
 const ModalHeader = ({ children, onClick }: Props) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.focus();
+    }
     return () => {
       document.body.style.overflow = "inherit";
     };
   }, []);
 
   return (
-    <Container>
+    <Container tabIndex={0} ref={containerRef}>
       {children}
-      <div>
-        <IoCloseSharp size={20} onClick={onClick} />
+      <div
+        role="button"
+        aria-label="닫기"
+        tabIndex={0}
+        onClick={onClick}
+        onKeyDown={(e) => {
+          if (enterKey(e)) onClick();
+        }}
+      >
+        <IoCloseSharp size={20} />
       </div>
     </Container>
   );

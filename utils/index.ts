@@ -1,5 +1,9 @@
 import { IRoom } from "types/room";
 
+export const enterKey = (
+  e: React.KeyboardEvent<HTMLDivElement | HTMLLIElement | HTMLSpanElement>
+) => e.key === "Enter";
+
 export const addComma = (value: string) => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

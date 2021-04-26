@@ -14,6 +14,8 @@ import { isEmpty } from "lodash";
 import Notification from "components/common/Notification";
 import useNotification from "hooks/useNotification";
 import { SocketContext } from "context/Socket";
+import { enterKey } from "utils";
+import { headerAuthMenu, headerUserMenu } from "lib/staticData";
 
 const Container = styled.div<{ popupOpened: boolean }>`
   position: relative;
@@ -63,24 +65,23 @@ const PopupContainer = styled.div`
   cursor: default;
   padding: 6px 0px;
   z-index: 2;
-`;
-
-const List = styled.ul``;
-
-const ListItem = styled.li`
-  position: relative;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  padding: 0px 16px;
-  cursor: pointer;
-  font-weight: 300;
-  &:hover {
-    background-color: ${palette.gray_f7};
-  }
-  div {
-    top: 50%;
-    transform: translate(-100%, -50%);
+  .popup-container_item {
+    position: relative;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    padding: 0px 16px;
+    cursor: pointer;
+    outline: none;
+    font-weight: 300;
+    &:hover,
+    &:focus {
+      background-color: ${palette.gray_f7};
+    }
+    div {
+      top: 50%;
+      transform: translate(-100%, -50%);
+    }
   }
 `;
 
@@ -110,12 +111,26 @@ const HeaderMenu = () => {
     }, false);
   };
 
+  const handleAuth = (mode: "login" | "signUp") => {
+    openModal();
+    setPopupOpened(false);
+    dispatch(commonActions.setAuthMode(mode));
+  };
+
   return (
     <>
       <OutsideClickHandler onOutsideClick={() => setPopupOpened(false)}>
         <Container
           popupOpened={popupOpened}
           onClick={() => setPopupOpened(!popupOpened)}
+          onKeyDown={(e) => {
+            if (enterKey(e)) {
+              setPopupOpened(!popupOpened);
+            }
+          }}
+          role="button"
+          aria-label="사용자 메뉴"
+          tabIndex={0}
         >
           <IoIosMenu size={20} />
           <img
@@ -123,7 +138,7 @@ const HeaderMenu = () => {
               user?.avatarUrl ||
               "/static/image/user/default_user_profile_image.jpg"
             }
-            alt=""
+            alt="프로필 사진"
           />
           {user?.isLoggedIn && !isEmpty(user.unreadNotifications) && (
             <Notification>{user.unreadNotifications.length}</Notification>
@@ -131,75 +146,66 @@ const HeaderMenu = () => {
         </Container>
         {popupOpened && (
           <PopupContainer>
-            <List>
-              {!user?.isLoggedIn && (
-                <>
-                  <ListItem
-                    onClick={() => {
-                      openModal();
-                      setPopupOpened(false);
-                      dispatch(commonActions.setAuthMode("login"));
-                    }}
-                  >
-                    로그인
-                  </ListItem>
-                  <ListItem
-                    onClick={() => {
-                      openModal();
-                      setPopupOpened(false);
-                      dispatch(commonActions.setAuthMode("signUp"));
-                    }}
-                  >
-                    회원가입
-                  </ListItem>
-                </>
-              )}
-              {user?.isLoggedIn && (
-                <>
-                  <Link href="/reservations">
-                    <a>
-                      <ListItem onClick={() => setPopupOpened(false)}>
-                        예약
-                        {reservationLength && (
+            {!user?.isLoggedIn &&
+              headerAuthMenu.map((menu, index) => (
+                <div
+                  className="popup-container_item"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => {
+                    handleAuth(menu.value);
+                  }}
+                  onKeyDown={(e) => {
+                    if (enterKey(e)) handleAuth(menu.value);
+                  }}
+                  key={index}
+                >
+                  {menu.label}
+                </div>
+              ))}
+            {user?.isLoggedIn && (
+              <>
+                {headerUserMenu.map((menu, index) => (
+                  <>
+                    <Link
+                      href={
+                        menu.label === "프로필"
+                          ? `${menu.link}/${user._id}`
+                          : menu.link
+                      }
+                      key={index}
+                    >
+                      <a
+                        className="popup-container_item"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => setPopupOpened(false)}
+                        onKeyDown={(e) => {
+                          if (enterKey(e)) setPopupOpened(false);
+                        }}
+                      >
+                        {menu.label}
+                        {index === 0 && reservationLength && (
                           <Notification>{reservationLength}</Notification>
                         )}
-                      </ListItem>
-                    </a>
-                  </Link>
-                  <Link href="/wishlists">
-                    <a>
-                      <ListItem onClick={() => setPopupOpened(false)}>
-                        위시리스트
-                      </ListItem>
-                    </a>
-                  </Link>
-                  <Divider />
-                  <Link href="/become-a-host/building">
-                    <a>
-                      <ListItem onClick={() => setPopupOpened(false)}>
-                        숙소 등록
-                      </ListItem>
-                    </a>
-                  </Link>
-                  <Link href="/management">
-                    <a>
-                      <ListItem onClick={() => setPopupOpened(false)}>
-                        숙소 관리
-                      </ListItem>
-                    </a>
-                  </Link>
-                  <Link href={`/user/${user._id}`}>
-                    <a>
-                      <ListItem onClick={() => setPopupOpened(false)}>
-                        프로필
-                      </ListItem>
-                    </a>
-                  </Link>
-                  <Divider />
-                  <ListItem onClick={handleLogout}>로그아웃</ListItem>
-                </>
-              )}
-            </List>
+                      </a>
+                    </Link>
+                    {(index === 1 || index === 4) && <Divider />}
+                  </>
+                ))}
+                <div
+                  className="popup-container_item"
+                  role="button"
+                  tabIndex={0}
+                  onClick={handleLogout}
+                  onKeyDown={(e) => {
+                    if (enterKey(e)) handleLogout();
+                  }}
+                >
+                  로그아웃
+                </div>
+              </>
+            )}
           </PopupContainer>
         )}
       </OutsideClickHandler>

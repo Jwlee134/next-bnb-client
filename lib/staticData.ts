@@ -1,5 +1,21 @@
 export const commonTitle = "숙소, 체험, 장소를 모두 한 곳에서 - 에어비앤비";
 
+export const headerAuthMenu: {
+  label: "로그인" | "회원가입";
+  value: "login" | "signUp";
+}[] = [
+  { label: "로그인", value: "login" },
+  { label: "회원가입", value: "signUp" },
+];
+
+export const headerUserMenu = [
+  { label: "예약", link: "/reservations?tab=upcoming" },
+  { label: "위시리스트", link: "/wishlists" },
+  { label: "숙소 등록", link: "/become-a-host/building" },
+  { label: "숙소 관리", link: "/management" },
+  { label: "프로필", link: "/user" },
+];
+
 export const quickSearchKeywords = {
   latitude: "36.1",
   longitude: "128",

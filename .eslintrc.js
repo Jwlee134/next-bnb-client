@@ -45,8 +45,6 @@ module.exports = {
     "react/require-default-props": "off", // custom props 추가 허용
     "global-require": "off", //함수 내에서 require 사용가능
     "jsx-a11y/label-has-associated-control": "off", // 상호작용하는 엘리먼트에 label을 넣음
-    "jsx-a11y/click-events-have-key-events": "off",
-    "jsx-a11y/no-static-element-interactions": "off",
     "no-confusing-arrow": "off",
     "prefer-destructuring": "off",
     "no-plusplus": "off",
