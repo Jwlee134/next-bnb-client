@@ -65,8 +65,9 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
       return {
         props: {
           error: {
-            statusCode: error.response.status,
-            message: error.response.data,
+            statusCode: 500,
+            message:
+              "웹페이지를 표시할 수 없습니다. 관리자에게 문의하세요. (sorhd134@gmail.com)",
           },
         },
       };
