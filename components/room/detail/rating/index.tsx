@@ -1,6 +1,6 @@
 import useRoom from "hooks/useRoom";
 import { isEmpty } from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import palette from "styles/palette";
 import { IoIosStar } from "react-icons/io";
@@ -9,6 +9,8 @@ import ReviewCard from "components/common/ReviewCard";
 import Button from "components/common/Button";
 import useModal from "hooks/useModal";
 import ReviewModal from "components/modal/reviewModal";
+import { useDispatch } from "react-redux";
+import { roomActions } from "store/room";
 import RatingBar from "./RatingBar";
 
 const Container = styled.div`
@@ -76,7 +78,16 @@ const Container = styled.div`
 
 const Rating = () => {
   const { room } = useRoom();
-  const { modalOpened, openModal, closeModal, ModalPortal } = useModal();
+  const { openModal, closeModal, ModalPortal } = useModal();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!room) return;
+    dispatch(
+      roomActions.setReview({ review: room.review.slice(0, 6), page: 1 })
+    );
+  }, [room, dispatch]);
 
   if (!room) return null;
   return (
@@ -119,11 +130,7 @@ const Rating = () => {
         )}
       </Container>
       <ModalPortal>
-        <ReviewModal
-          room={room}
-          modalOpened={modalOpened}
-          closeModal={closeModal}
-        />
+        <ReviewModal room={room} closeModal={closeModal} />
       </ModalPortal>
     </>
   );

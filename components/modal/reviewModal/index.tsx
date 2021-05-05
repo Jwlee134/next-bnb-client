@@ -94,11 +94,9 @@ const Target = styled.div`
 const ReviewModal = ({
   room,
   closeModal,
-  modalOpened,
 }: {
   room: IRoom;
   closeModal: () => void;
-  modalOpened: boolean;
 }) => {
   const innerWidth = useSelector((state) => state.common.innerWidth);
   const { review, page } = useSelector((state) => state.room.detail);
@@ -111,7 +109,7 @@ const ReviewModal = ({
     try {
       const { data } = await getRoomReviewAPI({
         id: room._id,
-        page,
+        page: page + 1,
       });
       dispatch(
         roomActions.setReview({ review: [...review, ...data], page: page + 1 })
@@ -122,17 +120,12 @@ const ReviewModal = ({
   };
 
   useEffect(() => {
-    if (modalOpened) {
-      fetchReview();
-    } else {
-      setTimeout(
-        () => {
-          dispatch(roomActions.setReview({ review: [], page: 1 }));
-        },
-        innerWidth >= tabletSmallBreakpoint ? 250 : 400
+    return () => {
+      dispatch(
+        roomActions.setReview({ review: room.review.slice(0, 6), page: 1 })
       );
-    }
-  }, [modalOpened, innerWidth, dispatch]);
+    };
+  }, []);
 
   useEffect(() => {
     if (inView && room.review.length > review.length) fetchReview();
