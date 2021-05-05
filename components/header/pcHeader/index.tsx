@@ -127,7 +127,7 @@ const PCHeader = ({
   useSearchBar: boolean;
   scroll: number;
 }) => {
-  const showMap = useSelector((state) => state.map.showMap);
+  const showMap = useSelector((state) => state.persist.showMap);
   const showSearchBar = useSelector((state) => state.common.showSearchBar);
   const dispatch = useDispatch();
 

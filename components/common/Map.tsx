@@ -14,7 +14,7 @@ import { commonActions } from "store/common";
 import { IoCloseSharp, IoFilter } from "react-icons/io5";
 import useModal from "hooks/useModal";
 import FilterModal from "components/modal/filterModal";
-import { mapActions } from "store/map";
+import { persistActions } from "store/persist";
 import InfoWindow from "../room/search/map/InfoWindow";
 
 const Container = styled.div<{ pathname: string }>`
@@ -399,7 +399,7 @@ const Map = ({
           <>
             <div
               className="map_close-button map_button map_fullscreen-button"
-              onClick={() => dispatch(mapActions.setShowMap(false))}
+              onClick={() => dispatch(persistActions.setShowMap(false))}
             >
               <IoCloseSharp size={30} />
             </div>

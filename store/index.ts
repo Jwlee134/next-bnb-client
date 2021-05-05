@@ -22,7 +22,7 @@ import common from "./common";
 import hosting from "./hosting";
 import search from "./search";
 import room from "./room";
-import map from "./map";
+import persist from "./persist";
 import user from "./user";
 
 const rootReducer = combineReducers({
@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
   hosting,
   search,
   room,
-  map,
+  persist,
   user,
 });
 
@@ -46,8 +46,8 @@ const reducer = (state: any, action: any) => {
       // preserve innerWidth value on client side navigation
       nextState.common.innerWidth = state.common.innerWidth;
     }
-    if (!state.map.showMap) {
-      nextState.map.showMap = state.map.showMap;
+    if (!state.persist.showMap) {
+      nextState.persist.showMap = state.persist.showMap;
     }
     return nextState;
   }
@@ -75,7 +75,7 @@ const makeStore = () => {
 
   const persistConfig = {
     key: "nextjs",
-    whitelist: ["map"],
+    whitelist: ["persist"],
     storage,
   };
 

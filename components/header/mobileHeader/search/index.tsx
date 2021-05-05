@@ -22,7 +22,7 @@ const SearchPopup = styled.div`
 
 const Search = ({ scroll }: { scroll: number }) => {
   const searchMode = useSelector((state) => state.common.searchMode);
-  const showMap = useSelector((state) => state.map.showMap);
+  const showMap = useSelector((state) => state.persist.showMap);
   const isGettingCoordinates = useSelector(
     (state) => state.common.isGettingCoordinates
   );

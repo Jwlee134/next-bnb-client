@@ -8,9 +8,11 @@ import { FcGoogle } from "react-icons/fc";
 import { GrGithub } from "react-icons/gr";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import Button from "components/common/Button";
+import { useRouter } from "next/router";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import ModalHeader from "../ModalHeader";
+import { persistActions } from "store/persist";
 
 const Container = styled.div`
   width: 568px;
@@ -61,12 +63,14 @@ const Divider = styled.div`
 `;
 
 const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
+  const router = useRouter();
   const authMode = useSelector((state) => state.common.authMode);
   const dispatch = useDispatch();
 
   const isLogin = authMode === "login";
 
   const handleGoogleLogin = () => {
+    dispatch(persistActions.setRedirectUrl(router.asPath));
     const link = document.createElement("a");
     link.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
       process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
@@ -85,6 +89,7 @@ const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
   };
 
   const handleKakaoLogin = () => {
+    dispatch(persistActions.setRedirectUrl(router.asPath));
     const link = document.createElement("a");
     link.href = `https://kauth.kakao.com/oauth/authorize?client_id=${
       process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY

@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { ImMap2 } from "react-icons/im";
 import palette from "styles/palette";
 import { useDispatch } from "react-redux";
-import { mapActions } from "store/map";
+import { persistActions } from "store/persist";
 import RoomList from "./RoomList";
 import Filter from "./filter";
 
@@ -53,7 +53,7 @@ const Container = styled.div`
 `;
 
 const Contents = () => {
-  const showMap = useSelector((state) => state.map.showMap);
+  const showMap = useSelector((state) => state.persist.showMap);
   const originalLength = useSelector(
     (state) => state.room.search.originalLength
   );
@@ -80,7 +80,7 @@ const Contents = () => {
           <Filter />
           <div
             className="search_show-map"
-            onClick={() => dispatch(mapActions.setShowMap(!showMap))}
+            onClick={() => dispatch(persistActions.setShowMap(!showMap))}
           >
             <ImMap2 size={16} />
             {showMap ? "지도 숨기기" : "지도 표시하기"}

@@ -8,10 +8,12 @@ import { mutate } from "swr";
 import { IUser } from "types/user";
 import Header from "components/header";
 import OauthText from "components/common/OauthText";
+import { useSelector } from "store";
 
 const Container = styled.div``;
 
 const google = () => {
+  const redirectUrl = useSelector((state) => state.persist.redirectUrl);
   const router = useRouter();
   const { query } = router;
 
@@ -22,13 +24,13 @@ const google = () => {
       );
       return data;
     });
-    router.back();
+    router.replace(redirectUrl);
   };
 
   useEffect(() => {
-    if (!query.code) return;
+    if (!query.code || !redirectUrl) return;
     googleLogin();
-  }, [query]);
+  }, [query, redirectUrl]);
 
   return (
     <Container>

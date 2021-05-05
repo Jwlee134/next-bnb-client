@@ -8,10 +8,12 @@ import { mutate } from "swr";
 import { IUser } from "types/user";
 import OauthText from "components/common/OauthText";
 import Header from "components/header";
+import { useSelector } from "store";
 
 const Container = styled.div``;
 
 const kakao = () => {
+  const redirectUrl = useSelector((state) => state.persist.redirectUrl);
   const router = useRouter();
   const { query } = router;
 
@@ -22,13 +24,13 @@ const kakao = () => {
       );
       return data;
     });
-    router.back();
+    router.replace(redirectUrl);
   };
 
   useEffect(() => {
-    if (!query.code) return;
+    if (!query.code || !redirectUrl) return;
     kakaoLogin();
-  }, [query]);
+  }, [query, redirectUrl]);
 
   return (
     <Container>

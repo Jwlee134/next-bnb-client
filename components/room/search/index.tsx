@@ -54,7 +54,7 @@ const Container = styled.div<{ showMap: boolean }>`
 `;
 
 const SearchResults = () => {
-  const showMap = useSelector((state) => state.map.showMap);
+  const showMap = useSelector((state) => state.persist.showMap);
   const innerWidth = useSelector((state) => state.common.innerWidth);
   const searchResults = useSelector((state) => state.room.search.searchResults);
 
