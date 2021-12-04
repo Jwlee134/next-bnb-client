@@ -1,5 +1,7 @@
 # next-bnb-client
 
+# 비용 청구 문제로 Elastic Beanstalk 환경 종료하여 서버 동작 X
+
 에어비앤비 웹사이트를 따라 만들어보며 배우는 Next.js
 
 웹사이트 링크: [https://next-bnb-client.vercel.app/](https://next-bnb-client.vercel.app/)
