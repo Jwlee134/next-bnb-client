@@ -16,7 +16,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "mongoose": "^5.11.15",
-    "next": "^10.0.7",
+    "next": "^12.0.10",
     "next-redux-wrapper": "^6.0.2",
     "raf-schd": "^4.0.2",
     "react": "17.0.1",
