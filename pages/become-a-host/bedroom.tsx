@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 
-const bedroom: NextPage = () => {
+const Bedroom: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const bedroom: NextPage = () => {
   );
 };
 
-export default bedroom;
+export default Bedroom;

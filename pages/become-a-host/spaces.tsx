@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 
-const spaces: NextPage = () => {
+const Spaces: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const spaces: NextPage = () => {
   );
 };
 
-export default spaces;
+export default Spaces;

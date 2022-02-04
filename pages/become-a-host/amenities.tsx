@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 
-const amenities: NextPage = () => {
+const Amenities: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const amenities: NextPage = () => {
   );
 };
 
-export default amenities;
+export default Amenities;

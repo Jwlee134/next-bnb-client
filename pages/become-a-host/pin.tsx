@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import React from "react";
 import Head from "next/head";
 
-const pin: NextPage = () => {
+const Pin: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const pin: NextPage = () => {
   );
 };
 
-export default pin;
+export default Pin;

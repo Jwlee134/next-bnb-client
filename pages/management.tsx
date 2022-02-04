@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 
-const management: NextPage = () => (
+const ManagementPage: NextPage = () => (
   <>
     <Head>
       <title>숙소 관리 - 에어비앤비</title>
@@ -14,4 +14,4 @@ const management: NextPage = () => (
   </>
 );
 
-export default management;
+export default ManagementPage;

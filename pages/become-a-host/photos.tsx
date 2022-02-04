@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import React from "react";
 import Head from "next/head";
 
-const photos: NextPage = () => {
+const Photos: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const photos: NextPage = () => {
   );
 };
 
-export default photos;
+export default Photos;

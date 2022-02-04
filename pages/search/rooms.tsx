@@ -18,7 +18,7 @@ interface Props {
   value: string;
 }
 
-const rooms: NextPage<Props> = ({ error, value }) => {
+const RoomsPage: NextPage<Props> = ({ error, value }) => {
   if (error) {
     return <Error statusCode={error.statusCode} message={error.message} />;
   }
@@ -34,8 +34,8 @@ const rooms: NextPage<Props> = ({ error, value }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
-  async ({ store, query }) => {
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps(async ({ store, query }) => {
     const { adults, children, infants, page } = query;
     if (
       Number(adults) < 1 ||
@@ -72,7 +72,6 @@ export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps
         },
       };
     }
-  }
-);
+  });
 
-export default rooms;
+export default RoomsPage;

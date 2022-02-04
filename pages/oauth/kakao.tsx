@@ -12,7 +12,7 @@ import { useSelector } from "store";
 
 const Container = styled.div``;
 
-const kakao = () => {
+const Kakao = () => {
   const redirectUrl = useSelector((state) => state.persist.redirectUrl);
   const router = useRouter();
   const { query } = router;
@@ -43,4 +43,4 @@ const kakao = () => {
   );
 };
 
-export default kakao;
+export default Kakao;

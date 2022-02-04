@@ -5,7 +5,7 @@ import Head from "next/head";
 import Header from "components/header";
 import { commonTitle } from "lib/staticData";
 
-const roomDetail: NextPage = () => (
+const RoomDetailPage: NextPage = () => (
   <>
     <Head>
       <title>{commonTitle}</title>
@@ -15,4 +15,4 @@ const roomDetail: NextPage = () => (
   </>
 );
 
-export default roomDetail;
+export default RoomDetailPage;

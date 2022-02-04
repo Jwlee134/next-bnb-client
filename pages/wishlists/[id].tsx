@@ -5,7 +5,7 @@ import Header from "components/header";
 import Wishlist from "components/wishlists/Wishlist";
 import { commonTitle } from "lib/staticData";
 
-const wishlist: NextPage = () => (
+const WishlistPage: NextPage = () => (
   <>
     <Head>
       <title>{commonTitle}</title>
@@ -15,4 +15,4 @@ const wishlist: NextPage = () => (
   </>
 );
 
-export default wishlist;
+export default WishlistPage;

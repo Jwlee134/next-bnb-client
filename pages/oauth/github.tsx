@@ -11,7 +11,7 @@ import Header from "components/header";
 
 const Container = styled.div``;
 
-const github = () => {
+const Github = () => {
   const router = useRouter();
   const { query } = router;
 
@@ -41,4 +41,4 @@ const github = () => {
   );
 };
 
-export default github;
+export default Github;

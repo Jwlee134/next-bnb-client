@@ -1,6 +1,4 @@
 import React from "react";
-import { AppProps } from "next/dist/next-server/lib/router/router";
-
 import GlobalStyles from "styles/GlobalStyles";
 import { wrapper } from "store";
 import { persistStore } from "redux-persist";
@@ -9,6 +7,7 @@ import { useStore } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import theme from "styles/theme";
 import { SocketContextProvider } from "context/Socket";
+import { AppProps } from "next/app";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const store = useStore();

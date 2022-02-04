@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import React from "react";
 import Head from "next/head";
 
-const description: NextPage = () => {
+const Description: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const description: NextPage = () => {
   );
 };
 
-export default description;
+export default Description;

@@ -4,7 +4,7 @@ import Head from "next/head";
 import Header from "components/header";
 import Reservations from "components/reservations";
 
-const reservations: NextPage = () => (
+const ReservationsPage: NextPage = () => (
   <>
     <Head>
       <title>예약 목록 - 에어비앤비</title>
@@ -14,4 +14,4 @@ const reservations: NextPage = () => (
   </>
 );
 
-export default reservations;
+export default ReservationsPage;

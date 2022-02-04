@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import React from "react";
 import Head from "next/head";
 
-const register: NextPage = () => {
+const Register: NextPage = () => {
   return (
     <>
       <Head>
@@ -16,4 +16,4 @@ const register: NextPage = () => {
   );
 };
 
-export default register;
+export default Register;

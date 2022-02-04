@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import React from "react";
 import Head from "next/head";
 
-const price: NextPage = () => {
+const Price: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const price: NextPage = () => {
   );
 };
 
-export default price;
+export default Price;

@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import React from "react";
 import Head from "next/head";
 
-const location: NextPage = () => {
+const Location: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const location: NextPage = () => {
   );
 };
 
-export default location;
+export default Location;

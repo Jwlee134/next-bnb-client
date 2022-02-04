@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import React from "react";
 import Head from "next/head";
 
-const rules: NextPage = () => {
+const Rules: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const rules: NextPage = () => {
   );
 };
 
-export default rules;
+export default Rules;

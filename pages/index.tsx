@@ -7,7 +7,7 @@ import { searchActions } from "store/search";
 import Header from "components/header";
 import Home from "components/home";
 
-const home: NextPage = () => {
+const HomePage: NextPage = () => {
   return (
     <>
       <Head>
@@ -19,13 +19,12 @@ const home: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
-  async ({ store }) => {
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps(async ({ store }) => {
     store.dispatch(commonActions.setShowMiniSearchBar(false));
     store.dispatch(commonActions.setShowSearchBar(true));
     store.dispatch(searchActions.initSearch());
     return { props: {} };
-  }
-);
+  });
 
-export default home;
+export default HomePage;

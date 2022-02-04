@@ -5,7 +5,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 
-const user: NextPage = () => (
+const UserPage: NextPage = () => (
   <>
     <Head>
       <title>{commonTitle}</title>
@@ -15,4 +15,4 @@ const user: NextPage = () => (
   </>
 );
 
-export default user;
+export default UserPage;

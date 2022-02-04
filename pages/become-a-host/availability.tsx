@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 
-const availability: NextPage = () => {
+const Availability: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const availability: NextPage = () => {
   );
 };
 
-export default availability;
+export default Availability;

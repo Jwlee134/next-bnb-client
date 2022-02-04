@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 
-const calender: NextPage = () => {
+const Calender: NextPage = () => {
   return (
     <>
       <Head>
@@ -14,4 +14,4 @@ const calender: NextPage = () => {
   );
 };
 
-export default calender;
+export default Calender;

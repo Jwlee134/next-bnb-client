@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
 
-const wishlists: NextPage = () => (
+const WishlistsPage: NextPage = () => (
   <>
     <Head>
       <title>위시리스트 - 에어비앤비</title>
@@ -14,4 +14,4 @@ const wishlists: NextPage = () => (
   </>
 );
 
-export default wishlists;
+export default WishlistsPage;

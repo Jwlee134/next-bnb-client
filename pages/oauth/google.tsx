@@ -12,7 +12,7 @@ import { useSelector } from "store";
 
 const Container = styled.div``;
 
-const google = () => {
+const Google = () => {
   const redirectUrl = useSelector((state) => state.persist.redirectUrl);
   const router = useRouter();
   const { query } = router;
@@ -43,4 +43,4 @@ const google = () => {
   );
 };
 
-export default google;
+export default Google;
