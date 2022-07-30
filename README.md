@@ -1,5 +1,5 @@
 # next-bnb-client
-
+## EC2 인스턴스 종료하여 현재 동작하지 않음
 에어비앤비 웹사이트를 따라 만들어보며 배우는 Next.js
 
 웹사이트 링크: [https://next-bnb-client.vercel.app/](https://next-bnb-client.vercel.app/)

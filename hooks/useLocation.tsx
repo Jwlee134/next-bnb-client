@@ -72,7 +72,7 @@ const useLocation = (mode: "pc" | "mobile") => {
         const { data } = await getPlaceAPI(keyword);
         setPlaceList(data);
       } catch (error) {
-        alert(error.response.data);
+        alert("서버에 연결할 수 없습니다.");
       }
     };
     searchPlaces();
